@@ -33,7 +33,6 @@ export default function WishAddForm() {
                 }
             }
         ).then((response) => {
-            console.log(response)
             if (response.status === 201) {
                 navigate(`/link/${userToken}`);
             }
@@ -95,8 +94,7 @@ export default function WishAddForm() {
 
 
                         {/*SUBMIT FORM */}
-                        <Button variant="primary" type="submit" disabled={props.isSubmitting}
-                                className="btn-custom mt-3 w-50 align-self-end">
+                        <Button variant="primary" type="submit" disabled={props.isSubmitting} className="btn-custom mt-3 w-50 align-self-end">
                             {t('createWish.buttons.submit')}
                         </Button>
                     </Form>

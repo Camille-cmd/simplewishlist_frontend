@@ -1,7 +1,7 @@
 @import './base.css';
 
 .add-wish-form {
-  width: 400px;
+  width: auto;
   margin-top: 50px;
   border-radius: 30px ;
   background-color: var(--palette1-medium);

@@ -56,7 +56,7 @@ header .btn-custom:hover {
 .utils-row{
   border-radius: 15px;
   padding: 10px;
-  width: 83rem;
+  width: auto;
 }
 
 .row-separator{
@@ -74,4 +74,12 @@ header .btn-custom:hover {
   color:var(--main-dark);
   font-family: 'DM Serif Text', serif;
   font-size:1.5rem;
+}
+
+.pointer-grab{
+  cursor: grab;
+}
+
+.crossed-text{
+  text-decoration: line-through;
 }
