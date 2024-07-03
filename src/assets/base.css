@@ -1,0 +1,25 @@
+:root {
+  --main-bg: #fefae0;
+  --palette1-light: #e9edc9;
+  --palette1-medium: #ccd5ae;
+  --palette1-dark: #5E6642;
+  --palette2-light: #faedcd;
+  --palette2-dark: #d4a373;
+  --main-dark: #344e41;
+  --secondary-dark: #637f71;
+}
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  background-color: var(--main-bg);
+  color: var(--main-dark);
+  font-family: 'Montserrat', sans-serif;
+}

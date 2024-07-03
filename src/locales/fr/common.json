@@ -1,0 +1,30 @@
+{
+  "createWL": {
+    "title": "Créer une nouvelle wishlist",
+    "wishlistName": "Nom de la wishlist",
+    "wishlistAdminName": "Votre super nom",
+    "allowSeeAssigned": "Permettre d'afficher qui a pris en charge un wish {{checked}}",
+    "otherUserName": "Et qui participe ?",
+    "placeholders": {
+      "wishlistName": "Comment on va l'appeler ?",
+      "wishlistAdminName": "Votre nom",
+      "otherUserName": "Nom d'un gros chanceux"
+    },
+    "buttons": {
+      "addAnother": "Ajouter un autre",
+      "submit": "Créer la wishlist"
+    }
+  },
+  "errors": {
+    "wishlistName": {
+      "required": "Vous devez donner un nom à votre wishlist"
+    },
+    "wishlistAdminName": {
+      "required": "Nous avons besoin du nom de l'admin"
+    },
+    "otherUsersNames": {
+      "required": "Nous avons besoin d'au moins un participant",
+      "noDuplicate": "Tous les noms doivent être différents"
+    }
+  }
+}

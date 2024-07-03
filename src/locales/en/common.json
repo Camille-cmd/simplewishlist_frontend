@@ -1,0 +1,65 @@
+{
+  "createWL": {
+    "title": "Create a new wishlist",
+    "wishlistName": "Your wishlist name",
+    "wishlistAdminName": "Your Name",
+    "allowSeeAssigned": "Allow to see who took a wish {{checked}}",
+    "otherUserName": "Who's in?",
+    "placeholders": {
+      "wishlistName": "How should we name it?",
+      "wishlistAdminName": "Your cool name",
+      "otherUserName": "Name of a fellow wishlist user"
+    },
+    "buttons": {
+      "addAnother": "Add another lucky one",
+      "submit": "create wishlist"
+    }
+  },
+  "createWish": {
+    "name": "Name of your wish",
+    "price": "Do you know the price for this item?",
+    "url": "Where can we find this item?",
+    "pageTitle": "Add a new wish",
+    "placeholders": {
+      "name": "What is your wish ?",
+      "price": "0€",
+      "url": "https://somewherenice.com"
+    },
+    "buttons": {
+      "submit": "Add a new wish"
+    }
+  },
+  "WLCreated": {
+    "name": "Name",
+    "link": "Link",
+    "copyAll": "Copy all links",
+    "wlWasCreated": "Your wishlist was created!",
+    "helpLink": "Each user accesses the wishlist via a personal link that identifies them. It's ",
+    "helpLinkBoldPart": "very important that everyone uses their personal link ",
+    "helpLinkEnd": "at the risk of modifying someone else's wishlist, or ruining the surprise ",
+    "individualLinks": "Here are the individual links for each user. Now's a good time to share them with everyone!",
+    "access": "Everything sent? Access your wishlist!",
+    "copy": "Copy",
+    "copyAllIntro": "Here are the links for the wishlist",
+    "copyAllReminder": "It is very important that everyone uses their personal link, at the risk of modifying someone else's wishlist, or ruining the surprise!"
+  },
+  "showWL": {
+    "hello": "Hello !",
+    "surpriseMode": "Surprise mode",
+    "handleWishlist": "Wishlist Params",
+    "handleWishlistUsers": "Handle Users",
+    "addNewWish": "Add a new wish"
+  },
+  "errors": {
+    "wishlistName": {
+      "required": "Your wishlist must have a name"
+    },
+    "wishlistAdminName": {
+      "required": "We need an admin name"
+    },
+    "otherUsersNames": {
+      "required": "We need at least one other person",
+      "noDuplicate": "Tous les noms doivent être différents"
+    }
+  }
+}
