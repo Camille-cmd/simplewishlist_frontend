@@ -83,3 +83,11 @@ header .btn-custom:hover {
 .crossed-text{
   text-decoration: line-through;
 }
+
+.welcome-container {
+  width: auto;
+  margin-top: 50px;
+  border-radius: 30px ;
+  background-color: var(--palette1-medium);
+  padding: 30px
+}

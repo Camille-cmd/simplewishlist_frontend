@@ -7,15 +7,23 @@ import * as Yup from "yup";
 import {TFunction} from "i18next";
 import {FormValues} from "../interfaces/WlCreateFormValues";
 
+/**
+ * Interface for the props of the WishlistCreateForm component
+ */
 interface WishlistCreateFormChildProps {
    handleSubmit: (values: FormValues) => void
 }
 
+/**
+ * Create the validation schema for the wishlist creation form
+ * @param t
+ */
 const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().shape({
     wishlist_name: Yup.string()
         .required(t('errors.wishlistName.required')),
     wishlist_admin_name: Yup.string()
         .required(t('errors.wishlistAdminName.required')),
+    // TODO prendre en compte le wishlist_admin_name dans la liste des autres utilisateurs
     other_users_names: Yup.array()
         .required(t('errors.otherUsersNames.required'))
         .of(Yup.string())
@@ -26,6 +34,12 @@ const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().s
         )
 });
 
+
+/**
+ * Component to display the wishlist creation form
+ * @param handleSubmit
+ * @constructor
+ */
 export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCreateFormChildProps>) {
     const {t} = useTranslation();
 
@@ -44,6 +58,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
         <>
 
             <h1 className='bold'> {t('createWL.title')} </h1>
+
             <Formik
                 initialValues={initialValues}
                 onSubmit={handleSubmit}

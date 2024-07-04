@@ -4,13 +4,13 @@ import {Button, Form} from "react-bootstrap";
 import {t} from "i18next";
 import {useNavigate, useParams} from "react-router-dom";
 import "../assets/wish.css"
+import {WishAddFormValues} from "../interfaces/WishAddFormValues";
 
-interface FormValues {
-    name: string,
-    price: string,
-    url: string
-}
 
+/**
+ * Component to create a new wish
+ * @constructor
+ */
 export default function WishAddForm() {
     const {userToken} = useParams();
     const navigate = useNavigate();
@@ -22,24 +22,20 @@ export default function WishAddForm() {
             url: ''
         }
 
-    const handleSubmit = (values: FormValues) => {
+    /**
+     * Handle the form submission to create the wish
+     * @param values
+     */
+    const handleSubmit = (values: WishAddFormValues) => {
         // Api call to create the wishlist
-        api.put(
-            '/wish',
-            values,
-            {
-                headers: {
-                    'Authorization': `Bearer ${userToken}`,
-                }
-            }
+        api.put('/wish', values, {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
             if (response.status === 201) {
                 navigate(`/link/${userToken}`);
             }
-        })
-            .catch((error) => {
-                console.error(error);
-            });
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     return (
@@ -94,7 +90,8 @@ export default function WishAddForm() {
 
 
                         {/*SUBMIT FORM */}
-                        <Button variant="primary" type="submit" disabled={props.isSubmitting} className="btn-custom mt-3 w-50 align-self-end">
+                        <Button variant="primary" type="submit" disabled={props.isSubmitting}
+                                className="btn-custom mt-3 w-50 align-self-end">
                             {t('createWish.buttons.submit')}
                         </Button>
                     </Form>

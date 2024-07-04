@@ -17,6 +17,10 @@ import WishlistNavbar from "./WishlistNavbar.tsx";
 import {ArrowUpRight} from "react-bootstrap-icons";
 
 
+/**
+ * Component to display the wishlist page
+ * @constructor
+ */
 export default function Wishlist() {
     const {t} = useTranslation();
     const [wishlistData, setWishlistData] = useState<WishListData>();
@@ -24,15 +28,13 @@ export default function Wishlist() {
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
-    const getWishlistData = (needToSetSurpriseMode: boolean) => {
 
-        api.get(
-            "/wishlist",
-            {
-                headers: {
-                    'Authorization': `Bearer ${userToken}`,
-                }
-            }
+    /**
+     * Get the wishlist data from the api and set the surprise mode if needed
+     * @param needToSetSurpriseMode
+     */
+    const getWishlistData = (needToSetSurpriseMode: boolean) => {
+        api.get("/wishlist", {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
             setWishlistData(response.data);
             // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
@@ -42,6 +44,13 @@ export default function Wishlist() {
         });
     }
 
+
+    /**
+     * Handle the assigned user of a wish, send the data to the api and refresh the wishlist data
+     * @param wish_id
+     * @param unassigne
+     * @constructor
+     */
     const HandleAssignedUser = (wish_id: string, unassigne: Boolean = false) => {
         let post_values: { assigned_user: string | null } = {
             assigned_user: userToken as string
@@ -53,20 +62,16 @@ export default function Wishlist() {
             }
         }
 
-        api.post(
-            `/wish/${wish_id}`,
-            post_values,
-            {
-                headers: {
-                    'Authorization': `Bearer ${userToken}`,
-                }
-            }
+        api.post(`/wish/${wish_id}`, post_values, {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
             // Refresh the wishlist data
             getWishlistData(false);
         });
     }
 
+    /**
+     * Get the wishlist data on the first render
+     */
     useEffect(() => {
         getWishlistData(true);
     }, [])
@@ -89,6 +94,7 @@ export default function Wishlist() {
                                 <Card.Header className="header">
                                     {data?.user}
                                 </Card.Header>
+
                                 <ListGroup>
                                     {/* Wishes still available*/}
                                     {data.wishes.length > 0
