@@ -20,11 +20,11 @@ import {ArrowUpRight} from "react-bootstrap-icons";
 export default function Wishlist() {
     const {t} = useTranslation();
     const [wishlistData, setWishlistData] = useState<WishListData>();
-    const [surpriseMode, setSurpriseMode] = useState<boolean>();
+    const [surpriseMode, setSurpriseMode] = useState<boolean>(false);
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
-    const getWishlistData = () => {
+    const getWishlistData = (needToSetSurpriseMode: boolean) => {
 
         api.get(
             "/wishlist",
@@ -34,10 +34,10 @@ export default function Wishlist() {
                 }
             }
         ).then((response) => {
-            setWishlistData(response.data)
+            setWishlistData(response.data);
             // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
-            if (surpriseMode === undefined){
-                setSurpriseMode(!response.data.allowSeeAssigned)
+            if (needToSetSurpriseMode) {
+                setSurpriseMode(!wishlistData?.allowSeeAssigned ? true : surpriseMode);
             }
         });
     }
@@ -63,12 +63,12 @@ export default function Wishlist() {
             }
         ).then((response) => {
             // Refresh the wishlist data
-            getWishlistData()
+            getWishlistData(false);
         });
     }
 
     useEffect(() => {
-        getWishlistData();
+        getWishlistData(true);
     }, [])
 
     return (

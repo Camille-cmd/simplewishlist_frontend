@@ -25,7 +25,7 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
 
                         <div>
                             <span className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" role="switch" id="surpriseMode" onChange={HandleSurpriseModeChange} defaultChecked={surpriseMode}/>
+                                <input className="form-check-input" type="checkbox" role="switch" id="surpriseMode" onChange={HandleSurpriseModeChange} defaultChecked={!surpriseMode}/>
                                 <label className="role-click form-check-label" htmlFor="surpriseMode">
                                     {t('showWL.surpriseMode')}
                                     <span> {!surpriseMode ? '🐵' : '🙈'}</span>
