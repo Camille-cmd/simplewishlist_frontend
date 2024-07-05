@@ -91,3 +91,12 @@ header .btn-custom:hover {
   background-color: var(--palette1-medium);
   padding: 30px
 }
+
+.btn-warning-custom {
+  background-color: var(--palette1-medium);
+}
+
+/* TABLE */
+.table {
+  background-color: var(--palette1-medium)
+}
