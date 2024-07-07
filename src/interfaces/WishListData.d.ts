@@ -9,7 +9,6 @@ export interface Wish {
 export interface UserWish {
     user: string;
     wishes: Array<Wish>;
-    assignedWishes: Array<Wish>;
 }
 
 export interface WishListData {

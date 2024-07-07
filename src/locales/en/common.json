@@ -29,6 +29,12 @@
       "submit": "Add a new wish"
     }
   },
+   "editWish": {
+    "pageTitle": "Update your wish",
+    "buttons": {
+      "submit": "Update wish"
+    }
+  },
   "WLCreated": {
     "name": "Name",
     "link": "Link",

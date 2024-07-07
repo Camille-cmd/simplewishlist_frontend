@@ -18,6 +18,10 @@ h2{
   border-color: 0 0 0 0.25rem var(--palette1-light);
   box-shadow: 0 0 0 0.25rem var(--palette1-light);
 }
+.icon-link {
+  color: var(--palette1-dark);
+
+}
 /* HEADER */
 header .btn-custom {
   margin-top: 5px;
@@ -32,6 +36,11 @@ header .btn-custom:focus {
 header .btn-custom:hover {
   background-color: var(--palette1-medium);
   border-color: 0 0 0 0.25rem var(--palette1-light);
+}
+
+.current-user-header {
+  background-color: var(--secondary-dark) !important;
+  color: var(--main-dark);
 }
 
 /* CHECKBOX SWITCH */

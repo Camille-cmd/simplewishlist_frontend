@@ -1,18 +1,28 @@
 import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
-import {Button, Col, Container, Dropdown, DropdownButton, Row, Stack} from "react-bootstrap";
+import {Button, Dropdown, DropdownButton, Stack} from "react-bootstrap";
 import {useParams} from "react-router-dom";
-import {Gear, Plus} from "react-bootstrap-icons";
-import {j} from "vite/dist/node/types.d-aGj9QkWt";
+import {Gear} from "react-bootstrap-icons";
+import {Dispatch, SetStateAction} from "react";
+
+
+interface WishlistNavbarProps {
+    wishlistData: WishListData | undefined,
+    setSurpriseMode: Dispatch<SetStateAction<boolean>>,
+    surpriseMode: boolean,
+    setShowWishForm: Dispatch<SetStateAction<boolean>>
+}
+
 
 /**
  * Component that displays the navbar of the wishlist page.
  * @param wishlistData
  * @param setSurpriseMode
  * @param surpriseMode
+ * @param setShowWishForm
  * @constructor
  */
-export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseMode}: Readonly<{ wishlistData: WishListData | undefined, setSurpriseMode, surpriseMode: boolean | undefined}>) {
+export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseMode, setShowWishForm}: Readonly<WishlistNavbarProps>) {
     const {t} = useTranslation();
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
@@ -61,7 +71,7 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
                 {/* Add new wish button */}
                 <Stack direction="horizontal" gap={3} className="ms-auto">
 
-                    <Button variant="primary" type="submit" className="btn-custom btn-sm" href={(`/${userToken}/wish/add`)}>
+                    <Button variant="primary" type="submit" className="btn-custom btn-sm" onClick={()=>setShowWishForm(true)}>
                         <span className={"d-none d-md-block"}> {t('showWL.addNewWish')} 💫</span>
                         <span className={"d-md-none"}>New 💫</span>
                     </Button>

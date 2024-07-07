@@ -1,20 +1,18 @@
 import {useEffect, useState} from "react";
 import {api} from "../api/axiosConfig.tsx";
-import {Link, useParams} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import {useParams} from "react-router-dom";
 import {
-    Badge,
     Card,
     Col,
     Container,
     ListGroup,
     ListGroupItem,
-    OverlayTrigger,
-    Row, Tooltip
+    Row,
 } from "react-bootstrap";
 import {UserWish, Wish, WishListData} from "../interfaces/WishListData";
 import WishlistNavbar from "./WishlistNavbar.tsx";
-import {ArrowUpRight} from "react-bootstrap-icons";
+import WishCardItem from "./WishCardItem.tsx";
+import WishForm from "./WishForm.tsx";
 
 
 /**
@@ -22,9 +20,11 @@ import {ArrowUpRight} from "react-bootstrap-icons";
  * @constructor
  */
 export default function Wishlist() {
-    const {t} = useTranslation();
+    // const {t} = useTranslation();
     const [wishlistData, setWishlistData] = useState<WishListData>();
     const [surpriseMode, setSurpriseMode] = useState<boolean>(false);
+    const [editWish, setEditWish] = useState<Wish>();
+    const [showWishForm, setShowWishForm] = useState<boolean>(false);
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
@@ -36,7 +36,12 @@ export default function Wishlist() {
     const getWishlistData = (needToSetSurpriseMode: boolean) => {
         api.get("/wishlist", {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
+            // Reorder userWishes to get the current user's ones first
+            const current_user = response.data.currentUser;
+            response.data.userWishes.sort((a: UserWish, _: UserWish) => a.user === current_user ? -1 : 1);
+
             setWishlistData(response.data);
+
             // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
             if (needToSetSurpriseMode) {
                 setSurpriseMode(!wishlistData?.allowSeeAssigned ? true : surpriseMode);
@@ -46,27 +51,12 @@ export default function Wishlist() {
 
 
     /**
-     * Handle the assigned user of a wish, send the data to the api and refresh the wishlist data
-     * @param wish_id
-     * @param unassigne
-     * @constructor
+     * Check if the user is the current user
+     * @param user_name
      */
-    const HandleAssignedUser = (wish_id: string, unassigne: Boolean = false) => {
-        let post_values: { assigned_user: string | null } = {
-            assigned_user: userToken as string
-        }
-        // Case when the user wants to unassign the wish
-        if (unassigne) {
-            post_values = {
-                assigned_user: null
-            }
-        }
-
-        api.post(`/wish/${wish_id}`, post_values, {headers: {'Authorization': `Bearer ${userToken}`}}
-        ).then((response) => {
-            // Refresh the wishlist data
-            getWishlistData(false);
-        });
+    const isCurrentUser = (user_name : string) => {
+        const current_user = wishlistData?.currentUser as string;
+        return user_name as string === current_user
     }
 
     /**
@@ -81,80 +71,50 @@ export default function Wishlist() {
             <h1>{wishlistData?.name}</h1>
 
             {/* WISHLIST BAR */}
-            <WishlistNavbar wishlistData={wishlistData} setSurpriseMode={setSurpriseMode} surpriseMode={surpriseMode}></WishlistNavbar>
+            <WishlistNavbar wishlistData={wishlistData} setSurpriseMode={setSurpriseMode} surpriseMode={surpriseMode} setShowWishForm={setShowWishForm}></WishlistNavbar>
 
-            {/* CARDS */}
-            <Container className="list-group user-wishes">
-                <Row>
-                {
-                    wishlistData?.userWishes.map((data: UserWish) => (
-                        <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
-                            <Card key={data.user}>
+            {/* CONTENT */}
+            {editWish != undefined || showWishForm
 
-                                <Card.Header className="header">
-                                    {data?.user}
-                                </Card.Header>
+                ? <WishForm initialWish={editWish} setEditWish={setEditWish} setShowWishForm={setShowWishForm} getWishlistData={getWishlistData}></WishForm>
 
-                                <ListGroup>
-                                    {/* Wishes still available*/}
-                                    {data.wishes.length > 0
-                                     ?
-                                        data.wishes.map((wish: Wish) => (
-                                            <ListGroupItem key={wish.id}>
-                                                <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">Click to take the wish!</Tooltip>}>
-                                                    <Card.Title onClick={() => HandleAssignedUser(wish.id)} className={"pointer-grab"}>
-                                                        {wish.name}
-                                                        <Badge className="p-2 mx-2">{wish.price}</Badge>
-                                                        {wish.url
-                                                            ? <Link to={wish.url} target="_blank">
-                                                                <ArrowUpRight></ArrowUpRight>
-                                                            </Link>
-                                                            : null
-                                                        }
-                                                    </Card.Title>
-                                                </OverlayTrigger>
-                                            </ListGroupItem>
-                                        ))
-                                     : <ListGroupItem>
-                                            <Card.Title>wow such empty</Card.Title>
-                                        </ListGroupItem>
-                                    }
+                : <Container className="list-group user-wishes">
+                    <Row>
+                        {
+                            wishlistData?.userWishes.map((data: UserWish) => (
+                                <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
+                                    <Card key={data.user}>
 
-                                    {/* Wishes already assigned */}
-                                    {data.assignedWishes.length > 0
-                                     ?
-                                        data.assignedWishes.map((wish: Wish) => (
-                                            <ListGroupItem key={wish.id}>
-                                                <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">Click to take the wish!</Tooltip>}>
-                                                    <Card.Title onClick={() => HandleAssignedUser(wish.id, true)} className={"crossed-text"}>
-                                                        {wish.name}
-                                                        <Badge className="p-2 mx-2">{wish.price}</Badge>
-                                                        {wish.url
-                                                            ? <Link to={wish.url} target="_blank">
-                                                                <ArrowUpRight></ArrowUpRight>
-                                                            </Link>
-                                                            : null
-                                                        }
-                                                    </Card.Title>
-                                                </OverlayTrigger>
-                                                {/*Display taken by when surpriseMode is off*/}
-                                                {!surpriseMode?
-                                                    <Card.Text>
-                                                         <small className="text-muted">Taken by {wish.assigned_user}</small>
-                                                    </Card.Text>
-                                                    : null
-                                                }
-                                            </ListGroupItem>
-                                        ))
-                                        : null
-                                    }
-                                </ListGroup>
-                            </Card>
-                        </Col>
-                    ))
-                }
-                </Row>
-            </Container>
+                                        <Card.Header className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
+                                            {data?.user}
+                                        </Card.Header>
+
+                                        <ListGroup>
+                                            {/* Wishes*/}
+                                            {data.wishes.length > 0
+                                                ?
+                                                data.wishes.map((wish: Wish) => (
+                                                    <WishCardItem
+                                                        key={wish.id}
+                                                        wish={wish}
+                                                        isCurrentUser={isCurrentUser(data.user)}
+                                                        getWishlistData={getWishlistData}
+                                                        surpriseMode={surpriseMode}
+                                                        setEditWish={setEditWish}
+                                                    ></WishCardItem>
+                                                ))
+                                                : <ListGroupItem>
+                                                    <Card.Title>wow such empty</Card.Title>
+                                                </ListGroupItem>
+                                            }
+                                        </ListGroup>
+                                    </Card>
+                                </Col>
+                            ))
+                        }
+                    </Row>
+                </Container>
+            }
         </>
     )
 }
