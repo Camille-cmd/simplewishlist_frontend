@@ -7,6 +7,6 @@ export interface WebSocketSendMessage {
     type: string,
     currentUser: string,
     post_values: {sting: string | null},
-    objectId: string
+    objectId: string | null
 
 }

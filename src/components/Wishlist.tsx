@@ -31,9 +31,20 @@ export default function Wishlist() {
             //Will attempt to reconnect on all close events, such as server shutting down
             shouldReconnect: () => true,
             reconnectAttempts: 10,
-            realProtocol: userToken as string,
         },
     )
+
+    /**
+     * Handle the setWishlistData function to reorder the userWishes first and set the wishlistData
+     * @param data
+     * @param currentUser - the current user if we need to force it
+     */
+    const handleSetWishlistData = (data: WishListData, currentUser: string | undefined = undefined) => {
+        // Reorder userWishes to get the current user's ones first
+        sortUserWishes(data.userWishes, currentUser);
+        setWishlistData(data);
+    }
+
 
     /**
      * Get the wishlist data from the api and set the surprise mode if needed
@@ -43,10 +54,8 @@ export default function Wishlist() {
         api.get("/wishlist", {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
             // Reorder userWishes to get the current user's ones first
-            const current_user = response.data.currentUser;
-            response.data.userWishes.sort((a: UserWish, _: UserWish) => a.user === current_user ? -1 : 1);
-
-            setWishlistData(response.data);
+            const currentUser = response.data.currentUser;
+            handleSetWishlistData(response.data, currentUser);
 
             // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
             if (needToSetSurpriseMode) {
@@ -69,23 +78,29 @@ export default function Wishlist() {
     }
 
     /**
+     * Sort the userWishes to get the current user's ones first
+     * @param userWishes
+     * @param currentUser - the current user if we need to get it from the data
+     */
+    const sortUserWishes = (userWishes: UserWish[], currentUser: string | undefined = undefined) => {
+        // Reorder userWishes to get the current user's ones first
+        if (currentUser === undefined) {
+            currentUser = wishlistData?.currentUser as string;
+        }
+        userWishes.sort((a: UserWish, _: UserWish) => a.user === currentUser ? -1 : 1);
+    }
+
+    /**
      * Get the wishlist data on the first render
      */
     useEffect(() => {
         getWishlistData(true);
     }, [])
 
+
     // Run when the connection state (readyState) changes
     useEffect(() => {
         console.log("Connection state changed")
-        // if (readyState === ReadyState.OPEN) {
-        //     sendJsonMessage({
-        //         event: "subscribe",
-        //         data: {
-        //             channel: "general-chatroom",
-        //         },
-        //     })
-        // }
     }, [readyState])
 
 
@@ -98,18 +113,24 @@ export default function Wishlist() {
         const response = JSON.parse(lastJsonMessage as string) as WebSocketReceiveMessage;
 
         const type = response.type;
+        console.log("Type : " + type)
         const data = response.data;
         switch (type) {
+
             case "update_wishes":
                 let newUserWishes = response.data as UserWish[];
                 let newWishlistData = {...wishlistData} as WishListData;
 
-                // Reorder userWishes to get the current user's ones first (TODO : ne pas répétes avec getWishlistData)
-                newUserWishes.sort((a: UserWish, _: UserWish) => a.user === newWishlistData.currentUser ? -1 : 1);
 
                 // Update the wishlist data with the new userWishes
                 newWishlistData.userWishes = newUserWishes;
-                setWishlistData(newWishlistData);
+                handleSetWishlistData(newWishlistData);
+
+                setShowWishForm(false);
+                // If we were editing a wish, we stop editing as the wish has been updated
+                if (editWish) {
+                    setEditWish(undefined);
+                }
                 break;
 
             case "error_message":
@@ -132,14 +153,13 @@ export default function Wishlist() {
             </WishlistNavbar>
 
             {/* CONTENT */}
-            {editWish != undefined || showWishForm
+            {showWishForm
                 // Display the wish form => edit or create a wish
                 ? <WishForm
                     initialWish={editWish}
                     setEditWish={setEditWish}
                     setShowWishForm={setShowWishForm}
-                    getWishlistData={getWishlistData}>
-
+                    sendJsonMessage={sendJsonMessage}>
                 </WishForm>
 
                 // Display the list of wishes
@@ -164,10 +184,10 @@ export default function Wishlist() {
                                                         key={wish.id}
                                                         wish={wish}
                                                         isCurrentUser={isCurrentUser(data.user)}
-                                                        setWishlistData={setWishlistData}
                                                         surpriseMode={surpriseMode}
                                                         setEditWish={setEditWish}
                                                         sendJsonMessage={sendJsonMessage}
+                                                        setShowWishForm={setShowWishForm}
                                                     ></WishCardItem>
                                                 ))
                                                 : <ListGroupItem>

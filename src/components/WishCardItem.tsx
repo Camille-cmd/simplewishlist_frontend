@@ -9,20 +9,20 @@ import {WebSocketSendMessage} from "../interfaces/Websocket";
 interface WishCardItemProps {
     wish: Wish,
     isCurrentUser: boolean,
-    setWishlistData: Dispatch<SetStateAction<WishListData | undefined>>
     surpriseMode: boolean
     setEditWish: Dispatch<SetStateAction<Wish | undefined>>
     sendJsonMessage: (message: any) => void
+    setShowWishForm: Dispatch<SetStateAction<boolean>>
 }
 
 export default function WishCardItem(
     {
         wish,
         isCurrentUser,
-        setWishlistData,
         surpriseMode,
         setEditWish,
-        sendJsonMessage
+        sendJsonMessage,
+        setShowWishForm
     }
         : Readonly<WishCardItemProps>) {
     const {userToken} = useParams();
@@ -42,17 +42,9 @@ export default function WishCardItem(
                 assigned_user: null
             }
         }
-
-        // api.post(`/wish/${wishId}`, post_values, {headers: {'Authorization': `Bearer ${userToken}`}}
-        // ).then((response) => {
-        //     // Refresh the wishlist data
-        //     if (response.status === 201) {
-        //         getWishlistData(false);
-        //     }
-        // });
-
+        // Update via Websocket
         sendJsonMessage({
-            type: 'assign_wish',
+            type: 'update_wish',
             currentUser: userToken,
             post_values: post_values,
             objectId: wishId
@@ -69,6 +61,7 @@ export default function WishCardItem(
             HandleAssignedUser(wish.id, wish.assigned_user !== null)
         } else {
             setEditWish(wish)
+            setShowWishForm(true)
         }
     }
 
