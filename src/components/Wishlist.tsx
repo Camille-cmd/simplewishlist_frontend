@@ -1,18 +1,13 @@
 import {useEffect, useState} from "react";
 import {api} from "../api/axiosConfig.tsx";
 import {useParams} from "react-router-dom";
-import {
-    Card,
-    Col,
-    Container,
-    ListGroup,
-    ListGroupItem,
-    Row,
-} from "react-bootstrap";
+import {Card, Col, Container, ListGroup, ListGroupItem, Row,} from "react-bootstrap";
 import {UserWish, Wish, WishListData} from "../interfaces/WishListData";
 import WishlistNavbar from "./WishlistNavbar.tsx";
 import WishCardItem from "./WishCardItem.tsx";
 import WishForm from "./WishForm.tsx";
+import useWebSocket from "react-use-websocket";
+import {WebSocketReceiveMessage} from "../interfaces/Websocket";
 
 
 /**
@@ -28,6 +23,17 @@ export default function Wishlist() {
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
+    // Websocket
+    const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
+        `ws://localhost:8000/ws/wishlist/${userToken}/`,
+        {
+            share: false,
+            //Will attempt to reconnect on all close events, such as server shutting down
+            shouldReconnect: () => true,
+            reconnectAttempts: 10,
+            realProtocol: userToken as string,
+        },
+    )
 
     /**
      * Get the wishlist data from the api and set the surprise mode if needed
@@ -46,7 +52,10 @@ export default function Wishlist() {
             if (needToSetSurpriseMode) {
                 setSurpriseMode(!wishlistData?.allowSeeAssigned ? true : surpriseMode);
             }
-        });
+
+        }).catch((error) => {
+            console.log(error);
+        })
     }
 
 
@@ -54,7 +63,7 @@ export default function Wishlist() {
      * Check if the user is the current user
      * @param user_name
      */
-    const isCurrentUser = (user_name : string) => {
+    const isCurrentUser = (user_name: string) => {
         const current_user = wishlistData?.currentUser as string;
         return user_name as string === current_user
     }
@@ -66,18 +75,74 @@ export default function Wishlist() {
         getWishlistData(true);
     }, [])
 
+    // Run when the connection state (readyState) changes
+    useEffect(() => {
+        console.log("Connection state changed")
+        // if (readyState === ReadyState.OPEN) {
+        //     sendJsonMessage({
+        //         event: "subscribe",
+        //         data: {
+        //             channel: "general-chatroom",
+        //         },
+        //     })
+        // }
+    }, [readyState])
+
+
+    // Run when a new WebSocket message is received (lastJsonMessage)
+    useEffect(() => {
+        console.log("New message received" + JSON.stringify(lastJsonMessage) + " " + typeof lastJsonMessage)
+        if (lastJsonMessage == null) {
+            return;
+        }
+        const response = JSON.parse(lastJsonMessage as string) as WebSocketReceiveMessage;
+
+        const type = response.type;
+        const data = response.data;
+        switch (type) {
+            case "update_wishes":
+                let newUserWishes = response.data as UserWish[];
+                let newWishlistData = {...wishlistData} as WishListData;
+
+                // Reorder userWishes to get the current user's ones first (TODO : ne pas répétes avec getWishlistData)
+                newUserWishes.sort((a: UserWish, _: UserWish) => a.user === newWishlistData.currentUser ? -1 : 1);
+
+                // Update the wishlist data with the new userWishes
+                newWishlistData.userWishes = newUserWishes;
+                setWishlistData(newWishlistData);
+                break;
+
+            case "error_message":
+                // TODO : handle error message
+                console.error(data);
+                break;
+        }
+    }, [lastJsonMessage])
+
     return (
         <>
             <h1>{wishlistData?.name}</h1>
 
             {/* WISHLIST BAR */}
-            <WishlistNavbar wishlistData={wishlistData} setSurpriseMode={setSurpriseMode} surpriseMode={surpriseMode} setShowWishForm={setShowWishForm}></WishlistNavbar>
+            <WishlistNavbar
+                wishlistData={wishlistData}
+                setSurpriseMode={setSurpriseMode}
+                surpriseMode={surpriseMode}
+                setShowWishForm={setShowWishForm}>
+            </WishlistNavbar>
 
             {/* CONTENT */}
             {editWish != undefined || showWishForm
+                // Display the wish form => edit or create a wish
+                ? <WishForm
+                    initialWish={editWish}
+                    setEditWish={setEditWish}
+                    setShowWishForm={setShowWishForm}
+                    getWishlistData={getWishlistData}>
 
-                ? <WishForm initialWish={editWish} setEditWish={setEditWish} setShowWishForm={setShowWishForm} getWishlistData={getWishlistData}></WishForm>
+                </WishForm>
 
+                // Display the list of wishes
                 : <Container className="list-group user-wishes">
                     <Row>
                         {
@@ -85,7 +150,8 @@ export default function Wishlist() {
                                 <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
                                     <Card key={data.user}>
 
-                                        <Card.Header className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
+                                        <Card.Header
+                                            className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
                                             {data?.user}
                                         </Card.Header>
 
@@ -98,9 +164,10 @@ export default function Wishlist() {
                                                         key={wish.id}
                                                         wish={wish}
                                                         isCurrentUser={isCurrentUser(data.user)}
-                                                        getWishlistData={getWishlistData}
+                                                        setWishlistData={setWishlistData}
                                                         surpriseMode={surpriseMode}
                                                         setEditWish={setEditWish}
+                                                        sendJsonMessage={sendJsonMessage}
                                                     ></WishCardItem>
                                                 ))
                                                 : <ListGroupItem>

@@ -12,6 +12,7 @@ export interface UserWish {
 }
 
 export interface WishListData {
+    wishListId: string;
     name: string;
     allowSeeAssigned: boolean;
     currentUser: string;

@@ -1,25 +1,28 @@
-import {Wish} from "../interfaces/WishListData";
+import {Wish, WishListData} from "../interfaces/WishListData";
 import {Badge, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {Link, useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {api} from "../api/axiosConfig.tsx";
+import {WebSocketSendMessage} from "../interfaces/Websocket";
 
 interface WishCardItemProps {
     wish: Wish,
     isCurrentUser: boolean,
-    getWishlistData: (needToSetSurpriseMode: boolean) => void
+    setWishlistData: Dispatch<SetStateAction<WishListData | undefined>>
     surpriseMode: boolean
     setEditWish: Dispatch<SetStateAction<Wish | undefined>>
+    sendJsonMessage: (message: any) => void
 }
 
 export default function WishCardItem(
     {
         wish,
         isCurrentUser,
-        getWishlistData,
+        setWishlistData,
         surpriseMode,
-        setEditWish
+        setEditWish,
+        sendJsonMessage
     }
         : Readonly<WishCardItemProps>) {
     const {userToken} = useParams();
@@ -40,15 +43,27 @@ export default function WishCardItem(
             }
         }
 
-        api.post(`/wish/${wishId}`, post_values, {headers: {'Authorization': `Bearer ${userToken}`}}
-        ).then((response) => {
-            // Refresh the wishlist data
-            if (response.status === 201) {
-                getWishlistData(false);
-            }
-        });
+        // api.post(`/wish/${wishId}`, post_values, {headers: {'Authorization': `Bearer ${userToken}`}}
+        // ).then((response) => {
+        //     // Refresh the wishlist data
+        //     if (response.status === 201) {
+        //         getWishlistData(false);
+        //     }
+        // });
+
+        sendJsonMessage({
+            type: 'assign_wish',
+            currentUser: userToken,
+            post_values: post_values,
+            objectId: wishId
+        } as WebSocketSendMessage)
     }
 
+    /**
+     * Handle the click on the wish, if the user is the current one then set the editWish state
+     * else assign the wish to the user
+     * @param wish
+     */
     const HandleOnClick = (wish: Wish) => {
         if (!isCurrentUser) {
             HandleAssignedUser(wish.id, wish.assigned_user !== null)
@@ -57,6 +72,9 @@ export default function WishCardItem(
         }
     }
 
+    /**
+     * Get the tooltip content depending on the user
+     */
     const TooltipContent = () => {
         if (isCurrentUser) {
             return 'Click to edit/delete this wish!'
