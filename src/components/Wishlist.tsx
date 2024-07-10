@@ -8,7 +8,8 @@ import WishCardItem from "./WishCardItem.tsx";
 import WishForm from "./WishForm.tsx";
 import useWebSocket from "react-use-websocket";
 import {WebSocketReceiveMessage} from "../interfaces/Websocket";
-
+import WishlistAlert from "./WishlistAlert.tsx";
+import {AlertData} from "../interfaces/AlertData";
 
 /**
  * Component to display the wishlist page
@@ -17,9 +18,15 @@ import {WebSocketReceiveMessage} from "../interfaces/Websocket";
 export default function Wishlist() {
     // const {t} = useTranslation();
     const [wishlistData, setWishlistData] = useState<WishListData>();
+
     const [surpriseMode, setSurpriseMode] = useState<boolean>(false);
+
     const [editWish, setEditWish] = useState<Wish>();
     const [showWishForm, setShowWishForm] = useState<boolean>(false);
+
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertData, setAlertData] = useState<AlertData>();
+
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
@@ -115,6 +122,7 @@ export default function Wishlist() {
         const type = response.type;
         console.log("Type : " + type)
         const data = response.data;
+        const userTokenFromWebsocket = response.userToken;
         switch (type) {
 
             case "update_wishes":
@@ -127,6 +135,24 @@ export default function Wishlist() {
                 handleSetWishlistData(newWishlistData);
 
                 setShowWishForm(false);
+
+                // Show the alert only if the current user is the one who updated the wish,
+                // we don't want to show the alert to others in the group
+                if (wishlistData?.currentUser === userTokenFromWebsocket) {
+                    let alertMessage = "Wish created";
+                    if (editWish) {
+                        alertMessage = "Wish updated";
+                    }
+                    setAlertData({
+                        message: alertMessage,
+                        variant: "success"
+                    } as AlertData)
+                    setShowAlert(true);
+                    setTimeout(() => {
+                        setShowAlert(false);
+                    }, 2000);
+                }
+
                 // If we were editing a wish, we stop editing as the wish has been updated
                 if (editWish) {
                     setEditWish(undefined);
@@ -134,8 +160,15 @@ export default function Wishlist() {
                 break;
 
             case "error_message":
-                // TODO : handle error message
-                console.error(data);
+                const alertData = {
+                    message: data,
+                    variant: "danger"
+                } as AlertData
+                setAlertData(alertData);
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 2000);
                 break;
         }
     }, [lastJsonMessage])
@@ -151,6 +184,12 @@ export default function Wishlist() {
                 surpriseMode={surpriseMode}
                 setShowWishForm={setShowWishForm}>
             </WishlistNavbar>
+
+            {/* ALERT */}
+            {showAlert
+                ? <WishlistAlert alertData={alertData as AlertData}></WishlistAlert>
+                : null
+            }
 
             {/* CONTENT */}
             {showWishForm
