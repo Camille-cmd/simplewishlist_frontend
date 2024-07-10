@@ -97,6 +97,35 @@ export default function Wishlist() {
         userWishes.sort((a: UserWish, _: UserWish) => a.user === currentUser ? -1 : 1);
     }
 
+
+    const handleAlert = (variant: string,  actionPerformed: string | null, alertMessage: string) => {
+        // If an actionPerformed is given, set the alert message depending on the action performed
+        if (actionPerformed !== null) {
+            switch (actionPerformed) {
+                case "create_wish":
+                    alertMessage = "Wish created";
+                    break;
+                case "update_wish":
+                    alertMessage = "Wish updated";
+                    break;
+                case "change_wish_assigned_user":
+                    alertMessage = "Wish assigned to you";
+                    break;
+                case "delete_wish":
+                    alertMessage = "Wish deleted";
+                    break;
+            }
+        }
+        console.log("alertMessage", alertMessage)
+        setAlertData({
+            message: alertMessage,
+            variant: variant
+        } as AlertData)
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 2000);
+    }
     /**
      * Get the wishlist data on the first render
      */
@@ -123,6 +152,7 @@ export default function Wishlist() {
         console.log("Type : " + type)
         const data = response.data;
         const userTokenFromWebsocket = response.userToken;
+        const actionPerformed = response.action;
         switch (type) {
 
             case "update_wishes":
@@ -139,18 +169,7 @@ export default function Wishlist() {
                 // Show the alert only if the current user is the one who updated the wish,
                 // we don't want to show the alert to others in the group
                 if (wishlistData?.currentUser === userTokenFromWebsocket) {
-                    let alertMessage = "Wish created";
-                    if (editWish) {
-                        alertMessage = "Wish updated";
-                    }
-                    setAlertData({
-                        message: alertMessage,
-                        variant: "success"
-                    } as AlertData)
-                    setShowAlert(true);
-                    setTimeout(() => {
-                        setShowAlert(false);
-                    }, 2000);
+                    handleAlert("success", actionPerformed,"");
                 }
 
                 // If we were editing a wish, we stop editing as the wish has been updated
@@ -160,15 +179,7 @@ export default function Wishlist() {
                 break;
 
             case "error_message":
-                const alertData = {
-                    message: data,
-                    variant: "danger"
-                } as AlertData
-                setAlertData(alertData);
-                setShowAlert(true);
-                setTimeout(() => {
-                    setShowAlert(false);
-                }, 2000);
+                handleAlert("danger", null, data);
                 break;
         }
     }, [lastJsonMessage])
@@ -227,6 +238,7 @@ export default function Wishlist() {
                                                         setEditWish={setEditWish}
                                                         sendJsonMessage={sendJsonMessage}
                                                         setShowWishForm={setShowWishForm}
+                                                        currentUserName={wishlistData?.currentUser as string}
                                                     ></WishCardItem>
                                                 ))
                                                 : <ListGroupItem>

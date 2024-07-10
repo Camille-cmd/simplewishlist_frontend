@@ -2,6 +2,7 @@ export interface WebSocketReceiveMessage {
     type: string;
     data: any;
     userToken: string;
+    action: string;
 }
 
 export interface WebSocketSendMessage {

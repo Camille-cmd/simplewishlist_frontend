@@ -13,6 +13,7 @@ interface WishCardItemProps {
     setEditWish: Dispatch<SetStateAction<Wish | undefined>>
     sendJsonMessage: (message: any) => void
     setShowWishForm: Dispatch<SetStateAction<boolean>>
+    currentUserName: string
 }
 
 export default function WishCardItem(
@@ -22,7 +23,8 @@ export default function WishCardItem(
         surpriseMode,
         setEditWish,
         sendJsonMessage,
-        setShowWishForm
+        setShowWishForm,
+        currentUserName,
     }
         : Readonly<WishCardItemProps>) {
     const {userToken} = useParams();
@@ -32,7 +34,7 @@ export default function WishCardItem(
      * @param wishId
      * @param alreadyAssigned
      */
-    const HandleAssignedUser = (wishId: string, alreadyAssigned: Boolean) => {
+    const handleAssignedUser = (wishId: string, alreadyAssigned: Boolean) => {
         let post_values: { assigned_user: string | null } = {
             assigned_user: userToken as string
         }
@@ -57,11 +59,16 @@ export default function WishCardItem(
      * @param wish
      */
     const HandleOnClick = (wish: Wish) => {
-        if (!isCurrentUser) {
-            HandleAssignedUser(wish.id, wish.assigned_user !== null)
-        } else {
+        // If the user is the current one,
+        // then set the editWish state instead of assigning the wish
+        console.log("wish.assigned_user", wish.assigned_user)
+        console.log("currentUserName", currentUserName)
+        if (isCurrentUser) {
             setEditWish(wish)
             setShowWishForm(true)
+        // Only the currently assigned user can modify the wish assigned_user
+        } else if (wish.assigned_user == null || wish.assigned_user === currentUserName) {
+            handleAssignedUser(wish.id, wish.assigned_user !== null)
         }
     }
 
