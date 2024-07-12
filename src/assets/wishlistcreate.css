@@ -1,3 +1,48 @@
-h1{
+h1 {
     font-family: 'DM Serif Text', serif;
+}
+
+.btn-add-another {
+    background-color: var(--secondary-dark);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
+}
+
+.btn-add-another:hover {
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
+}
+
+.btn-remove {
+    background-color: var(--danger-main);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
+    padding: 1px 5px;
+    margin-left: 5px;
+}
+
+.btn-remove:hover {
+    background-color: var(--danger-secondary);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
+}
+
+.create-wl-btn-container {
+    margin-top: 80px;
+}
+
+.invalid-feedback {
+    color: var(--danger-secondary);
+}
+
+.user-links {
+    color: var(--main-dark);
+    /*background-color:#fff5f5 ;*/
+    word-wrap: anywhere;
+
+}
+
+.user-links a {
+    font-size: small;
 }

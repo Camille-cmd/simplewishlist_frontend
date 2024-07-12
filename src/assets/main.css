@@ -1,120 +1,123 @@
 @import './base.css';
+@import './bootstrap-override.css';
 
-h1{
-  color:var(--main-dark)!important;
-  font-family: 'DM Serif Text', serif;
-  text-align: center;
-  margin-top: 20px!important;
-}
-
-h2{
-  color:var(--main-dark);
-  font-family: 'DM Serif Text', serif;
-  margin-top: 20px!important;
-}
-/* BOOTSTRAP OVERRIDE*/
-.form-control:focus{
-  background-color: var(--palette1-medium);
-  border-color: 0 0 0 0.25rem var(--palette1-light);
-  box-shadow: 0 0 0 0.25rem var(--palette1-light);
-}
-.icon-link {
-  color: var(--palette1-dark);
-
+h1 {
+    color: var(--main-dark) !important;
+    font-family: 'DM Serif Text', serif;
+    text-align: center;
+    margin-top: 20px !important;
 }
 
-.alert-success {
-  background-color: var(--palette1-light);
-  color: var(--main-dark);
+
+h2 {
+    color: var(--main-dark);
+    font-family: 'DM Serif Text', serif;
+    margin-top: 20px !important;
 }
-.alert-danger {
-  background-color: var(--main-danger);
-  color: var(--main-dark);
+
+
+.wishlist-container {
+    width: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: var(--palette1-medium);
+    padding: 30px
 }
+
+.wishlist-title {
+    font-size: 2rem;
+}
+
+
 /* HEADER */
 header .btn-custom {
-  margin-top: 5px;
-  background-color: var(--palette1-medium);
+    margin-top: 5px;
+    background-color: var(--palette1-medium);
 }
 
 header .btn-custom:focus {
-  background-color: var(--palette1-medium);
-  border-color: 0 0 0 0.25rem var(--palette1-light);
+    background-color: var(--palette1-medium);
+    border-color: 0 0 0 0.25rem var(--palette1-light);
 }
 
 header .btn-custom:hover {
-  background-color: var(--palette1-medium);
-  border-color: 0 0 0 0.25rem var(--palette1-light);
+    background-color: var(--palette1-medium);
+    border-color: 0 0 0 0.25rem var(--palette1-light);
 }
 
 .current-user-header {
-  background-color: var(--secondary-dark) !important;
-  color: var(--main-dark);
+    background-color: var(--secondary-dark) !important;
+    color: var(--main-dark);
 }
 
 /* CHECKBOX SWITCH */
-.form-switch.form-check{
-  display: inline-block;
+.form-switch.form-check {
+    display: inline-block;
 }
 
-.form-switch .form-check-input:checked{
-  background-color: var(--palette1-medium);
-  border-color: var(--palette1-medium);
+.form-switch .form-check-input:checked {
+    background-color: var(--palette1-medium);
+    border-color: var(--palette1-medium);
 }
 
-.form-switch .form-check-input:focus{
-  border-color: var(--main-dark);
-  box-shadow: 0 0 0 0.25rem var(--palette1-light);
+.form-switch .form-check-input:focus {
+    border-color: var(--main-dark);
+    box-shadow: 0 0 0 0.25rem var(--palette1-light);
+}
+
+.wishlist-container .form-switch .form-check-input:checked {
+    background-color: var(--palette2-dark);
+    border-color: var(--palette2-dark);
 }
 
 /* WISHLIST */
-.utils-row.utils-row-main{
-  background-color: var(--palette2-light);
-}
-.utils-row{
-  border-radius: 15px;
-  padding: 10px;
-  width: auto;
+.utils-row.utils-row-main {
+    background-color: var(--palette2-light);
 }
 
-.row-separator{
-  border-right: 1px solid #00000040;
+.utils-row {
+    border-radius: 15px;
+    padding: 10px;
+    width: auto;
+}
+
+.row-separator {
+    border-right: 1px solid #00000040;
 }
 
 /* WISHLIST CARDS */
-.user-wishes{
-  overflow-wrap: break-word;
+.user-wishes {
+    overflow-wrap: break-word;
 }
 
-.user-wishes .header{
-  background-color: var(--palette1-medium);
-  text-align: center;
-  color:var(--main-dark);
-  font-family: 'DM Serif Text', serif;
-  font-size:1.5rem;
+.user-wishes .header {
+    background-color: var(--palette1-medium);
+    text-align: center;
+    color: var(--main-dark);
+    font-family: 'DM Serif Text', serif;
+    font-size: 1.5rem;
 }
 
-.pointer-grab{
-  cursor: grab;
+.pointer-grab {
+    cursor: grab;
 }
 
-.crossed-text{
-  text-decoration: line-through;
+.crossed-text {
+    text-decoration: line-through;
 }
 
-.welcome-container {
-  width: auto;
-  margin-top: 50px;
-  border-radius: 30px ;
-  background-color: var(--palette1-medium);
-  padding: 30px
-}
 
 .btn-warning-custom {
-  background-color: var(--palette1-medium);
+    background-color: var(--palette1-medium);
 }
 
-/* TABLE */
-.table {
-  background-color: var(--palette1-medium)
+
+@media (min-width: 768px) {
+    .wishlist-container {
+        margin-top: 50px;
+    }
+
+    .wishlist-title {
+        font-size: 2.5rem;
+    }
 }

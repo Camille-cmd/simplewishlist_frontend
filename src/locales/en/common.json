@@ -1,18 +1,27 @@
 {
+  "welcomePage": {
+    "title": "Welcome to SimpleWishlist",
+    "description": "Create a wishlist, add your wishes and share it with your friends. They will be able to see your wishes and mark them as taken. No more duplicate gifts!",
+    "description2": "To make things very simple, we don't require any registration. Just create a wishlist, share the personal links and let the magic happen!",
+    "description3": "Each user accesses the wishlist via a personal link that identifies them. This link is automatically generated on wishlist's creation. It's very important that everyone uses their personal link at the risk of modifying someone else's wishes",
+    "description4": "Click on the \"Create a new Wishlist\" button to get started!",
+    "createWLButton": "Create a new Wishlist"
+  },
   "createWL": {
     "title": "Create a new wishlist",
-    "wishlistName": "Your wishlist name",
-    "wishlistAdminName": "Your Name",
-    "allowSeeAssigned": "Allow to see who took a wish {{checked}}",
+    "wishlistName": "Your Wishlist name",
+    "wishlistAdminName": "Your name (you are the admin)",
+    "allowSeeAssigned": "Surprise mode {{checked}}",
+    "surpriseModeDescription": "In surprise mode, you can not see who took care of your wishes nor taken wishes. It's a surprise!",
     "otherUserName": "Who's in?",
     "placeholders": {
-      "wishlistName": "How should we name it?",
+      "wishlistName": "Family Christmas, Birthday...",
       "wishlistAdminName": "Your cool name",
-      "otherUserName": "Name of a fellow wishlist user"
+      "otherUserName": "Name of a lucky one"
     },
     "buttons": {
       "addAnother": "Add another lucky one",
-      "submit": "create wishlist"
+      "submit": "Create your Wishlist"
     }
   },
   "createWish": {
@@ -26,13 +35,31 @@
       "url": "https://somewherenice.com"
     },
     "buttons": {
-      "submit": "Add a new wish"
+      "submit": "Add a new wish",
+      "returnToWishlist": "Return to wishlist"
     }
   },
-   "editWish": {
+  "alert": {
+    "wishCreated": "Your wish has been added!",
+    "wishUpdated": "Your wish has been updated!",
+    "wishDeleted": "Your wish has been deleted!",
+    "wishTaken": "You have taken this wish!"
+  },
+  "wishCard": {
+    "tooltip": {
+      "currentUserMessage": "Click to edit/delete this wish!",
+      "otherUserMessage": "Click to mark this wish as taken!",
+      "goToWebsite": "Go to the website",
+      "alreadyTaken": "This wish is already taken!",
+      "untake": "Click to unmark this wish as taken"
+    },
+    "taken": "Taken by "
+  },
+  "editWish": {
     "pageTitle": "Update your wish",
     "buttons": {
-      "submit": "Update wish"
+      "submit": "Update wish",
+      "delete": "Delete wish"
     }
   },
   "WLCreated": {
@@ -45,7 +72,8 @@
     "helpLinkEnd": "at the risk of modifying someone else's wishlist, or ruining the surprise ",
     "individualLinks": "Here are the individual links for each user. Now's a good time to share them with everyone!",
     "access": "Everything sent? Access your wishlist!",
-    "copy": "Copy",
+    "copy": "Copy user link",
+    "copied": "Copied!",
     "copyAllIntro": "Here are the links for the wishlist",
     "copyAllReminder": "It is very important that everyone uses their personal link, at the risk of modifying someone else's wishlist, or ruining the surprise!"
   },
@@ -54,18 +82,22 @@
     "surpriseMode": "Surprise mode",
     "handleWishlist": "Wishlist Params",
     "handleWishlistUsers": "Handle Users",
-    "addNewWish": "Add a new wish"
+    "addNewWish": "Add a new wish",
+    "emptyWishlist": "This wishlist is empty.",
+    "emptyWishlistText": "Click on the \"Add a new wish\" button upward to add your first wish!"
   },
   "errors": {
     "wishlistName": {
       "required": "Your wishlist must have a name"
     },
     "wishlistAdminName": {
-      "required": "We need an admin name"
+      "required": "We need an admin name",
+      "noDuplicate": "All names in the wishlist must be different. Admin included."
     },
     "otherUsersNames": {
       "required": "We need at least one other person",
-      "noDuplicate": "Tous les noms doivent être différents"
-    }
+      "noDuplicate": "All names in the wishlist must be different."
+    },
+    "generic": "An error occurred. Please try again later."
   }
 }

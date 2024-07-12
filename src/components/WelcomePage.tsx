@@ -1,17 +1,29 @@
 import {Button} from "react-bootstrap";
+import {useTranslation} from "react-i18next";
 
 export default function WelcomePage() {
-    return (
-        <div className="welcome-container">
-            <h1>Welcome to SimpleWishlist! 💫</h1>
+    const {t} = useTranslation();
 
-            <p>SimpleWishlist is a web application that allows you to create wishlists and share them with your friends and family.</p>
-            <p>The application aims to be simple without any account creation or login required.</p>
-            <p>On creation, a personal link will be attributed to each user, with this link each user will be able to access its wishlist data</p>
-            <p>Click on the "Create a Wishlist" button to get started!</p>
-            <Button className={"btn-custom"} href={(`/wishlist/create`)}>
-                Create a Wishlist
-            </Button>
-        </div>
+    return (
+        <>
+            <h1 className={"wishlist-title my-4 my-md-5 p-2"}>
+                {t('welcomePage.title')}
+                <div>💫</div>
+            </h1>
+            <div className="wishlist-container">
+
+
+                <p>{t('welcomePage.description')}</p>
+                <p>{t('welcomePage.description2')}</p>
+                <p>{t('welcomePage.description3')}</p>
+                <p>{t('welcomePage.description4')}</p>
+
+                <div className="text-center">
+                    <Button className={"btn-custom"} href={(`/wishlist/create`)}>
+                        {t('welcomePage.createWLButton')} 🪄
+                    </Button>
+                </div>
+            </div>
+        </>
     );
 }

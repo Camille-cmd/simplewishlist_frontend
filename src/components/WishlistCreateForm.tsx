@@ -1,11 +1,12 @@
-import {Button, Form, Spinner} from "react-bootstrap";
+import {Button, Form, OverlayTrigger, Popover, Spinner, Stack, Tooltip} from "react-bootstrap";
 import '../assets/wishlistcreate.css'
 import {FieldArray, Formik} from 'formik';
-import {PersonX, PlusCircle} from "react-bootstrap-icons";
+import {PatchQuestion, PersonDash, PersonX, PlusCircle, Trash} from "react-bootstrap-icons";
 import {useTranslation} from "react-i18next";
 import * as Yup from "yup";
 import {TFunction} from "i18next";
 import {FormValues} from "../interfaces/WlCreateFormValues";
+import {TestContext} from "yup";
 
 /**
  * Interface for the props of the WishlistCreateForm component
@@ -22,7 +23,16 @@ const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().s
     wishlist_name: Yup.string()
         .required(t('errors.wishlistName.required')),
     wishlist_admin_name: Yup.string()
-        .required(t('errors.wishlistAdminName.required')),
+        .required(t('errors.wishlistAdminName.required'))
+        .test(
+            'unique',
+            t('errors.wishlistAdminName.noDuplicate'),
+            (value: string, context: TestContext) => {
+                // We want to prevent duplicates in the list of users (wishlist_admin_name included)
+                const allNamesIncludingAdmin = context.parent.other_users_names ? context.parent.other_users_names.concat(value) : [value]
+                return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
+            }
+        ),
     // TODO prendre en compte le wishlist_admin_name dans la liste des autres utilisateurs
     other_users_names: Yup.array()
         .required(t('errors.otherUsersNames.required'))
@@ -30,7 +40,11 @@ const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().s
         .test(
             'unique',
             t('errors.otherUsersNames.noDuplicate'),
-            (value: (string | undefined)[]) => value ? value.length === new Set(value)?.size : true
+            (value: (string | undefined)[], context: TestContext) => {
+                // We want to prevent duplicates in the list of users (wishlist_admin_name included)
+                const allNamesIncludingAdmin = value ? value.concat(context.parent.wishlist_admin_name) : []
+                return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
+            }
         )
 });
 
@@ -54,10 +68,22 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
     // We need to pass translation to the validation schema
     const validationSchema = () => createWLValidationSchema(t)
 
+    // Popover for the surprise mode description
+    const surpriseModePopover = (
+        <Popover id="popover-basic">
+            <Popover.Body>
+                {t('createWL.surpriseModeDescription')}
+            </Popover.Body>
+        </Popover>
+    );
+
     return (
         <>
 
-            <h1 className='bold'> {t('createWL.title')} </h1>
+            <h1 className='wishlist-title my-4 my-md-5 p-2'>
+                {t('createWL.title')}
+                <div>💫</div>
+            </h1>
 
             <Formik
                 initialValues={initialValues}
@@ -66,11 +92,11 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
             >
                 {props => (
 
-                    <Form onSubmit={props.handleSubmit}>
+                    <Form onSubmit={props.handleSubmit} className={"wishlist-container"}>
 
                         {/* WISHLIST NAME*/}
                         <Form.Group className="mb-3" controlId="wishlistName">
-                            <Form.Label>{t('createWL.wishlistName')}</Form.Label>
+                            <Form.Label>{t('createWL.wishlistName')}*</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="wishlist_name"
@@ -85,7 +111,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
 
                         {/* WISHLIST ADMIN NAME*/}
                         <Form.Group className="mb-3" controlId="wishlistAdminName">
-                            <Form.Label>{t('createWL.wishlistAdminName')}</Form.Label>
+                            <Form.Label>{t('createWL.wishlistAdminName')}*</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="wishlist_admin_name"
@@ -94,21 +120,29 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                 placeholder={t('createWL.placeholders.wishlistAdminName')}
                                 isInvalid={!!(props.touched.wishlist_admin_name && props.errors.wishlist_admin_name)}
                             />
-                            <Form.Control.Feedback
-                                type="invalid">{props.errors.wishlist_admin_name}</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                                {props.errors.wishlist_admin_name}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         {/* ALLOW SEE ASSIGNED USERS CHECKBOX*/}
-                        <Form.Check
-                            type='switch'
-                            id="surprise-mode"
-                            label={t('createWL.allowSeeAssigned', {checked: props.values.allow_see_assigned ? '🐵' : '🙈'})}
-                            name='allow_see_assigned'
-                            onChange={props.handleChange}
-                        />
+                        <Stack direction="horizontal" gap={2}>
+                            <Form.Check
+                                type='switch'
+                                id="surprise-mode"
+                                reverse={true}
+                                checked={!props.values.allow_see_assigned}
+                                label={t('createWL.allowSeeAssigned', {checked: props.values.allow_see_assigned ? '🐵' : '🙈'})}
+                                name='allow_see_assigned'
+                                onChange={() => props.setFieldValue('allow_see_assigned', !props.values.allow_see_assigned)}
+                            />
+                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover} rootClose>
+                                <PatchQuestion/>
+                            </OverlayTrigger>
+                        </Stack>
 
                         {/* ADD OTHER USERS*/}
-                        <Form.Group className="mb-3" controlId="wishlistOtherUsersName">
+                        <Form.Group controlId="wishlistOtherUsersName">
                             <h2 className='bold'>{t('createWL.otherUserName')}</h2>
 
                             <FieldArray
@@ -118,7 +152,8 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                         {
                                             props.values.other_users_names.map((other_user_name: string, index: number) => (
                                                 // Use index as Key, the list can not be reordered
-                                                <div key={index} className="d-flex flex-md-row">
+                                                <Stack direction={"horizontal"} gap={1} key={index}>
+
                                                     <Form.Control
                                                         className="mb-3"
                                                         type="text"
@@ -134,33 +169,34 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                                         }}
                                                         isInvalid={!!(props.touched.other_users_names && props.errors.other_users_names)}
                                                     />
-                                                    <Form.Control.Feedback type="invalid">{props.errors.other_users_names}</Form.Control.Feedback>
+                                                    <Form.Control.Feedback className="mb-3" type="invalid">{props.errors.other_users_names}</Form.Control.Feedback>
 
                                                     {/*REMOVE */}
-                                                    <button type="button" className="btn" onClick={() => arrayHelpers.remove(index)}>
-                                                        <PersonX/>
-                                                    </button>
-
-                                                </div>
-                                            ))
+                                                    <Button className="btn-remove btn-sm mb-3" onClick={() => arrayHelpers.remove(index)}>
+                                                        <Trash/>
+                                                    </Button>
+                                                </Stack>
+                                            ) )
                                         }
 
                                         {/* ADD ANOTHER */}
-                                        <button type="button" className="btn" onClick={() => arrayHelpers.push('')}>
+                                        <Button className="btn-add-another btn-sm float-end" onClick={() => arrayHelpers.push('')}>
                                             <PlusCircle/> {t('createWL.buttons.addAnother')}
-                                        </button>
+                                        </Button>
                                     </div>
                                 )}
                             />
                         </Form.Group>
 
                         {/*SUBMIT FORM */}
-                        <Button variant="primary" type="submit" disabled={props.isSubmitting}>
-                            {t('createWL.buttons.submit')}
-                            {props.isSubmitting && <Spinner animation="border" size="sm" role="status"></Spinner>}
-                        </Button>
+                        <div className="text-center create-wl-btn-container">
+                            <Button className={"btn-custom"} type="submit" disabled={props.isSubmitting}>
+                                {t('createWL.buttons.submit')} 🪄
+                                {props.isSubmitting && <Spinner animation="border" size="sm" role="status"></Spinner>}
+                            </Button>
+                        </div>
                     </Form>
-                )}
+                    )}
             </Formik>
         </>
     )

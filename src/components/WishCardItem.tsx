@@ -5,6 +5,7 @@ import {ArrowUpRightCircle} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {api} from "../api/axiosConfig.tsx";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
+import {useTranslation} from "react-i18next";
 
 interface WishCardItemProps {
     wish: Wish,
@@ -27,6 +28,7 @@ export default function WishCardItem(
         currentUserName,
     }
         : Readonly<WishCardItemProps>) {
+    const {t} = useTranslation();
     const {userToken} = useParams();
 
     /**
@@ -75,26 +77,32 @@ export default function WishCardItem(
     /**
      * Get the tooltip content depending on the user
      */
-    const TooltipContent = () => {
+    const TooltipContent = (wish: Wish) => {
         if (isCurrentUser) {
-            return 'Click to edit/delete this wish!'
+            return t('wishCard.tooltip.currentUserMessage')
+        } else if (wish.assigned_user !== null && wish.assigned_user !== currentUserName) {
+            return t('wishCard.tooltip.alreadyTaken')
+        } else if (wish.assigned_user !== null && wish.assigned_user === currentUserName) {
+            return t('wishCard.tooltip.untake')
         } else {
-            return 'Click to take the wish!'
+            return t('wishCard.tooltip.otherUserMessage')
         }
     }
+
+    const canShowAssignedUser = (wish.assigned_user !== null) && (!isCurrentUser || !surpriseMode)
 
     return (
         <ListGroupItem key={wish.id}>
 
-            <Card.Title className={wish.assigned_user !== null ? "crossed-text" : ""}>
+            <Card.Title className={canShowAssignedUser ? "crossed-text" : ""}>
                 <Stack direction={"horizontal"} gap={3} >
                     {/* double HandleOnClick to avoid triggering it on Link*/}
-                    <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent()}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
                         <span onClick={() => HandleOnClick(wish)}>{wish.name}</span>
                     </OverlayTrigger>
                     <Badge className="ms-auto" onClick={() => HandleOnClick(wish)}>{wish.price}</Badge>
                      {wish.url
-                        ? <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">Go to website</Tooltip>}>
+                        ? <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{t("wishCard.tooltip.goToWebsite")}</Tooltip>}>
                             <Link to={wish.url} target="_blank">
                                 <ArrowUpRightCircle className={"icon-link"}></ArrowUpRightCircle>
                             </Link>
@@ -105,9 +113,9 @@ export default function WishCardItem(
             </Card.Title>
 
             {/*Display taken by when surpriseMode is off*/}
-            {!surpriseMode && wish.assigned_user !== null ?
+            {canShowAssignedUser?
                 <Card.Text>
-                    <small className="text-muted">Taken by {wish.assigned_user}</small>
+                    <small className="text-muted">{t("wishCard.taken")}{wish.assigned_user}</small>
                 </Card.Text>
                 : null
             }

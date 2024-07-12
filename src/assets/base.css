@@ -7,7 +7,9 @@
   --palette2-dark: #d4a373;
   --main-dark: #344e41;
   --secondary-dark: #637f71;
-  --main-danger: #f99;
+  --danger-main: #f99;
+  --danger-secondary: #f66;
+  --danger-light: #ffc7cc;
 }
 
 

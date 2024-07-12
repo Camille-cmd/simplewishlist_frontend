@@ -47,7 +47,7 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
 
             <Stack direction="horizontal" gap={3}>
 
-                {/* User name and grettings */}
+                {/* User name (not on mobile) and greetings */}
                 <div className={"d-none d-md-block"}>
                     <span>
                         {/*TODO  limiter à 23 charactères*/}
@@ -58,10 +58,10 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
                 {/* Surprise mode */}
                 <div>
                     <span className="form-check form-switch">
-                        <input className="form-check-input" type="checkbox" role="switch" id="surpriseMode" onChange={HandleSurpriseModeChange} defaultChecked={!surpriseMode}/>
+                        <input className="form-check-input" type="checkbox" role="switch" id="surpriseMode" onChange={HandleSurpriseModeChange} checked={surpriseMode}/>
                         <label className="role-click form-check-label d-flex flex-row gap-1" htmlFor="surpriseMode">
                             <span className={"d-none d-md-block"}> {t('showWL.surpriseMode')}</span>
-                            <span> {!surpriseMode ? '🐵' : '🙈'}</span>
+                            <span> {surpriseMode ? '🙈' : '🐵'}</span>
                         </label>
                     </span>
                 </div>
@@ -70,6 +70,7 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
 
                 {/* Add new wish button */}
                 <Stack direction="horizontal" gap={3} className="ms-auto">
+
 
                     <Button variant="primary" type="submit" className="btn-custom btn-sm" onClick={()=>setShowWishForm(true)}>
                         <span className={"d-none d-md-block"}> {t('showWL.addNewWish')} 💫</span>

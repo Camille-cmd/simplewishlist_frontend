@@ -93,12 +93,12 @@ export default function WishForm({initialWish, setEditWish, setShowWishForm, sen
             <Button
                 as="input"
                 type="button"
-                value="Return to wishlist"
+                value={t("createWish.buttons.returnToWishlist")}
                 variant="outline-dark"
                 onClick={handleReturnToWishlist}
             />
             {isUpdating
-                ? <Button variant="danger" className={"ms-auto mx-5"} onClick={handleDelete} disabled={initialWish?.assigned_user != null}>Delete the wish</Button>
+                ? <Button variant="danger" className={"ms-auto mx-5"} onClick={handleDelete} disabled={initialWish?.assigned_user != null}>{t('editWish.buttons.delete')}</Button>
                 : null
             }
         </Stack>

@@ -1,0 +1,60 @@
+/* BOOTSTRAP OVERRIDE*/
+.form-control:focus {
+    border-color: 0 0 0 0.25rem var(--palette1-light);
+    box-shadow: 0 0 0 0.25rem var(--palette1-light);
+}
+
+.icon-link {
+    color: var(--palette1-dark);
+
+}
+
+.alert-success {
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
+.alert-danger {
+    background-color: var(--danger-main);
+    color: var(--main-dark);
+}
+
+.form-control::placeholder {
+    color: var(--palette1-dark);
+    font-size: smaller;
+}
+
+.form-control::placeholder {
+    color: var(--palette1-dark);
+    font-size: smaller;
+    opacity: 1;
+}
+
+.form-control.is-invalid .was-validated .form-control:invalid:focus {
+    border-color: var(--danger-main);
+}
+
+.form-control::placeholder {
+    color: var(--palette1-dark);
+    font-size: smaller;
+}
+
+a:hover {
+    color: var(--palette1-dark) !important;
+}
+
+.list-group {
+    --bs-list-group-border-color: var(--palette1-light);
+    --bs-list-group-border-width: 1px;
+}
+.list-group-item:hover {
+    --bs-list-group-bg: var(--palette1-light);
+    --bs-list-group-border-color: var(--palette1-light);
+    --bs-list-group-border-width: 1px;
+
+}
+/* TABLE */
+.table {
+    --bs-table-bg: var(--palette1-light);
+    --bs-table-accent-bg: var(--palette1-light);
+}

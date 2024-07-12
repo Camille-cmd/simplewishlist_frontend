@@ -1,17 +1,22 @@
 import {UserToken} from "../interfaces/UserToken";
-import {Alert, Button, Table} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
-import {BoxArrowUpRight} from "react-bootstrap-icons";
 import {generateLink} from "../utils/generateLink";
+import {useState} from "react";
+import UserLinkItem from "./UserLinkItem.tsx";
+
 /**
  * Component that displays the list of users and their unique links.
  * @param usersTokens
  * @param wishlistName
  * @constructor
  */
-export default function WishlistUserList({usersTokens, wishlistName}: Readonly<{ usersTokens: Array<UserToken>, wishlistName:string | undefined}>) {
+export default function WishlistUserList({usersTokens, wishlistName}: Readonly<{
+    usersTokens: Array<UserToken>,
+    wishlistName: string | undefined
+}>) {
     const {t} = useTranslation();
-
+    const [allLinksCopied, setAllLinksCopied] = useState<boolean>(false);
     /**
      * Copies all user links to the clipboard.
      *
@@ -28,45 +33,44 @@ export default function WishlistUserList({usersTokens, wishlistName}: Readonly<{
 
         // Generate the data with Intro(+ wishlistName) + links + reminder
         const data = `${t('WLCreated.copyAllIntro')} "${wishlistName}:"\n\n${links.join("\n\n")}\n\n${t('WLCreated.copyAllReminder')}`;
-        navigator.clipboard.writeText(data);
+        navigator.clipboard.writeText(data).then(function () {
+            setAllLinksCopied(true);
+            setTimeout(() => {
+                setAllLinksCopied(false);
+            }, 2000);
+        }, function (err) {
+            console.error('Async: Could not copy text: ', err);
+        });
     }
 
     return (
         <>
-            <h1>{t('WLCreated.wlWasCreated')}</h1>
-            <p>
-                {t('WLCreated.helpLink')}
-                <b>{t('WLCreated.helpLinkBoldPart')} </b>
-                {t('WLCreated.helpLinkEnd')}<span className="emoji-bg">🫣</span>
-            </p>
-            <p> {t('WLCreated.individualLinks')}</p>
-            <Button type="button" className="btn" variant="primary" onClick={copyAllLinks}>
-                {t('WLCreated.copyAll')}
+            <h1 className={"wishlist-title my-4 my-md-5 p-2"}>{t('WLCreated.wlWasCreated')} 🎉</h1>
+            <div className={"wishlist-container pb-1"}>
+                <p>
+                    {t('WLCreated.helpLink')}
+                    <b>{t('WLCreated.helpLinkBoldPart')} </b>
+                    {t('WLCreated.helpLinkEnd')}<span className="emoji-bg">🫣</span>
+                </p>
+                <p> {t('WLCreated.individualLinks')}</p>
+            </div>
+
+            <Button type="button" className="btn-custom mt-3 mb-2" variant="primary" onClick={copyAllLinks}>
+                {allLinksCopied ? t('WLCreated.copied') : t('WLCreated.copyAll')}
             </Button>
 
-            <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>{t('WLCreated.name')}</th>
-                    <th>{t('WLCreated.link')}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {usersTokens.map((userToken: UserToken) => (
-                    <tr key={userToken.name}>
-                        <td>{userToken.name}</td>
-                        <td>
-                            <Button type="button" className="btn" variant="primary" onClick={copyAllLinks}>
-                                {t('WLCreated.copy')}
-                            </Button>
-                            <Alert.Link href={generateLink(userToken.token, userToken.name)}>{generateLink(userToken.token, userToken.name)} <BoxArrowUpRight></BoxArrowUpRight></Alert.Link>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </Table>
-
             <p> {t('WLCreated.access')}</p>
+
+            <Container className="list-group user-wishes">
+                <Row>
+                    {usersTokens.map((userToken: UserToken) => (
+                        <Col xs={12} md={6} lg={4} className="mt-4">
+                            <UserLinkItem userToken={userToken} key={userToken.name}></UserLinkItem>
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
+
         </>
     )
 }

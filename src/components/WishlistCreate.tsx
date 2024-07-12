@@ -5,6 +5,9 @@ import WishlistUserList from "./WishlistUserList.tsx";
 import {UserToken} from "../interfaces/UserToken";
 import WishlistCreateForm from "./WishlistCreateForm.tsx";
 import {api} from "../api/axiosConfig.tsx";
+import WishlistAlert from "./WishlistAlert.tsx";
+import {AlertData} from "../interfaces/AlertData";
+import {useTranslation} from "react-i18next";
 
 
 /**
@@ -12,8 +15,12 @@ import {api} from "../api/axiosConfig.tsx";
  * @constructor
  */
 export default function WishlistCreate() {
+    const {t} = useTranslation();
     const [usersTokens, setUsersTokens] = useState<Array<UserToken>>([])
     const [wishlistName, setWishlistName] = useState<string>()
+
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertData, setAlertData] = useState<AlertData>();
 
     /**
      * Handle the users from the api response and convert them to UserToken objects
@@ -41,14 +48,28 @@ export default function WishlistCreate() {
                 const users = response.data
                 // Set the users
                 handleUsers(users)
+            } else {
+                setShowAlert(true);
+                setAlertData({
+                    "variant": "danger",
+                    "message": t("errors.generic")
+                } as AlertData);
             }
         }).catch((error) => {
-            console.error(error);
+            console.error(error.response);
+            const errorMessage = error.response.data.detail[0].msg;
+            setShowAlert(true);
+            setAlertData({
+                "variant": "danger",
+                "message": errorMessage
+            } as AlertData);
         });
     }
 
     return (
         <>
+            {showAlert ? <WishlistAlert alertData={alertData as AlertData}></WishlistAlert> : null}
+
             {usersTokens.length > 0
                 // If we have users, then we should display the users list
                 ? <WishlistUserList usersTokens={usersTokens} wishlistName={wishlistName}></WishlistUserList>
