@@ -4,6 +4,7 @@ export interface Wish {
     url: string | null;
     id: string;
     assigned_user: string | null;
+    deleted: boolean;
 }
 
 export interface UserWish {

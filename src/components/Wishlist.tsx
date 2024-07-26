@@ -7,7 +7,7 @@ import WishlistNavbar from "./WishlistNavbar.tsx";
 import WishCardItem from "./WishCardItem.tsx";
 import WishForm from "./WishForm.tsx";
 import useWebSocket from "react-use-websocket";
-import {WebSocketReceiveMessage} from "../interfaces/Websocket";
+import {WebSocketReceiveMessage, WebSocketSendMessage} from "../interfaces/Websocket";
 import WishlistAlert from "./WishlistAlert.tsx";
 import {AlertData} from "../interfaces/AlertData";
 import {useTranslation} from "react-i18next";
@@ -68,33 +68,6 @@ export default function Wishlist() {
 
 
     /**
-     * Get the wishlist data from the api and set the surprise mode if needed
-     */
-    const getWishlistData = () => {
-        api.get("/wishlist", {headers: {'Authorization': `Bearer ${userToken}`}}
-        ).then((response) => {
-            console.log(response.data);
-            // Reorder userWishes to get the current user's ones first
-            const currentUser = response.data.currentUser;
-            handleSetWishlistData(response.data, currentUser);
-
-            // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
-            setSurpriseMode(!response.data.allowSeeAssigned as boolean);
-
-        }).catch((error) => {
-                console.error(error.response);
-                const errorMessage = error.response.data.detail[0].msg;
-                setShowAlert(true);
-                setAlertData({
-                    "variant": "danger",
-                    "message": errorMessage
-                } as AlertData);
-            }
-        );
-    }
-
-
-    /**
      * Check if the user is the current user
      * @param user_name
      */
@@ -130,40 +103,42 @@ export default function Wishlist() {
         setShowAlert(true);
         setTimeout(() => {
             setShowAlert(false);
-        }, 2000);
+        }, 200000);
     }
-
-
-    /**
-     * Get the wishlist data on the first render
-     */
-    useEffect(() => {
-        getWishlistData();
-    }, [])
 
 
     // Run when the connection state (readyState) changes
     useEffect(() => {
-        console.log("Connection state changed")
+        // If the connection is open, we send a message to get the wishlist data
+        if (readyState === 1) {
+            sendJsonMessage({
+                type: 'wishlist_data',
+                currentUser: userToken,
+                post_values: null,
+                objectId: null
+            } as WebSocketSendMessage)
+        }
     }, [readyState])
 
 
     // Run when a new WebSocket message is received (lastJsonMessage)
     useEffect(() => {
-        console.log("New message received" + JSON.stringify(lastJsonMessage) + " " + typeof lastJsonMessage)
         if (lastJsonMessage == null) {
             return;
         }
         const response = JSON.parse(lastJsonMessage as string) as WebSocketReceiveMessage;
 
         const type = response.type;
-        console.log("Type : " + type)
         const data = response.data;
         const userNameFromWebsocket = response.userToken;
         const actionPerformed = response.action;
         switch (type) {
-            case "new_group_member_connection":
-                console.log(`connection from ${userNameFromWebsocket}`)
+            case "wishlist_data":
+                const currentUser = data.currentUser;
+                handleSetWishlistData(data, currentUser);
+
+                // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
+                setSurpriseMode(!data.allowSeeAssigned as boolean);
                 break;
             case "update_wishes":
                 let newUserWishes = response.data as UserWish[];

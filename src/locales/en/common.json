@@ -53,7 +53,8 @@
       "alreadyTaken": "This wish is already taken!",
       "untake": "Click to unmark this wish as taken"
     },
-    "taken": "Taken by "
+    "taken": "Taken by ",
+    "deleted": "Deleted"
   },
   "editWish": {
     "pageTitle": "Update your wish",

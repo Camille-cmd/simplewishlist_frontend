@@ -1,4 +1,4 @@
-import {WishListData} from "../interfaces/WishListData";
+import {WishListDataInterface} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
 import {Button, Dropdown, DropdownButton, Stack} from "react-bootstrap";
 import {useParams} from "react-router-dom";
@@ -7,7 +7,7 @@ import {Dispatch, SetStateAction} from "react";
 
 
 interface WishlistNavbarProps {
-    wishlistData: WishListData | undefined,
+    wishlistData: WishListDataInterface | undefined,
     setSurpriseMode: Dispatch<SetStateAction<boolean>>,
     surpriseMode: boolean,
     setShowWishForm: Dispatch<SetStateAction<boolean>>

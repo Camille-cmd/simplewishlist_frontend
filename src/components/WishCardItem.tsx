@@ -1,4 +1,4 @@
-import {Wish, WishListData} from "../interfaces/WishListData";
+import {Wish, WishListDataInterface} from "../interfaces/WishListData";
 import {Badge, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {Link, useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
@@ -30,6 +30,7 @@ export default function WishCardItem(
         : Readonly<WishCardItemProps>) {
     const {t} = useTranslation();
     const {userToken} = useParams();
+    const {deletedWish} = wish.deleted
 
     /**
      * Handle the assigned user of a wish, send the data to the api and refresh the wishlist data
@@ -63,8 +64,6 @@ export default function WishCardItem(
     const HandleOnClick = (wish: Wish) => {
         // If the user is the current one,
         // then set the editWish state instead of assigning the wish
-        console.log("wish.assigned_user", wish.assigned_user)
-        console.log("currentUserName", currentUserName)
         if (isCurrentUser) {
             setEditWish(wish)
             setShowWishForm(true)
@@ -92,13 +91,21 @@ export default function WishCardItem(
     const canShowAssignedUser = (wish.assigned_user !== null) && (!isCurrentUser || !surpriseMode)
 
     return (
+         // If the wish is deleted and the current user is not the one who took it, we don't display it
+        // We continue to display it to the user who took it, to allow him to unassign it
+        wish.deleted && wish.assigned_user !== currentUserName
+        ? null
+        :
         <ListGroupItem key={wish.id}>
 
             <Card.Title className={canShowAssignedUser ? "crossed-text" : ""}>
                 <Stack direction={"horizontal"} gap={3} >
                     {/* double HandleOnClick to avoid triggering it on Link*/}
                     <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
-                        <span onClick={() => HandleOnClick(wish)}>{wish.name}</span>
+                        {wish.deleted
+                            ? <span>{t("wishCard.deleted")}</span>
+                            : <span onClick={() => HandleOnClick(wish)}>{wish.name}</span>
+                        }
                     </OverlayTrigger>
                     <Badge className="ms-auto" onClick={() => HandleOnClick(wish)}>{wish.price}</Badge>
                      {wish.url

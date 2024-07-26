@@ -52,7 +52,6 @@ export default function WishForm(
      */
     const handleCreateWish = (values: WishAddFormValues) => {
         // Create via Websocket
-        console.log("Create wish", values)
         sendJsonMessage({
             type: 'create_wish',
             currentUser: userToken,
