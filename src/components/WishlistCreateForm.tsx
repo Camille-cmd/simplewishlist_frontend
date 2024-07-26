@@ -12,7 +12,7 @@ import {TestContext} from "yup";
  * Interface for the props of the WishlistCreateForm component
  */
 interface WishlistCreateFormChildProps {
-   handleSubmit: (values: FormValues) => void
+    handleSubmit: (values: FormValues) => void
 }
 
 /**
@@ -33,7 +33,6 @@ const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().s
                 return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
             }
         ),
-    // TODO prendre en compte le wishlist_admin_name dans la liste des autres utilisateurs
     other_users_names: Yup.array()
         .required(t('errors.otherUsersNames.required'))
         .of(Yup.string())
@@ -56,6 +55,21 @@ const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().s
  */
 export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCreateFormChildProps>) {
     const {t} = useTranslation();
+
+    /**
+     * Focus on the last input when a new one is added
+     */
+    const focusNewInput = () => {
+        // Focus on the last input when a new one is added
+        // setTimeout is required to allow the new input to render so that it returns the newly created input
+        setTimeout(() => {
+            const inputs = document.querySelectorAll('[name^=other_users_names]');
+            const lastInput = inputs[inputs.length - 1];
+            if (lastInput) {
+                lastInput.focus();
+            }
+        }, 0)
+    }
 
     const initialValues =
         {
@@ -136,7 +150,8 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                 name='allow_see_assigned'
                                 onChange={() => props.setFieldValue('allow_see_assigned', !props.values.allow_see_assigned)}
                             />
-                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover} rootClose>
+                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover}
+                                            rootClose>
                                 <PatchQuestion/>
                             </OverlayTrigger>
                         </Stack>
@@ -165,6 +180,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                                             if (e.key === 'Enter') {
                                                                 e.preventDefault();
                                                                 arrayHelpers.push('');
+                                                                focusNewInput();
                                                             }
                                                         }}
                                                         isInvalid={!!(props.touched.other_users_names && props.errors.other_users_names)}
@@ -176,7 +192,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                                         <Trash/>
                                                     </Button>
                                                 </Stack>
-                                            ) )
+                                            ))
                                         }
 
                                         {/* ADD ANOTHER */}
@@ -196,7 +212,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                             </Button>
                         </div>
                     </Form>
-                    )}
+                )}
             </Formik>
         </>
     )

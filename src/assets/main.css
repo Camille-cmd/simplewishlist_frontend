@@ -121,3 +121,14 @@ header .btn-custom:hover {
         font-size: 2.5rem;
     }
 }
+
+@media (min-width: 992px) {
+    .wishlist-container {
+        Width: 60%;
+        margin: auto;
+    }
+
+    .wishlist-title {
+        font-size: 3rem;
+    }
+}

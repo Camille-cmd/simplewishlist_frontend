@@ -36,7 +36,7 @@
     },
     "buttons": {
       "submit": "Ajouter un nouveau souhait",
-        "returnToWishlist": "Retour à la wishlist"
+      "returnToWishlist": "Retour à la wishlist"
     }
   },
   "wishCard": {
@@ -69,13 +69,13 @@
     "wlWasCreated": "Votre wishlist a été créée !",
     "helpLink": "Chaque utilisateur accède à la wishlist via un lien personnel qui les identifie. Il est ",
     "helpLinkBoldPart": "très important que chacun utilise son lien personnel ",
-    "helpLinkEnd": "au risque de modifier les souhaits de quelqu'un d'autre, ou de ruiner la surprise. ",
+    "helpLinkEnd": "au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise. ",
     "individualLinks": "Voici les liens individuels pour chaque utilisateur. C'est le moment de les partager avec tout le monde !",
     "access": "Tout le monde a son lien? Accédez à votre wishlist!",
     "copy": "Copier le lien",
     "copied": "Copié !",
     "copyAllIntro": "Voici les liens personnels de chacun pour accéder à la wishlist",
-    "copyAllReminder": "Il est très important que chacun utilise son lien personnel, au risque de modifier les souhaits de quelqu'un d'autre, ou de ruiner la surprise !"
+    "copyAllReminder": "Il est très important que chacun utilise son lien personnel, au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise !"
   },
   "showWL": {
     "hello": "Hello !",
@@ -97,6 +97,12 @@
     "otherUsersNames": {
       "required": "Nous avons besoin d'au moins un participant",
       "noDuplicate": "Tous les noms dans la wishlist doivent être différents."
+    },
+    "wishUrl": {
+      "correctUrl": "Vous devez entrer une URL valide, commençant par http:// ou https://"
+    },
+    "wishName": {
+      "required": "Vous devez donner un nom à votre souhait"
     },
     "generic": "Une erreur est survenue. Veuillez réessayer plus tard."
   }

@@ -98,6 +98,12 @@
       "required": "We need at least one other person",
       "noDuplicate": "All names in the wishlist must be different."
     },
+    "wishUrl": {
+      "correctUrl": "Please enter a valid URL, starting with http:// or https://"
+    },
+    "wishName": {
+      "required": "Your wish must have a name"
+    },
     "generic": "An error occurred. Please try again later."
   }
 }
