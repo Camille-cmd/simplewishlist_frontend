@@ -76,7 +76,12 @@ export default function Wishlist() {
         return user_name as string === current_user
     }
 
-
+    /**
+     * Set the correct alert message and show the alert
+     * @param variant
+     * @param actionPerformed
+     * @param alertMessage
+     */
     const handleAlert = (variant: string,  actionPerformed: string | null, alertMessage: string) => {
         // If an actionPerformed is given, set the alert message depending on the action performed
         if (actionPerformed !== null) {
@@ -103,7 +108,17 @@ export default function Wishlist() {
         setShowAlert(true);
         setTimeout(() => {
             setShowAlert(false);
-        }, 200000);
+        }, 5000);
+    }
+
+    const countActiveWishes = (userWishes: Array<Wish>) => {
+        let count = 0;
+        userWishes.forEach((wish) => {
+            if (!wish.deleted) {
+                count++;
+            }
+        });
+        return count;
     }
 
 
@@ -114,7 +129,7 @@ export default function Wishlist() {
             sendJsonMessage({
                 type: 'wishlist_data',
                 currentUser: userToken,
-                post_values: null,
+                postValues: null,
                 objectId: null
             } as WebSocketSendMessage)
         }
@@ -215,7 +230,7 @@ export default function Wishlist() {
 
                                         <ListGroup>
                                             {/* Wishes*/}
-                                            {data.wishes.length > 0
+                                            {countActiveWishes(data.wishes) > 0
                                                 ?
                                                 data.wishes.map((wish: Wish) => (
                                                     <WishCardItem

@@ -4,6 +4,7 @@ import ErrorPage from "./components/ErrorPage.tsx";
 import Wishlist from "./components/Wishlist.tsx";
 import WelcomePage from "./components/WelcomePage.tsx";
 import {HandleUsers} from "./components/Parameters/HandleUsers.tsx";
+import {WishlistSettings} from "./components/Parameters/WishlistParameters.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -19,6 +20,11 @@ export const router = createBrowserRouter([
     {
         path: "/:userToken/wishlist/handle-users",
         element: <HandleUsers/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/:userToken/wishlist/settings",
+        element: <WishlistSettings/>,
         errorElement: <ErrorPage/>,
     },
     {

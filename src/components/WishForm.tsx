@@ -16,13 +16,6 @@ interface WishFormProps {
     sendJsonMessage: (message: any) => void
 }
 
-const wishValidationSchema = (t: TFunction<"translation">) => Yup.object().shape({
-    url: Yup.string().url(t("errors.wishUrl.correctUrl")),
-    name: Yup.string()
-        .required(t("errors.wishName.required"))
-        .nullable(t("errors.wishName.required"))
-});
-
 
 /**
  * Component to create a new wish
@@ -43,7 +36,14 @@ export default function WishForm(
         }
 
 
-    const validationSchema = () => wishValidationSchema(t)
+    const validationSchema = () =>  {
+        return Yup.object().shape({
+            url: Yup.string().url(t("errors.wishUrl.correctUrl")),
+            name: Yup.string()
+                .required(t("errors.wishName.required"))
+                .nullable(t("errors.wishName.required"))
+        });
+    }
 
 
     /**
@@ -55,7 +55,7 @@ export default function WishForm(
         sendJsonMessage({
             type: 'create_wish',
             currentUser: userToken,
-            post_values: values,
+            postValues: values,
             objectId: null
         } as WebSocketSendMessage)
     }
@@ -69,7 +69,7 @@ export default function WishForm(
         sendJsonMessage({
             type: 'update_wish',
             currentUser: userToken,
-            post_values: values,
+            postValues: values,
             objectId: initialWish?.id
         } as WebSocketSendMessage)
 
@@ -83,7 +83,7 @@ export default function WishForm(
         sendJsonMessage({
             type: 'delete_wish',
             currentUser: userToken,
-            post_values: null,
+            postValues: null,
             objectId: initialWish?.id
         } as WebSocketSendMessage)
     }
@@ -113,6 +113,7 @@ export default function WishForm(
 
     return (
         <>
+            {/*BUTTONS */}
             <Stack direction="horizontal" gap={3} className={"mt-3"}>
                 <Button
                     as="input"
@@ -126,6 +127,8 @@ export default function WishForm(
                     : null
                 }
             </Stack>
+
+            {/* FORM */}
             <div className="container add-wish-form">
                 <h1 className="mb-5">{isUpdating ? t('editWish.pageTitle') : t('createWish.pageTitle')} 💫</h1>
                 <Formik

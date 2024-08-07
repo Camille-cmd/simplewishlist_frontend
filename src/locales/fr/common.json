@@ -11,7 +11,7 @@
     "title": "Créer une nouvelle wishlist",
     "wishlistName": "Nom de la wishlist",
     "wishlistAdminName": "Votre super nom (vous êtes l'admin)",
-    "allowSeeAssigned": "Mode surprise {{checked}}",
+    "allowSeeAssigned": "Mode surprise par défaut {{checked}}",
     "surpriseModeDescription": "En mode surprise, vous ne pouvez pas voir qui a pris en charge vos souhaits, ni quels souhaits sont pris. C'est une surprise!",
     "otherUserName": "Et qui participe ?",
     "placeholders": {
@@ -22,6 +22,15 @@
     "buttons": {
       "addAnother": "Ajouter un autre",
       "submit": "Créer la wishlist"
+    }
+  },
+  "updateWL": {
+    "title": "Mettre à jour votre wishlist",
+    "admin": "Administrateur:",
+    "success": "Votre wishlist a été mise à jour !",
+    "buttons": {
+      "submit": "Mettre à jour la wishlist",
+      "delete": "Supprimer la wishlist"
     }
   },
   "createWish": {
@@ -37,6 +46,18 @@
     "buttons": {
       "submit": "Ajouter un nouveau souhait",
       "returnToWishlist": "Retour à la wishlist"
+    }
+  },
+  "createUser": {
+    "placeholders": {
+      "name": "Nom d'un nouveau gros chanceux"
+    },
+    "buttons": {
+      "submit": "Ajouter",
+      "cancel": "Annuler"
+    },
+    "alert": {
+      "userAdded": "L'utilisateur a été ajouté !"
     }
   },
   "wishCard": {
@@ -86,6 +107,19 @@
     "emptyWishlist": "Cette wishlist est vide.",
     "emptyWishlistText": "Cliquez sur le bouton \"Ajouter un souhait\" ci-dessus pour ajouter votre premier souhait !"
   },
+  "settings": {
+    "users": "Gérer les participants",
+    "deactivateUser": "Désactiver le participant",
+    "reactivateUser": "Réactiver",
+    "inactiveUser": "Participant désactivé",
+    "addUser": "Ajouter un nouveau participant",
+    "handleUser": "Gestion des participants",
+    "manageWishlist": "Gestion de la wishlist",
+    "wishlistName": "Nom de la wishlist",
+    "wishlistAdminName": "Nom de l'admin",
+    "allowSeeAssigned": "Mode surprise",
+    "title": "Paramètres de la wishlist"
+  },
   "errors": {
     "wishlistName": {
       "required": "Vous devez donner un nom à votre wishlist"
@@ -103,6 +137,9 @@
     },
     "wishName": {
       "required": "Vous devez donner un nom à votre souhait"
+    },
+     "addUser": {
+        "required": "Vous devez entrer un nom"
     },
     "generic": "Une erreur est survenue. Veuillez réessayer plus tard."
   }

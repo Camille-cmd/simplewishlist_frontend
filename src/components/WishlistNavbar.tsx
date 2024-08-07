@@ -1,4 +1,4 @@
-import {WishListDataInterface} from "../interfaces/WishListData";
+import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
 import {Button, Dropdown, DropdownButton, Stack} from "react-bootstrap";
 import {useParams} from "react-router-dom";
@@ -7,7 +7,7 @@ import {Dispatch, SetStateAction} from "react";
 
 
 interface WishlistNavbarProps {
-    wishlistData: WishListDataInterface | undefined,
+    wishlistData: WishListData | undefined,
     setSurpriseMode: Dispatch<SetStateAction<boolean>>,
     surpriseMode: boolean,
     setShowWishForm: Dispatch<SetStateAction<boolean>>
@@ -84,8 +84,8 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
                             role="parameters"
                             variant="custom"
                         >
-                            <Dropdown.Item eventKey="1" href={(`/${userToken}/wishlist/handle-users`)}>Handle users</Dropdown.Item>
-                            <Dropdown.Item eventKey="2">Wishlist parameters</Dropdown.Item>
+                            <Dropdown.Item eventKey="1" href={(`/${userToken}/wishlist/handle-users`)}>{t('settings.handleUser')} </Dropdown.Item>
+                            <Dropdown.Item eventKey="2" href={(`/${userToken}/wishlist/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
                         </DropdownButton>
                         : null
                     }

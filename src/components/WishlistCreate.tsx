@@ -2,12 +2,12 @@ import '../assets/wishlistcreate.css'
 import {FormValues} from "../interfaces/WlCreateFormValues";
 import {useState} from "react";
 import WishlistUserList from "./WishlistUserList.tsx";
-import {UserToken} from "../interfaces/UserToken";
-import WishlistCreateForm from "./WishlistCreateForm.tsx";
+import {UserData} from "../interfaces/UserToken";
 import {api} from "../api/axiosConfig.tsx";
 import WishlistAlert from "./WishlistAlert.tsx";
 import {AlertData} from "../interfaces/AlertData";
 import {useTranslation} from "react-i18next";
+import WishlistCreateForm from "./WishlistCreateForm.tsx";
 
 
 /**
@@ -16,25 +16,12 @@ import {useTranslation} from "react-i18next";
  */
 export default function WishlistCreate() {
     const {t} = useTranslation();
-    const [usersTokens, setUsersTokens] = useState<Array<UserToken>>([])
+    const [usersData, setUsersData] = useState<Array<UserData>>([])
     const [wishlistName, setWishlistName] = useState<string>()
 
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertData, setAlertData] = useState<AlertData>();
 
-    /**
-     * Handle the users from the api response and convert them to UserToken objects
-     * @param users
-     */
-    const handleUsers = (users: Array<string>) => {
-        Object.entries(users).forEach(([key, value]) => {
-            const newUserToken = {
-                "name": key,
-                "token": value
-            } as UserToken
-            setUsersTokens(prevState => [...prevState, newUserToken]);
-        });
-    }
 
     /**
      * Handle the form submission to create the wishlist
@@ -43,11 +30,13 @@ export default function WishlistCreate() {
     const handleSubmit = (values: FormValues) => {
         // Api call to create the wishlist
         api.put('/wishlist', values).then((response) => {
+            // If the response is successful, then we should display the users list
             if (response.status === 200) {
-                setWishlistName(values.wishlist_name)
-                const users = response.data
-                // Set the users
-                handleUsers(users)
+                setWishlistName(values.wishlistName)
+
+                // Set the users data
+                setUsersData(response.data as Array<UserData>)
+
             } else {
                 setShowAlert(true);
                 setAlertData({
@@ -70,9 +59,9 @@ export default function WishlistCreate() {
         <>
             {showAlert ? <WishlistAlert alertData={alertData as AlertData}></WishlistAlert> : null}
 
-            {usersTokens.length > 0
+            {usersData.length > 0
                 // If we have users, then we should display the users list
-                ? <WishlistUserList usersTokens={usersTokens} wishlistName={wishlistName}></WishlistUserList>
+                ? <WishlistUserList usersData={usersData} wishlistName={wishlistName} userSettings={false} setUsersData={setUsersData}></WishlistUserList>
                 // Else, display the wishlist create form
                 : <WishlistCreateForm handleSubmit={handleSubmit}></WishlistCreateForm>
             }

@@ -1,7 +1,7 @@
-import {Button, Form, OverlayTrigger, Popover, Spinner, Stack, Tooltip} from "react-bootstrap";
+import {Button, Form, OverlayTrigger, Popover, Spinner, Stack} from "react-bootstrap";
 import '../assets/wishlistcreate.css'
 import {FieldArray, Formik} from 'formik';
-import {PatchQuestion, PersonDash, PersonX, PlusCircle, Trash} from "react-bootstrap-icons";
+import {PatchQuestion, PlusCircle, Trash} from "react-bootstrap-icons";
 import {useTranslation} from "react-i18next";
 import * as Yup from "yup";
 import {TFunction} from "i18next";
@@ -14,39 +14,6 @@ import {TestContext} from "yup";
 interface WishlistCreateFormChildProps {
     handleSubmit: (values: FormValues) => void
 }
-
-/**
- * Create the validation schema for the wishlist creation form
- * @param t
- */
-const createWLValidationSchema = (t: TFunction<"translation">) => Yup.object().shape({
-    wishlist_name: Yup.string()
-        .required(t('errors.wishlistName.required')),
-    wishlist_admin_name: Yup.string()
-        .required(t('errors.wishlistAdminName.required'))
-        .test(
-            'unique',
-            t('errors.wishlistAdminName.noDuplicate'),
-            (value: string, context: TestContext) => {
-                // We want to prevent duplicates in the list of users (wishlist_admin_name included)
-                const allNamesIncludingAdmin = context.parent.other_users_names ? context.parent.other_users_names.concat(value) : [value]
-                return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
-            }
-        ),
-    other_users_names: Yup.array()
-        .required(t('errors.otherUsersNames.required'))
-        .of(Yup.string())
-        .test(
-            'unique',
-            t('errors.otherUsersNames.noDuplicate'),
-            (value: (string | undefined)[], context: TestContext) => {
-                // We want to prevent duplicates in the list of users (wishlist_admin_name included)
-                const allNamesIncludingAdmin = value ? value.concat(context.parent.wishlist_admin_name) : []
-                return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
-            }
-        )
-});
-
 
 /**
  * Component to display the wishlist creation form
@@ -63,7 +30,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
         // Focus on the last input when a new one is added
         // setTimeout is required to allow the new input to render so that it returns the newly created input
         setTimeout(() => {
-            const inputs = document.querySelectorAll('[name^=other_users_names]');
+            const inputs = document.querySelectorAll('[name^=otherUsersNames]');
             const lastInput = inputs[inputs.length - 1];
             if (lastInput) {
                 lastInput.focus();
@@ -73,14 +40,42 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
 
     const initialValues =
         {
-            wishlist_name: '',
-            wishlist_admin_name: '',
-            allow_see_assigned: false,
-            other_users_names: [''],
+            wishlistName: '',
+            wishlistAdminName: '',
+            allowSeeAssigned: false,
+            otherUsersNames: [''],
         }
 
     // We need to pass translation to the validation schema
-    const validationSchema = () => createWLValidationSchema(t)
+    const validationSchema = () => {
+        return Yup.object().shape({
+            wishlistName: Yup.string()
+                .required(t('errors.wishlistName.required')),
+            wishlistAdminName: Yup.string()
+                .required(t('errors.wishlistAdminName.required'))
+                .test(
+                    'unique',
+                    t('errors.wishlistAdminName.noDuplicate'),
+                    (value: string, context: TestContext) => {
+                        // We want to prevent duplicates in the list of users (wishlist_admin_name included)
+                        const allNamesIncludingAdmin = context.parent.otherUsersNames ? context.parent.otherUsersNames.concat(value) : [value]
+                        return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
+                    }
+                ),
+            otherUsersNames: Yup.array()
+                .required(t('errors.otherUsersNames.required'))
+                .of(Yup.string())
+                .test(
+                    'unique',
+                    t('errors.otherUsersNames.noDuplicate'),
+                    (value: (string | undefined)[], context: TestContext) => {
+                        // We want to prevent duplicates in the list of users (wishlist_admin_name included)
+                        const allNamesIncludingAdmin = value ? value.concat(context.parent.wishlist_admin_name) : []
+                        return allNamesIncludingAdmin ? allNamesIncludingAdmin.length === new Set(allNamesIncludingAdmin)?.size : true
+                    }
+                )
+        });
+    }
 
     // Popover for the surprise mode description
     const surpriseModePopover = (
@@ -113,14 +108,14 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                             <Form.Label>{t('createWL.wishlistName')}*</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="wishlist_name"
-                                value={props.values.wishlist_name}
+                                name="wishlistName"
+                                value={props.values.wishlistName}
                                 onChange={props.handleChange}
                                 placeholder={t('createWL.placeholders.wishlistName')}
-                                isInvalid={!!(props.touched.wishlist_name && props.errors.wishlist_name)}
+                                isInvalid={!!(props.touched.wishlistName && props.errors.wishlistName)}
                             />
                             <Form.Control.Feedback
-                                type="invalid">{props.errors.wishlist_name}</Form.Control.Feedback>
+                                type="invalid">{props.errors.wishlistName}</Form.Control.Feedback>
                         </Form.Group>
 
                         {/* WISHLIST ADMIN NAME*/}
@@ -128,14 +123,14 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                             <Form.Label>{t('createWL.wishlistAdminName')}*</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="wishlist_admin_name"
-                                value={props.values.wishlist_admin_name}
+                                name="wishlistAdminName"
+                                value={props.values.wishlistAdminName}
                                 onChange={props.handleChange}
                                 placeholder={t('createWL.placeholders.wishlistAdminName')}
-                                isInvalid={!!(props.touched.wishlist_admin_name && props.errors.wishlist_admin_name)}
+                                isInvalid={!!(props.touched.wishlistAdminName && props.errors.wishlistAdminName)}
                             />
                             <Form.Control.Feedback type="invalid">
-                                {props.errors.wishlist_admin_name}
+                                {props.errors.wishlistAdminName}
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -145,13 +140,12 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                 type='switch'
                                 id="surprise-mode"
                                 reverse={true}
-                                checked={!props.values.allow_see_assigned}
-                                label={t('createWL.allowSeeAssigned', {checked: props.values.allow_see_assigned ? '🐵' : '🙈'})}
-                                name='allow_see_assigned'
-                                onChange={() => props.setFieldValue('allow_see_assigned', !props.values.allow_see_assigned)}
+                                checked={!props.values.allowSeeAssigned}
+                                label={t('createWL.allowSeeAssigned', {checked: props.values.allowSeeAssigned ? '🐵' : '🙈'})}
+                                name='allowSeeAssigned'
+                                onChange={() => props.setFieldValue('allowSeeAssigned', !props.values.allowSeeAssigned)}
                             />
-                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover}
-                                            rootClose>
+                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover} rootClose>
                                 <PatchQuestion/>
                             </OverlayTrigger>
                         </Stack>
@@ -161,20 +155,20 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                             <h2 className='bold'>{t('createWL.otherUserName')}</h2>
 
                             <FieldArray
-                                name="other_users_names"
+                                name="otherUsersNames"
                                 render={arrayHelpers => (
                                     <div>
                                         {
-                                            props.values.other_users_names.map((other_user_name: string, index: number) => (
+                                            props.values.otherUsersNames.map((otherUsersName: string, index: number) => (
                                                 // Use index as Key, the list can not be reordered
                                                 <Stack direction={"horizontal"} gap={1} key={index}>
 
                                                     <Form.Control
                                                         className="mb-3"
                                                         type="text"
-                                                        name={`other_users_names.${index}`}
+                                                        name={`otherUsersNames.${index}`}
                                                         placeholder={t('createWL.placeholders.otherUserName')}
-                                                        value={other_user_name}
+                                                        value={otherUsersName}
                                                         onChange={props.handleChange}
                                                         onKeyDown={(e) => {
                                                             if (e.key === 'Enter') {
@@ -183,9 +177,9 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                                                 focusNewInput();
                                                             }
                                                         }}
-                                                        isInvalid={!!(props.touched.other_users_names && props.errors.other_users_names)}
+                                                        isInvalid={!!(props.touched.otherUsersNames && props.errors.otherUsersNames)}
                                                     />
-                                                    <Form.Control.Feedback className="mb-3" type="invalid">{props.errors.other_users_names}</Form.Control.Feedback>
+                                                    <Form.Control.Feedback className="mb-3" type="invalid">{props.errors.otherUsersNames}</Form.Control.Feedback>
 
                                                     {/*REMOVE */}
                                                     <Button className="btn-remove btn-sm mb-3" onClick={() => arrayHelpers.remove(index)}>
@@ -206,7 +200,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
 
                         {/*SUBMIT FORM */}
                         <div className="text-center create-wl-btn-container">
-                            <Button className={"btn-custom"} type="submit" disabled={props.isSubmitting}>
+                            <Button className={"btn-custom"} type="submit">
                                 {t('createWL.buttons.submit')} 🪄
                                 {props.isSubmitting && <Spinner animation="border" size="sm" role="status"></Spinner>}
                             </Button>

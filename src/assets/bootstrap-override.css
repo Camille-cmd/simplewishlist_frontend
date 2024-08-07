@@ -47,14 +47,31 @@ a:hover {
     --bs-list-group-border-color: var(--palette1-light);
     --bs-list-group-border-width: 1px;
 }
-.list-group-item:hover {
-    --bs-list-group-bg: var(--palette1-light);
-    --bs-list-group-border-color: var(--palette1-light);
-    --bs-list-group-border-width: 1px;
 
-}
 /* TABLE */
 .table {
     --bs-table-bg: var(--palette1-light);
     --bs-table-accent-bg: var(--palette1-light);
+}
+
+.btn-success {
+    background-color: var(--palette1-medium);
+    color: var(--main-dark);
+}
+.btn-success:hover {
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
+.btn-danger {
+    background-color: var(--danger-main);
+    color: var(--main-dark);
+}
+.btn-danger:hover {
+    background-color: var(--danger-light);
+    color: var(--main-dark);
+}
+
+.bg-secondary {
+    background-color: var(--inactive) !important;
 }

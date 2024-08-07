@@ -51,7 +51,7 @@ export default function WishCardItem(
         sendJsonMessage({
             type: 'update_wish',
             currentUser: userToken,
-            post_values: post_values,
+            postValues: post_values,
             objectId: wishId
         } as WebSocketSendMessage)
     }

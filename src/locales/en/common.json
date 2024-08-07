@@ -11,7 +11,7 @@
     "title": "Create a new wishlist",
     "wishlistName": "Your Wishlist name",
     "wishlistAdminName": "Your name (you are the admin)",
-    "allowSeeAssigned": "Surprise mode {{checked}}",
+    "allowSeeAssigned": "Surprise mode default mode {{checked}}",
     "surpriseModeDescription": "In surprise mode, you can not see who took care of your wishes nor taken wishes. It's a surprise!",
     "otherUserName": "Who's in?",
     "placeholders": {
@@ -22,6 +22,15 @@
     "buttons": {
       "addAnother": "Add another lucky one",
       "submit": "Create your Wishlist"
+    }
+  },
+  "updateWL": {
+    "title": "Update your wishlist",
+    "admin": "Administrator:",
+    "success": "Your wishlist has been updated!",
+    "buttons": {
+      "submit": "Update your Wishlist",
+      "delete": "Delete your Wishlist"
     }
   },
   "createWish": {
@@ -37,6 +46,18 @@
     "buttons": {
       "submit": "Add a new wish",
       "returnToWishlist": "Return to wishlist"
+    }
+  },
+  "createUser": {
+    "placeholders": {
+      "name": "Name of a new lucky one"
+    },
+    "buttons": {
+      "submit": "Add",
+      "cancel": "Cancel"
+    },
+    "alert": {
+      "userAdded": "The user has been added!"
     }
   },
   "alert": {
@@ -87,6 +108,20 @@
     "emptyWishlist": "This wishlist is empty.",
     "emptyWishlistText": "Click on the \"Add a new wish\" button upward to add your first wish!"
   },
+  "settings": {
+    "users": "Users Settings",
+    "deactivateUser": "Deactivate user",
+    "reactivateUser": "Reactivate",
+    "inactiveUser": "Inactive user",
+    "addUser": "Add a new user",
+    "handleUser": "Handle users",
+    "manageWishlist": "Manage Wishlist",
+    "wishlistName": "Wishlist name",
+    "wishlistAdminName": "Admin name",
+    "allowSeeAssigned": "Surprise mode",
+    "title": "Wishlist Settings"
+
+  },
   "errors": {
     "wishlistName": {
       "required": "Your wishlist must have a name"
@@ -104,6 +139,9 @@
     },
     "wishName": {
       "required": "Your wish must have a name"
+    },
+    "addUser": {
+        "required": "You must enter a name"
     },
     "generic": "An error occurred. Please try again later."
   }

@@ -1,4 +1,6 @@
-export interface UserToken {
+export interface UserData {
     "name": string;
-    "token": string
+    "id": string;
+    "isActive": boolean;
+    "isAdmin": boolean;
 }
