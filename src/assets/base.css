@@ -1,3 +1,9 @@
+@font-face {
+  font-family: YesevaOne;
+  src: url(fonts/YesevaOne-Regular.ttf);
+}
+
+
 :root {
   --main-bg: #fefae0;
   --palette1-light: #e9edc9;

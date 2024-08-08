@@ -1,28 +1,19 @@
-import { useRouteError } from "react-router-dom";
-
-
-/**
- * Interface for the error object
- */
-interface RouteError {
-    statusText: string;
-    message: string;
-}
+import {useTranslation} from "react-i18next";
+import '../assets/errorpage.css';
 
 /**
  * Component to display the error page
  * @constructor
  */
 export default function ErrorPage() {
-  const error = useRouteError() as RouteError;
+    const {t} = useTranslation();
 
-  return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
-    </div>
-  );
+    return (
+        <div id="error-page">
+            <h1>404</h1>
+            <img src="/404.svg" alt="404 illustration"/>
+            <h2>{t('errors.404')}</h2>
+            <h5>{t('errors.404explanation')}</h5>
+        </div>
+    );
 }

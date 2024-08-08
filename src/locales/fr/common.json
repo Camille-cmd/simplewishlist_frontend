@@ -141,6 +141,8 @@
      "addUser": {
         "required": "Vous devez entrer un nom"
     },
-    "generic": "Une erreur est survenue. Veuillez réessayer plus tard."
+    "generic": "Une erreur est survenue. Veuillez réessayer plus tard.",
+    "404": "La page n'existe pas.",
+    "404explanation": "Vous avez peut-être mal tapé l'adresse ou la page a peut-être été déplacée."
   }
 }

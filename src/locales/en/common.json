@@ -143,6 +143,8 @@
     "addUser": {
         "required": "You must enter a name"
     },
-    "generic": "An error occurred. Please try again later."
+    "generic": "An error occurred. Please try again later.",
+    "404": "The page you are looking for does not exist.",
+    "404explanation": "You may have mistyped the address or the page may have moved."
   }
 }
