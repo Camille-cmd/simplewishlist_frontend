@@ -46,7 +46,7 @@ export function WishlistSettings() {
      */
     const handleSubmit = (values) => {
         api.post(
-            `/wishlist/update`,
+            `/wishlist`,
             values,
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {

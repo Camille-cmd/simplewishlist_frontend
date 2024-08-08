@@ -41,7 +41,7 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
             {},
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            if (response.status === 201) {
+            if (response.status === 200) {
                 setUsersData((prevState) => {
                     // Map over the users and set the selected user to inactive
                     return prevState.map((user) => {
@@ -68,7 +68,7 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
             {},
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            if (response.status === 201) {
+            if (response.status === 200) {
                 setUsersData((prevState) => {
                     // Map over the users and set the selected user to active
                     return prevState.map((user) => {

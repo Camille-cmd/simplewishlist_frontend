@@ -35,7 +35,7 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
      */
     const handleSubmitUpdate = (values) => {
         api.post(
-            `/wishlist/users/${currentUserToken}/update`,
+            `/wishlist/users/${currentUserToken}`,
             {"name": values.name},
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
@@ -66,11 +66,11 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
      */
     const handleSubmitCreate = (values) => {
         api.put(
-            `/wishlist/users/add-new`,
+            `/wishlist/users`,
             {"name": values.name},
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            if (response.status === 200) {
+            if (response.status === 201) {
                 const newUser = response.data as UserData;
 
                 // Add the new user to the list of users
