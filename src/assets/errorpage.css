@@ -22,7 +22,7 @@
     margin: 0 auto;
 }
 
-h1 {
+#error-page h1 {
     color: var(--main-dark) !important;
     font-family: YesevaOne, serif;
     text-align: center;

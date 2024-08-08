@@ -2,9 +2,8 @@
 @import './bootstrap-override.css';
 
 h1 {
-    color: var(--main-dark) !important;
-    font-family: YesevaOne, serif;
     text-align: center;
+    font-size: smaller;
     margin-top: 20px !important;
 }
 
@@ -111,6 +110,19 @@ header .btn-custom:hover {
     background-color: var(--palette1-medium);
 }
 
+.welcome-img {
+    width: 150px;
+    height: auto;
+    margin: 40px auto 50px;
+}
+
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    flex-flow: column-reverse;
+    gap: 30px;
+}
+
 
 @media (min-width: 768px) {
     .wishlist-container {
@@ -119,6 +131,10 @@ header .btn-custom:hover {
 
     .wishlist-title {
         font-size: 2.5rem;
+    }
+
+    .welcome-img {
+        width: 300px;
     }
 }
 
@@ -130,5 +146,16 @@ header .btn-custom:hover {
 
     .wishlist-title {
         font-size: 3rem;
+    }
+
+    .welcome-img {
+        width: 500px;
+        height: auto;
+    }
+
+    .welcome-container {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
     }
 }

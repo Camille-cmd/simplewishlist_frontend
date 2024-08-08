@@ -33,3 +33,8 @@ body {
   color: var(--main-dark);
   font-family: 'Montserrat', sans-serif;
 }
+
+h1 {
+  font-family: YesevaOne, serif;
+  color: var(--main-dark);
+}

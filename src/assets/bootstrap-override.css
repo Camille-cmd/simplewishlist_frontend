@@ -72,6 +72,16 @@ a:hover {
     color: var(--main-dark);
 }
 
+.btn-outline-dark {
+    background-color: var(--main-dark);
+    color: var(--palette1-light);
+}
+
+.btn-outline-dark:hover {
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
 .bg-secondary {
     background-color: var(--inactive) !important;
 }

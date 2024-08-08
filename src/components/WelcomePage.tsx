@@ -10,18 +10,25 @@ export default function WelcomePage() {
                 {t('welcomePage.title')}
                 <div>💫</div>
             </h1>
-            <div className="wishlist-container">
+
+            <div className="text-center welcome-container">
+
+                <img src="/wishlist.svg" alt="wishlist" className="welcome-img"/>
 
 
-                <p>{t('welcomePage.description')}</p>
-                <p>{t('welcomePage.description2')}</p>
-                <p>{t('welcomePage.description3')}</p>
-                <p>{t('welcomePage.description4')}</p>
+                <div className="wishlist-container">
 
-                <div className="text-center">
-                    <Button className={"btn-custom"} href={(`/wishlist/create`)}>
-                        {t('welcomePage.createWLButton')} 🪄
-                    </Button>
+
+                    <p>{t('welcomePage.description')}</p>
+                    <p>{t('welcomePage.description2')}</p>
+                    <p>{t('welcomePage.description3')}</p>
+                    <p>{t('welcomePage.description4')}</p>
+
+                    <div className="text-center">
+                        <Button className={"btn-custom"} href={(`/wishlist/create`)}>
+                            {t('welcomePage.createWLButton')} 🪄
+                        </Button>
+                    </div>
                 </div>
             </div>
         </>

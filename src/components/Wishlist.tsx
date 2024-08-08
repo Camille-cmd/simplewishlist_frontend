@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {api} from "../api/axiosConfig.tsx";
 import {useParams} from "react-router-dom";
 import {Card, Col, Container, ListGroup, ListGroupItem, Row,} from "react-bootstrap";
 import {UserWish, Wish, WishListData} from "../interfaces/WishListData";
@@ -84,7 +83,7 @@ export default function Wishlist() {
      * @param actionPerformed
      * @param alertMessage
      */
-    const handleAlert = (variant: string,  actionPerformed: string | null, alertMessage: string) => {
+    const handleAlert = (variant: string, actionPerformed: string | null, alertMessage: string) => {
         // If an actionPerformed is given, set the alert message depending on the action performed
         if (actionPerformed !== null) {
             switch (actionPerformed) {
@@ -127,7 +126,6 @@ export default function Wishlist() {
     // Run when the connection state (readyState) changes
     useEffect(() => {
         // If the connection is open, we send a message to get the wishlist data
-        console.log(readyState);
         if (readyState === 1) {
             setWaiting(false);
             sendJsonMessage({
@@ -148,7 +146,6 @@ export default function Wishlist() {
             return;
         }
         const response = JSON.parse(lastJsonMessage as string) as WebSocketReceiveMessage;
-        console.log(response);
 
         const type = response.type;
         const data = response.data;
@@ -176,7 +173,7 @@ export default function Wishlist() {
                 // Show the alert only if the current user is the one who updated the wish,
                 // we don't want to show the alert to others in the group
                 if (wishlistData?.currentUser === userNameFromWebsocket) {
-                    handleAlert("success", actionPerformed,"");
+                    handleAlert("success", actionPerformed, "");
                 }
 
                 // If we were editing a wish, we stop editing as the wish has been updated
@@ -193,87 +190,78 @@ export default function Wishlist() {
 
     return (
         <>
-            {/* LOADING */}
-            {waiting
-                ? <div className="loading">
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                : <div className="wishlist">
-                    {/* WISHLIST TITLE */}
-                    <h1 className={"wishlist-title my-3 my-md-4 p-2"}>
-                        {wishlistData?.name}
-                        <div>💫</div>
-                    </h1>
+            {/* WISHLIST TITLE */}
+            <h1 className={"wishlist-title my-3 my-md-4 p-2"}>
+                {wishlistData?.name}
+                <div>💫</div>
+            </h1>
 
-                    {/* WISHLIST BAR */}
-                    <WishlistNavbar
-                        wishlistData={wishlistData}
-                        setSurpriseMode={setSurpriseMode}
-                        surpriseMode={surpriseMode}
-                        setShowWishForm={setShowWishForm}>
-                    </WishlistNavbar>
+            {/* WISHLIST BAR */}
+            <WishlistNavbar
+                wishlistData={wishlistData}
+                setSurpriseMode={setSurpriseMode}
+                surpriseMode={surpriseMode}
+                setShowWishForm={setShowWishForm}>
+            </WishlistNavbar>
 
-                    {/* ALERT */}
-                    {showAlert
-                        ? <WishlistAlert alertData={alertData as AlertData}></WishlistAlert>
-                        : null
-                    }
+            {/* ALERT */}
+            {showAlert
+                ? <WishlistAlert alertData={alertData as AlertData}></WishlistAlert>
+                : null
+            }
 
-                    {/* CONTENT */}
-                    {showWishForm
-                        // Display the wish form => edit or create a wish
-                        ? <WishForm
-                            initialWish={editWish}
-                            setEditWish={setEditWish}
-                            setShowWishForm={setShowWishForm}
-                            sendJsonMessage={sendJsonMessage}>
-                        </WishForm>
+            {/* CONTENT */}
+            {showWishForm
+                // Display the wish form => edit or create a wish
+                ? <WishForm
+                    initialWish={editWish}
+                    setEditWish={setEditWish}
+                    setShowWishForm={setShowWishForm}
+                    sendJsonMessage={sendJsonMessage}>
+                </WishForm>
 
-                        // Display the list of wishes
-                        : <Container className="list-group user-wishes">
-                            <Row>
-                                {
-                                    wishlistData?.userWishes.map((data: UserWish) => (
-                                        <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
-                                            <Card key={data.user}>
+                // Display the list of wishes
+                : <Container className="list-group user-wishes">
+                    <Row>
+                        {
+                            wishlistData?.userWishes.map((data: UserWish) => (
+                                <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
+                                    <Card key={data.user}>
 
-                                                <Card.Header
-                                                    className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
-                                                    {data?.user}
-                                                </Card.Header>
+                                        <Card.Header
+                                            className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
+                                            {data?.user}
+                                        </Card.Header>
 
-                                                <ListGroup>
-                                                    {/* Wishes*/}
-                                                    {countActiveWishes(data.wishes) > 0
-                                                        ?
-                                                        data.wishes.map((wish: Wish) => (
-                                                            <WishCardItem
-                                                                key={wish.id}
-                                                                wish={wish}
-                                                                isCurrentUser={isCurrentUser(data.user)}
-                                                                surpriseMode={surpriseMode}
-                                                                setEditWish={setEditWish}
-                                                                sendJsonMessage={sendJsonMessage}
-                                                                setShowWishForm={setShowWishForm}
-                                                                currentUserName={wishlistData?.currentUser as string}
-                                                            ></WishCardItem>
-                                                        ))
-                                                        : <ListGroupItem>
-                                                            <Card.Title>{t('showWL.emptyWishlist')}</Card.Title>
-                                                            {isCurrentUser(data.user) && <Card.Text>{t('showWL.emptyWishlistText')}</Card.Text>}
-                                                        </ListGroupItem>
-                                                    }
-                                                </ListGroup>
-                                            </Card>
-                                        </Col>
-                                    ))
-                                }
-                            </Row>
-                        </Container>
-                    }
-                </div>
+                                        <ListGroup>
+                                            {/* Wishes*/}
+                                            {countActiveWishes(data.wishes) > 0
+                                                ?
+                                                data.wishes.map((wish: Wish) => (
+                                                    <WishCardItem
+                                                        key={wish.id}
+                                                        wish={wish}
+                                                        isCurrentUser={isCurrentUser(data.user)}
+                                                        surpriseMode={surpriseMode}
+                                                        setEditWish={setEditWish}
+                                                        sendJsonMessage={sendJsonMessage}
+                                                        setShowWishForm={setShowWishForm}
+                                                        currentUserName={wishlistData?.currentUser as string}
+                                                    ></WishCardItem>
+                                                ))
+                                                : <ListGroupItem>
+                                                    <Card.Title>{t('showWL.emptyWishlist')}</Card.Title>
+                                                    {isCurrentUser(data.user) &&
+                                                        <Card.Text>{t('showWL.emptyWishlistText')}</Card.Text>}
+                                                </ListGroupItem>
+                                            }
+                                        </ListGroup>
+                                    </Card>
+                                </Col>
+                            ))
+                        }
+                    </Row>
+                </Container>
             }
         </>
     )
