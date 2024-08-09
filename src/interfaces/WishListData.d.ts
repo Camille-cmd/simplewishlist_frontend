@@ -2,6 +2,7 @@ export interface Wish {
     name: string;
     price: string | null;
     url: string | null;
+    description: string | null;
     id: string;
     assigned_user: string | null;
     deleted: boolean;

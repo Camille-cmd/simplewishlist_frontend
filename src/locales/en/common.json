@@ -37,11 +37,13 @@
     "name": "Name of your wish",
     "price": "Do you know the price for this item?",
     "url": "Where can we find this item?",
+    "description": "Describe your wish to help your friends find it",
     "pageTitle": "Add a new wish",
     "placeholders": {
       "name": "What is your wish ?",
       "price": "0€",
-      "url": "https://somewherenice.com"
+      "url": "https://somewherenice.com",
+      "description": "I already have the 3rd season, I need the 4th one!"
     },
     "buttons": {
       "submit": "Add a new wish",

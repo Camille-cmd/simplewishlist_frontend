@@ -33,6 +33,7 @@ export default function WishForm(
             name: initialWish?.name ?? '',
             price: initialWish?.price ?? '',
             url: initialWish?.url ?? '',
+            description: initialWish?.description ?? ''
         }
 
 
@@ -130,7 +131,7 @@ export default function WishForm(
 
             {/* FORM */}
             <div className="container add-wish-form">
-                <h1 className="mb-5">{isUpdating ? t('editWish.pageTitle') : t('createWish.pageTitle')} 💫</h1>
+                <h1 className="my-2">{isUpdating ? t('editWish.pageTitle') : t('createWish.pageTitle')} 💫</h1>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -179,6 +180,19 @@ export default function WishForm(
                                 <Form.Control.Feedback type="invalid">{props.errors.url}</Form.Control.Feedback>
                             </Form.Group>
 
+                            <Form.Group className="mb-3" controlId="wishUrl">
+                                <Form.Label>{t('createWish.description')}</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    name="description"
+                                    value={props.values.description}
+                                    onChange={props.handleChange}
+                                    placeholder={t('createWish.placeholders.description')}
+                                    isInvalid={!!(props.touched.name && props.errors.description)}
+                                />
+                                <Form.Control.Feedback type="invalid">{props.errors.description}</Form.Control.Feedback>
+                            </Form.Group>
 
                             {/*SUBMIT FORM */}
                             <Button variant="primary" type="submit" disabled={props.isValidating} className="btn-custom mt-3 w-50 align-self-end">

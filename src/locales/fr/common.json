@@ -37,11 +37,13 @@
     "name": "Nom de votre souhait",
     "price": "Connaissez-vous le prix de cet article ?",
     "url": "Où pouvons-nous trouver cet article ?",
+    "description": "Décrivez votre souhait pour aider vos amis à le trouver",
     "pageTitle": "Ajouter un nouveau souhait",
     "placeholders": {
       "name": "Quel est votre souhait ?",
       "price": "0€",
-      "url": "https://mercidevotresouhait.com"
+      "url": "https://mercidevotresouhait.com",
+      "description": "J'ai déjà la saison 3, j'ai besoin de la 4ème !"
     },
     "buttons": {
       "submit": "Ajouter un nouveau souhait",
@@ -138,8 +140,8 @@
     "wishName": {
       "required": "Vous devez donner un nom à votre souhait"
     },
-     "addUser": {
-        "required": "Vous devez entrer un nom"
+    "addUser": {
+      "required": "Vous devez entrer un nom"
     },
     "generic": "Une erreur est survenue. Veuillez réessayer plus tard.",
     "404": "La page n'existe pas.",

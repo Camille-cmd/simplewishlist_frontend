@@ -3,7 +3,6 @@ import {Badge, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-
 import {Link, useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
-import {api} from "../api/axiosConfig.tsx";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
 import {useTranslation} from "react-i18next";
 
@@ -30,7 +29,6 @@ export default function WishCardItem(
         : Readonly<WishCardItemProps>) {
     const {t} = useTranslation();
     const {userToken} = useParams();
-    const {deletedWish} = wish.deleted
 
     /**
      * Handle the assigned user of a wish, send the data to the api and refresh the wishlist data
@@ -121,9 +119,15 @@ export default function WishCardItem(
 
             {/*Display taken by when surpriseMode is off*/}
             {canShowAssignedUser?
-                <Card.Text>
+                <Card.Subtitle>
                     <small className="text-muted">{t("wishCard.taken")}{wish.assigned_user}</small>
-                </Card.Text>
+                </Card.Subtitle>
+                : null
+            }
+
+            {/*Display the description of the wish*/}
+            {wish.description
+                ? <Card.Text className="mt-2">{wish.description}</Card.Text>
                 : null
             }
         </ListGroupItem>
