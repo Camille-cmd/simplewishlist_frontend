@@ -32,7 +32,7 @@ export default function Wishlist() {
 
     // Websocket
     const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
-        `ws://localhost:8000/ws/wishlist/${userToken}/`,
+        `${import.meta.env.VITE_WS_URL}/${userToken}/`,
         {
             share: false,
             //Will attempt to reconnect on all close events, such as server shutting down
