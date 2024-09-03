@@ -2,17 +2,17 @@ import {UserData} from "../interfaces/UserToken";
 import {Button, Col, Container, Row, ListGroup} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {generateLink} from "../utils/generateLink";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import UserLinkItem from "./UserLinkItem.tsx";
 import {PlusCircleDotted} from "react-bootstrap-icons";
 import {UserForm} from "./Parameters/UserForm.tsx";
 
 
 class WishlistUserListProps {
-    usersData: Array<UserData>
+    usersData: Array<UserData> | undefined
     wishlistName: string | undefined
-    userSettings: boolean
-    setUsersData: (value: (((prevState: [UserData]) => [UserData]) | [UserData])) => void;
+    userSettings: boolean | undefined
+    setUsersData: Dispatch<SetStateAction<Array<UserData>>> | undefined
 }
 
 /**
@@ -39,6 +39,9 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
     const copyAllLinks = () => {
         const links: Array<string> = [];
 
+        if (!usersData) {
+            return;
+        }
         usersData.map((userData: UserData) => (
             userData.isActive ? links.push(generateLink(userData.id, userData.name)) : null
 
@@ -79,7 +82,7 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
 
             <Container className="list-group user-wishes">
                 <Row>
-                    {usersData.map((userData: UserData) => (
+                    {usersData?.map((userData: UserData) => (
                         <Col xs={12} md={6} lg={4} className="mt-4" key={userData.id}>
                             <UserLinkItem userData={userData} editUser={userSettings} setUsersData={setUsersData} otherUsersNames={usersData.map(userToken => userToken.name)}></UserLinkItem>
                         </Col>
@@ -90,7 +93,7 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
                                 <b>{t('settings.addUser')}</b>
                             </div>
                             {showUserForm
-                                ? <UserForm editMode={false} setShowUserForm={setShowUserForm} otherUsersNames={usersData.map(userToken => userToken.name)} setUsersData={setUsersData} initialData={undefined}></UserForm>
+                                ? <UserForm editMode={false} setShowUserForm={setShowUserForm} otherUsersNames={usersData?.map(userToken => userToken.name)} setUsersData={setUsersData} initialData={undefined}></UserForm>
                                 : <Button className="ms-auto" variant={"success"} onClick={() => setShowUserForm(true)}>
                                     <PlusCircleDotted/>
                                 </Button>

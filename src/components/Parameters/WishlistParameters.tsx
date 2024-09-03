@@ -44,7 +44,7 @@ export function WishlistSettings() {
      * Handle the form submission to update the wishlist settings
      * @param values
      */
-    const handleSubmit = (values) => {
+    const handleSubmit = (values: WishlistSettingsInterface) => {
         api.post(
             `/wishlist`,
             values,

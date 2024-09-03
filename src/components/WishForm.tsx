@@ -1,6 +1,6 @@
 import {Formik} from "formik";
 import {Button, Form, Stack} from "react-bootstrap";
-import {t, TFunction} from "i18next";
+import {t} from "i18next";
 import {useParams} from "react-router-dom";
 import "../assets/wish.css"
 import {WishAddFormValues} from "../interfaces/WishAddFormValues";
@@ -13,7 +13,7 @@ interface WishFormProps {
     initialWish: Wish | undefined,
     setEditWish: Dispatch<SetStateAction<Wish | undefined>>,
     setShowWishForm: Dispatch<SetStateAction<boolean>>,
-    sendJsonMessage: (message: any) => void
+    sendJsonMessage: (message: WebSocketSendMessage) => void
 }
 
 
@@ -114,7 +114,6 @@ export default function WishForm(
 
     return (
         <>
-            {/*BUTTONS */}
             <Stack direction="horizontal" gap={3} className={"mt-3"}>
                 <Button
                     as="input"

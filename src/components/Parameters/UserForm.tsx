@@ -6,15 +6,15 @@ import {useTranslation} from "react-i18next";
 import {api} from "../../api/axiosConfig.tsx";
 import {useParams} from "react-router-dom";
 import WishlistAlert from "../WishlistAlert.tsx";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import {AlertData} from "../../interfaces/AlertData";
 import {UserData} from "../../interfaces/UserToken";
 
 class UserFormProps {
-    editMode: boolean;
-    setShowUserForm: (value: boolean) => void;
-    otherUsersNames: Array<string>;
-    setUsersData: (value: (((prevState: [UserData]) => [UserData]) | [UserData])) => void;
+    editMode: boolean | undefined;
+    setShowUserForm: Dispatch<boolean> | undefined;
+    otherUsersNames: Array<string> | undefined;
+    setUsersData: Dispatch<SetStateAction<Array<UserData>>> | undefined;
     initialData: UserData | undefined;
 }
 
@@ -22,7 +22,7 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
     const {t} = useTranslation();
     const {userToken} = useParams();
     const [alertData, setAlertData] = useState<AlertData>();
-    const [currentUserToken, setCurrentUserToken] = useState<string | undefined>(initialData?.token);
+    const [currentUserToken] = useState<string | undefined>(initialData?.id);
 
 
     const initialValues = {
@@ -33,13 +33,14 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
      * Handle the form submission to update a user
      * @param values - The form values {name: string}
      */
-    const handleSubmitUpdate = (values) => {
+    const handleSubmitUpdate = (values: { name: string; }) => {
         api.post(
             `/wishlist/users/${currentUserToken}`,
             {"name": values.name},
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            if (response.status === 200) {
+            if (response.status === 200 && setUsersData && setShowUserForm) {
+                // Update the user in the list of users
                 setUsersData((prevState) => {
                     return prevState.map((user) => {
                         if (currentUserToken === user.id) {
@@ -48,6 +49,7 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
                         return user;
                     });
                 });
+
                 setShowUserForm(false);
             }
         })
@@ -64,13 +66,13 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
      * Handle the form submission to create a new user
      * @param values - The form values {name: string}
      */
-    const handleSubmitCreate = (values) => {
+    const handleSubmitCreate = (values: { name: string; }) => {
         api.put(
             `/wishlist/users`,
             {"name": values.name},
             {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            if (response.status === 201) {
+            if (response.status === 201 && setUsersData && setShowUserForm) {
                 const newUser = response.data as UserData;
 
                 // Add the new user to the list of users
@@ -92,7 +94,7 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
      * Handle the form submission
      * @param values - The form values {name: string}
      */
-    const handleSubmit = (values) => {
+    const handleSubmit = (values: { name: string; }) => {
         if (editMode) {
             handleSubmitUpdate(values);
         } else {
@@ -114,9 +116,9 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
                         // We want to prevent duplicates in the list of users
                         if (editMode) {
                             // If we are editing a user, we want to allow the current name
-                            otherUsersNames = otherUsersNames.filter((name) => name !== initialData.name);
+                            otherUsersNames = otherUsersNames?.filter((name) => name !== initialData?.name);
                         }
-                        return !(otherUsersNames.includes(value as string));
+                        return !(otherUsersNames?.includes(value as string));
                     }
                 ),
         })
@@ -161,7 +163,7 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
                             <Button variant="success" type="submit" disabled={props.isValidating} className="ms-auto mt-3">
                                 {t('createUser.buttons.submit')}<PlusCircle className="ms-2"/>
                             </Button>
-                            <Button variant="danger" type="submit" onClick={()=> setShowUserForm(false)} className="mt-3">
+                            <Button variant="danger" type="submit" onClick={()=> setShowUserForm ? setShowUserForm(false) : null} className="mt-3">
                                 {t('createUser.buttons.cancel')}
                             </Button>
                         </Stack>

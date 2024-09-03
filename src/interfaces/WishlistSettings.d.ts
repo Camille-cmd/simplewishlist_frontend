@@ -1,4 +1,4 @@
 export interface WishlistSettingsInterface {
     "wishlistName": string;
-    "allowSeeAssigned": string;
+    "allowSeeAssigned": boolean;
 }

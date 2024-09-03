@@ -4,7 +4,6 @@ import {FieldArray, Formik} from 'formik';
 import {PatchQuestion, PlusCircle, Trash} from "react-bootstrap-icons";
 import {useTranslation} from "react-i18next";
 import * as Yup from "yup";
-import {TFunction} from "i18next";
 import {FormValues} from "../interfaces/WlCreateFormValues";
 import {TestContext} from "yup";
 
@@ -31,7 +30,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
         // setTimeout is required to allow the new input to render so that it returns the newly created input
         setTimeout(() => {
             const inputs = document.querySelectorAll('[name^=otherUsersNames]');
-            const lastInput = inputs[inputs.length - 1];
+            const lastInput = inputs[inputs.length - 1] as HTMLElement;
             if (lastInput) {
                 lastInput.focus();
             }

@@ -1,6 +1,6 @@
 export interface WebSocketReceiveMessage {
     type: string;
-    data: any;
+    data: never;
     userToken: string;
     action: string;
 }
@@ -8,7 +8,7 @@ export interface WebSocketReceiveMessage {
 export interface WebSocketSendMessage {
     type: string,
     currentUser: string,
-    post_values: { sting: string | null },
+    postValues: NonNullable<unknown> | null ,
     objectId: string | null
 
 }

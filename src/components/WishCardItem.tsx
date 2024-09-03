@@ -1,4 +1,4 @@
-import {Wish, WishListDataInterface} from "../interfaces/WishListData";
+import {Wish} from "../interfaces/WishListData";
 import {Badge, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {Link, useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
@@ -11,7 +11,7 @@ interface WishCardItemProps {
     isCurrentUser: boolean,
     surpriseMode: boolean
     setEditWish: Dispatch<SetStateAction<Wish | undefined>>
-    sendJsonMessage: (message: any) => void
+    sendJsonMessage: (message: WebSocketSendMessage) => void
     setShowWishForm: Dispatch<SetStateAction<boolean>>
     currentUserName: string
 }
@@ -35,7 +35,7 @@ export default function WishCardItem(
      * @param wishId
      * @param alreadyAssigned
      */
-    const handleAssignedUser = (wishId: string, alreadyAssigned: Boolean) => {
+    const handleAssignedUser = (wishId: string, alreadyAssigned: boolean) => {
         let post_values: { assigned_user: string | null } = {
             assigned_user: userToken as string
         }

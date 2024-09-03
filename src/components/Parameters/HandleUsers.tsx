@@ -14,7 +14,7 @@ import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
  */
 export function HandleUsers() {
     const {userToken} = useParams();
-    const [usersData, setUsersData] = useState<[UserData]>([]);
+    const [usersData, setUsersData] = useState<Array<UserData>>([]);
 
 
     /**
@@ -23,7 +23,7 @@ export function HandleUsers() {
     const getUsersData = () => {
         api.get('/wishlist/users', {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            setUsersData(response.data as Array<UserData>);
+            setUsersData(response.data);
         });
 
     }

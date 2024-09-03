@@ -40,17 +40,15 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
             {/* Only on mobile display the name above */}
             <div className={"d-md-none col-md-3 col-lg-2 mb-2"}>
                 <span>
-                    {/*TODO  limiter à 23 charactères*/}
                     {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
                 </span>
             </div>
 
             <Stack direction="horizontal" gap={3}>
 
-                {/* User name (not on mobile) and greetings */}
+                {/* Username (not on mobile) and greetings */}
                 <div className={"d-none d-md-block"}>
                     <span>
-                        {/*TODO  limiter à 23 charactères*/}
                         {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
                     </span>
                 </div>

@@ -30,8 +30,6 @@ export default function Wishlist() {
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
-    const [waiting, setWaiting] = useState<boolean>(true);
-
     // Websocket
     const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
         `ws://localhost:8000/ws/wishlist/${userToken}/`,
@@ -53,7 +51,7 @@ export default function Wishlist() {
         if (currentUser === undefined) {
             currentUser = wishlistData?.currentUser as string;
         }
-        userWishes.sort((a: UserWish, _: UserWish) => a.user === currentUser ? -1 : 1);
+        userWishes.sort((a: UserWish) => a.user === currentUser ? -1 : 1);
     }
 
     /**
@@ -127,7 +125,6 @@ export default function Wishlist() {
     useEffect(() => {
         // If the connection is open, we send a message to get the wishlist data
         if (readyState === 1) {
-            setWaiting(false);
             sendJsonMessage({
                 type: 'wishlist_data',
                 currentUser: userToken,
@@ -148,20 +145,28 @@ export default function Wishlist() {
         const response = JSON.parse(lastJsonMessage as string) as WebSocketReceiveMessage;
 
         const type = response.type;
-        const data = response.data;
         const userNameFromWebsocket = response.userToken;
         const actionPerformed = response.action;
+
+        // Variables to store the new data
+        let errorMessage: string;
+        let data: WishListData;
+        let currentUser: string;
+        let newUserWishes: UserWish[];
+        let newWishlistData: WishListData;
+
         switch (type) {
             case "wishlist_data":
-                const currentUser = data.currentUser;
+                data = response.data as WishListData;
+                currentUser = data.currentUser;
                 handleSetWishlistData(data, currentUser);
 
                 // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
                 setSurpriseMode(!data.allowSeeAssigned as boolean);
                 break;
             case "update_wishes":
-                let newUserWishes = response.data as UserWish[];
-                let newWishlistData = {...wishlistData} as WishListData;
+                newUserWishes = response.data as UserWish[];
+                newWishlistData = {...wishlistData} as WishListData;
 
 
                 // Update the wishlist data with the new userWishes
@@ -183,7 +188,9 @@ export default function Wishlist() {
                 break;
 
             case "error_message":
-                handleAlert("danger", null, data);
+                errorMessage = response.data as string;
+                console.error("Error received from websocket: " + errorMessage);
+                handleAlert("danger", null, errorMessage);
                 break;
         }
     }, [lastJsonMessage])

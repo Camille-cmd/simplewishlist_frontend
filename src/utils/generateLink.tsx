@@ -19,6 +19,6 @@ const urlizeText = (text: string) => {
  * @param {string} username - The name of the user.
  * @returns {string} The complete URL for accessing the user-specific page.
  */
-export const generateLink = (token: string, username: string) => {
+export const generateLink = (token: string, username: string): string => {
     return `${window.location.origin}/link/${token}#${urlizeText(username)}`
 }
