@@ -1,11 +1,12 @@
 import {UserData} from "../interfaces/UserToken";
-import {Button, Col, Container, Row, ListGroup} from "react-bootstrap";
+import {Button, Col, Container, ListGroup, Table} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {generateLink} from "../utils/generateLink";
 import {Dispatch, SetStateAction, useState} from "react";
 import UserLinkItem from "./UserLinkItem.tsx";
 import {PlusCircleDotted} from "react-bootstrap-icons";
 import {UserForm} from "./Parameters/UserForm.tsx";
+import {getAdminUserFromUserData} from "../utils/getAdminUserFromUserData.tsx";
 
 
 class WishlistUserListProps {
@@ -28,6 +29,8 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
     const [allLinksCopied, setAllLinksCopied] = useState<boolean>(false);
     const [showUserForm, setShowUserForm] = useState<boolean>(false);
 
+    const {adminId, adminName} = getAdminUserFromUserData(usersData);
+
 
     /**
      * Copies all user links to the clipboard.
@@ -43,7 +46,7 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
             return;
         }
         usersData.map((userData: UserData) => (
-            userData.isActive ? links.push(generateLink(userData.id, userData.name)) : null
+            userData.isActive ? links.push(userData.name + " = " + generateLink(userData.id, userData.name)) : null
 
         ));
 
@@ -74,18 +77,37 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
                 {!userSettings && <p> {t('WLCreated.individualLinks')}</p>}
             </div>
 
-            <Button type="button" className="btn-custom mt-3 mb-2" variant="primary" onClick={copyAllLinks}>
-                {allLinksCopied ? t('WLCreated.copied') : t('WLCreated.copyAll')}
-            </Button>
+            <div className={"d-flex flex-column"}>
 
-            {!userSettings &&<p> {t('WLCreated.access')}</p>}
+                <Button type="button" className={"btn-custom mt-3 mb-2 m-auto"} variant="primary" onClick={copyAllLinks}>
+                    {allLinksCopied ? t('WLCreated.copied') : t('WLCreated.copyAll')}
+                </Button>
+
+                {!userSettings && <p className={"mt-3 mb-4 m-auto"}>
+                    {t('WLCreated.access')}
+                    <a href={generateLink(adminId, adminName)} className={"link-success link-underline-danger"}>{t('WLCreated.accessButton')}</a>
+                </p>
+                }
+            </div>
 
             <Container className="list-group user-wishes">
-                <Row>
+                <Table striped responsive>
+                    <thead>
+                    <tr>
+                        <th className={"text-wrap text-break fixed-width"}>{t('WLCreated.table.name')}</th>
+                        <th className={"text-wrap text-break d-none d-lg-table-cell"}>{t('WLCreated.table.link')}</th>
+                        <th>{t('WLCreated.table.status')}</th>
+                        <th>{t('WLCreated.table.actions')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {usersData?.map((userData: UserData) => (
-                        <Col xs={12} md={6} lg={4} className="mt-4" key={userData.id}>
-                            <UserLinkItem userData={userData} editUser={userSettings} setUsersData={setUsersData} otherUsersNames={usersData.map(userToken => userToken.name)}></UserLinkItem>
-                        </Col>
+                        <UserLinkItem
+                            userData={userData}
+                            editUser={userSettings}
+                            setUsersData={setUsersData}
+                            otherUsersNames={usersData.map(userToken => userToken.name)}>
+                        </UserLinkItem>
                     ))}
                     {userSettings && <Col xs={12} md={6} lg={4} className="mt-4">
                         <ListGroup.Item key={"add"} className={"user-links wishlist-list-group h-100"}>
@@ -98,9 +120,10 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
                                     <PlusCircleDotted/>
                                 </Button>
                             }
-                         </ListGroup.Item>
+                        </ListGroup.Item>
                     </Col>}
-                </Row>
+                    </tbody>
+                </Table>
             </Container>
 
         </>

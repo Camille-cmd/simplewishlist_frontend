@@ -1,10 +1,10 @@
 {
   "welcomePage": {
     "title": "Bienvenue sur SimpleWishlist",
-    "description": "Créez une wishlist, ajoutez vos souhaits et partagez-la avec vos amis. Ils pourront voir vos souhaits et les marquer comme pris. Fini les cadeaux en double!",
-    "description2": "Pour simplifier les choses, nous ne demandons aucune inscription. Créez simplement une wishlist, partagez les liens personnels et laissez la magie opérer!",
+    "description": "Créez une wishlist, ajoutez vos souhaits et partagez-la avec vos amis. Ils pourront voir vos souhaits et les marquer comme pris. Fini les cadeaux en double !",
+    "description2": "Pour simplifier les choses, nous ne demandons aucune inscription. Créez simplement une wishlist, partagez les liens personnels et laissez la magie opérer !",
     "description3": "Chaque utilisateur accède à la wishlist via un lien personnel qui les identifie. Ce lien est généré automatiquement lors de la création de la wishlist. Il est très important que chacun utilise son lien personnel sous peine de modifier les souhaits de quelqu'un d'autre.",
-    "description4": "Cliquez sur le bouton \"Créer une nouvelle Wishlist\" pour commencer!",
+    "description4": "Cliquez sur le bouton \"Créer une nouvelle Wishlist\" pour commencer !",
     "createWLButton": "Créer une nouvelle Wishlist"
   },
   "createWL": {
@@ -12,7 +12,7 @@
     "wishlistName": "Nom de la wishlist",
     "wishlistAdminName": "Votre super nom (vous êtes l'admin)",
     "allowSeeAssigned": "Mode surprise par défaut {{checked}}",
-    "surpriseModeDescription": "En mode surprise, vous ne pouvez pas voir qui a pris en charge vos souhaits, ni quels souhaits sont pris. C'est une surprise!",
+    "surpriseModeDescription": "En mode surprise, vous ne pouvez pas voir qui a pris en charge vos souhaits, ni quels souhaits sont pris. C'est une surprise !",
     "otherUserName": "Et qui participe ?",
     "placeholders": {
       "wishlistName": "Noël en famille, Anniversaire...",
@@ -94,11 +94,18 @@
     "helpLinkBoldPart": "très important que chacun utilise son lien personnel ",
     "helpLinkEnd": "au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise. ",
     "individualLinks": "Voici les liens individuels pour chaque utilisateur. C'est le moment de les partager avec tout le monde !",
-    "access": "Tout le monde a son lien? Accédez à votre wishlist!",
+    "access": "Tout le monde a son lien ? ",
+    "accessButton": "Accédez à votre wishlist !",
     "copy": "Copier le lien",
     "copied": "Copié !",
     "copyAllIntro": "Voici les liens personnels de chacun pour accéder à la wishlist",
-    "copyAllReminder": "Il est très important que chacun utilise son lien personnel, au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise !"
+    "copyAllReminder": "Il est très important que chacun utilise son lien personnel, au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise !",
+     "table": {
+      "name": "Nom",
+      "link": "Lien pour accéder à la wishlist",
+      "status": "Statut",
+      "actions": "Actions"
+    }
   },
   "showWL": {
     "hello": "Hello !",

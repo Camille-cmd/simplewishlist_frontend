@@ -45,3 +45,16 @@ h1 {
 .user-links a {
     font-size: small;
 }
+
+.fixed-width {
+    width: 130px;
+}
+
+
+@media (min-width: 768px) {
+
+    .fixed-width {
+        width: 300px;
+    }
+
+}

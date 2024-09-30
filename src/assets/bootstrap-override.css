@@ -50,8 +50,11 @@ a:hover {
 
 /* TABLE */
 .table {
-    --bs-table-bg: var(--palette1-light);
-    --bs-table-accent-bg: var(--palette1-light);
+    --bs-table-bg: var(--main-bg);
+}
+.table th {
+    --bs-table-bg: var(--main-dark);
+    --bs-table-color: var(--palette1-light);
 }
 
 .btn-success {
@@ -84,4 +87,11 @@ a:hover {
 
 .bg-secondary {
     background-color: var(--inactive) !important;
+}
+
+.link-success {
+    color: var(--palette1-dark);
+}
+.link-underline-danger {
+    color: var(--danger-main);
 }

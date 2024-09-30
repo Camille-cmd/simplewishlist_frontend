@@ -1,4 +1,4 @@
-import {Button, ListGroup, Stack} from "react-bootstrap";
+import {Badge, Button} from "react-bootstrap";
 import {generateLink} from "../utils/generateLink.tsx";
 import {UserData} from "../interfaces/UserToken";
 import {useTranslation} from "react-i18next";
@@ -104,41 +104,51 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
 
 
     return (
-        <ListGroup.Item key={userData?.name} className={"user-links wishlist-list-group h-100 " + (!userData?.isActive ? 'bg-secondary' : '')} >
-            {/*Title of the card*/}
-            <Stack direction={"horizontal"} gap={3} className={"mb-3 py-2"}>
+        <tr>
+            <td className={"text-wrap text-break"}>
                 {editMode
-                    ? <UserForm editMode={editMode} setShowUserForm={setEditMode} otherUsersNames={otherUsersNames} setUsersData={setUsersData} initialData={userData}/>
-                    : <div className={"user-links" } onClick={()=> setEditMode(true)}>
-                    <b>{userData?.name}</b>
-                </div>
+                    ? <UserForm editMode={editMode} setShowUserForm={setEditMode} otherUsersNames={otherUsersNames}
+                                setUsersData={setUsersData} initialData={userData}/>
+                    : <div className={"user-links"} onClick={() => setEditMode(true)}>
+                        <b>{userData?.name}</b>
+                    </div>
                 }
-
+                {userData?.isActive ? null : <Badge bg="danger" className="ms-2">{t('settings.inactive')}</Badge>}
+            </td>
+            <td className={"text-wrap text-break d-none d-lg-table-cell"}>
+                {userData?.isActive && <p>{generateLink(userData?.id, userData?.name)}</p>}
+            </td>
+            <td>
+                <Badge bg={userData?.isActive ? "primary" : "danger"}>
+                    {userData?.isActive ? "Active" : "Inactive"}
+                </Badge>
+            </td>
+            <td>
                 {userData?.isActive ?
-                    <Button className="btn-sm btn-custom ms-auto" onClick={() => copyToClipboard(generateLink(userData?.id, userData?.name))}>
+                    <Button className="btn-sm btn-custom"
+                            onClick={() => copyToClipboard(generateLink(userData?.id, userData?.name))}>
                         {linkCopied ? t('WLCreated.copied') : t('WLCreated.copy')}
                     </Button>
                     : <p className="ms-auto">{t('settings.inactiveUser')}</p>
                 }
-            </Stack>
 
-            {/*Link to the wishlist*/}
-            {userData?.isActive && <p>{generateLink(userData?.id, userData?.name)}</p>}
-
-            {/*Actions to reactivate or deactivate the user*/}
-            {editUser && userData?.isActive
-                ? <Button
-                    className="btn-sm btn-custom"
-                    variant="danger"
-                    onClick={() => deactivateUser(userData?.id)}
-                >
-                    {t('settings.deactivateUser')}
-                </Button>
-                : editUser && <Button className="btn-sm btn-danger" onClick={() => reactivateUser(userData?.id)}>
+                {editUser && userData?.isActive
+                    ? <Button
+                        className="btn-sm btn-custom"
+                        variant="danger"
+                        onClick={() => deactivateUser(userData?.id)}
+                    >
+                        {t('settings.deactivateUser')}
+                    </Button>
+                    : editUser && <Button className="btn-sm btn-danger" onClick={() => reactivateUser(userData?.id)}>
                     {t('settings.reactivateUser')}
 
                 </Button>
-            }
-        </ListGroup.Item>
+                }
+
+
+            </td>
+        </tr>
     )
+
 }

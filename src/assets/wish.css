@@ -32,9 +32,14 @@
   border: var(--palette1-dark) solid 1px;
 }
 
-.badge{
+.bg-primary {
   background-color: var(--palette2-light) !important;
   color: var(--palette1-dark);
+}
+
+.bg-danger {
+  background-color: var(--danger-main) !important;
+  color: var(--main-dark);
 }
 
 @media screen and (min-width: 992px) {
