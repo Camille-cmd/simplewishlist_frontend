@@ -123,6 +123,12 @@ header .btn-custom:hover {
 }
 
 
+.add-user {
+    background-color: var(--palette2-light);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
+}
+
 @media (min-width: 768px) {
     .wishlist-container {
         margin-top: 50px;

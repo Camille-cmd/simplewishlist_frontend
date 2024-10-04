@@ -26,8 +26,41 @@
     color: var(--main-dark) !important;
     font-family: YesevaOne, serif;
     text-align: center;
-    font-size: 5em !important;
+    font-size: 5em;
     margin-top: 20px !important;
+}
+
+.loading-page h2{
+    font-size: 3em;
+}
+
+#loading-text {
+    font-size: 1.5em;
+    width: 50px;
+    margin-bottom: 30px;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side, var(--main-dark) 90%, #0000);
+    background: var(--_g) 0 50%,
+    var(--_g) 50% 50%,
+    var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
+
+}
+
+@keyframes l3 {
+    20% {
+        background-position: 0 0, 50% 50%, 100% 50%
+    }
+    40% {
+        background-position: 0 100%, 50% 0, 100% 50%
+    }
+    60% {
+        background-position: 0 50%, 50% 100%, 100% 0
+    }
+    80% {
+        background-position: 0 50%, 50% 50%, 100% 100%
+    }
 }
 
 @media (min-width: 768px) {

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Card, Col, Container, ListGroup, ListGroupItem, Row,} from "react-bootstrap";
 import {UserWish, Wish, WishListData} from "../interfaces/WishListData";
@@ -6,20 +6,24 @@ import WishlistNavbar from "./WishlistNavbar.tsx";
 import WishCardItem from "./WishCardItem.tsx";
 import WishForm from "./WishForm.tsx";
 import useWebSocket from "react-use-websocket";
-import {WebSocketReceiveMessage, WebSocketSendMessage} from "../interfaces/Websocket";
+import {WebSocketReceiveMessage} from "../interfaces/Websocket";
 import WishlistAlert from "./WishlistAlert.tsx";
 import {AlertData} from "../interfaces/AlertData";
 import {useTranslation} from "react-i18next";
 
+interface WishlistProps {
+    wishlistData: WishListData
+    setWishlistData: Dispatch<SetStateAction<WishListData | undefined>>
+}
+
 /**
- * Component to display the wishlist page
+ * Component to display the wishlist
  * @constructor
  */
-export default function Wishlist() {
+export default function Wishlist({wishlistData, setWishlistData}: Readonly<WishlistProps>) {
     const {t} = useTranslation();
-    const [wishlistData, setWishlistData] = useState<WishListData>();
 
-    const [surpriseMode, setSurpriseMode] = useState<boolean>(false);
+    const [surpriseMode, setSurpriseMode] = useState<boolean>(!wishlistData.allowSeeAssigned as boolean);
 
     const [editWish, setEditWish] = useState<Wish>();
     const [showWishForm, setShowWishForm] = useState<boolean>(false);
@@ -31,9 +35,10 @@ export default function Wishlist() {
     const {userToken} = useParams();
 
     // Websocket
-    const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
+    const {sendJsonMessage, lastJsonMessage} = useWebSocket(
         `${import.meta.env.VITE_WS_URL}/${userToken}/`,
         {
+            protocols: ['authorization', `${userToken}`],
             share: false,
             //Will attempt to reconnect on all close events, such as server shutting down
             shouldReconnect: () => true,
@@ -42,36 +47,11 @@ export default function Wishlist() {
     )
 
     /**
-     * Sort the userWishes to get the current user's ones first
-     * @param userWishes
-     * @param currentUser - the current user if we need to get it from the data
-     */
-    const sortUserWishes = (userWishes: UserWish[], currentUser: string | undefined = undefined) => {
-        // Reorder userWishes to get the current user's ones first
-        if (currentUser === undefined) {
-            currentUser = wishlistData?.currentUser as string;
-        }
-        userWishes.sort((a: UserWish) => a.user === currentUser ? -1 : 1);
-    }
-
-    /**
-     * Handle the setWishlistData function to reorder the userWishes first and set the wishlistData
-     * @param data
-     * @param currentUser - the current user if we need to force it
-     */
-    const handleSetWishlistData = (data: WishListData, currentUser: string | undefined = undefined) => {
-        // Reorder userWishes to get the current user's ones first
-        sortUserWishes(data.userWishes, currentUser);
-        setWishlistData(data);
-    }
-
-
-    /**
      * Check if the user is the current user
      * @param user_name
      */
     const isCurrentUser = (user_name: string) => {
-        const current_user = wishlistData?.currentUser as string;
+        const current_user = wishlistData.currentUser as string;
         return user_name as string === current_user
     }
 
@@ -110,6 +90,10 @@ export default function Wishlist() {
         }, 5000);
     }
 
+    /**
+     * Count the number of active wishes (not deleted)
+     * @param userWishes
+     */
     const countActiveWishes = (userWishes: Array<Wish>) => {
         let count = 0;
         userWishes.forEach((wish) => {
@@ -120,29 +104,12 @@ export default function Wishlist() {
         return count;
     }
 
-
-    // Run when the connection state (readyState) changes
-    useEffect(() => {
-        // If the connection is open, we send a message to get the wishlist data
-        if (readyState === 1) {
-            sendJsonMessage({
-                type: 'wishlist_data',
-                currentUser: userToken,
-                postValues: null,
-                objectId: null
-            } as WebSocketSendMessage)
-        } else if (readyState === 3) {
-            throw new Error(t('errors.generic'));
-        }
-    }, [readyState])
-
-
     // Run when a new WebSocket message is received (lastJsonMessage)
     useEffect(() => {
         if (lastJsonMessage == null) {
             return;
         }
-        const response = JSON.parse(lastJsonMessage as string) as WebSocketReceiveMessage;
+        const response = lastJsonMessage as WebSocketReceiveMessage;
 
         const type = response.type;
         const userNameFromWebsocket = response.userToken;
@@ -150,34 +117,23 @@ export default function Wishlist() {
 
         // Variables to store the new data
         let errorMessage: string;
-        let data: WishListData;
-        let currentUser: string;
         let newUserWishes: UserWish[];
         let newWishlistData: WishListData;
 
         switch (type) {
-            case "wishlist_data":
-                data = response.data as WishListData;
-                currentUser = data.currentUser;
-                handleSetWishlistData(data, currentUser);
-
-                // Set the surprise mode = if allowSeeAssigned is false then surpriseMode is true
-                setSurpriseMode(!data.allowSeeAssigned as boolean);
-                break;
             case "update_wishes":
-                newUserWishes = response.data as UserWish[];
+                newUserWishes = response.data as Array<UserWish>;
                 newWishlistData = {...wishlistData} as WishListData;
-
 
                 // Update the wishlist data with the new userWishes
                 newWishlistData.userWishes = newUserWishes;
-                handleSetWishlistData(newWishlistData);
+                setWishlistData(newWishlistData);
 
                 setShowWishForm(false);
 
                 // Show the alert only if the current user is the one who updated the wish,
                 // we don't want to show the alert to others in the group
-                if (wishlistData?.currentUser === userNameFromWebsocket) {
+                if (wishlistData.currentUser === userNameFromWebsocket) {
                     handleAlert("success", actionPerformed, "");
                 }
 
@@ -195,11 +151,12 @@ export default function Wishlist() {
         }
     }, [lastJsonMessage])
 
+
     return (
         <>
             {/* WISHLIST TITLE */}
             <h1 className={"wishlist-title my-3 my-md-4 p-2"}>
-                {wishlistData?.name}
+                {wishlistData.name}
                 <div>💫</div>
             </h1>
 

@@ -1,4 +1,4 @@
-import {Badge, Button} from "react-bootstrap";
+import {Badge, Button, ButtonGroup} from "react-bootstrap";
 import {generateLink} from "../utils/generateLink.tsx";
 import {UserData} from "../interfaces/UserToken";
 import {useTranslation} from "react-i18next";
@@ -113,7 +113,6 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
                         <b>{userData?.name}</b>
                     </div>
                 }
-                {userData?.isActive ? null : <Badge bg="danger" className="ms-2">{t('settings.inactive')}</Badge>}
             </td>
             <td className={"text-wrap text-break d-none d-lg-table-cell"}>
                 {userData?.isActive && <p>{generateLink(userData?.id, userData?.name)}</p>}
@@ -124,27 +123,30 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
                 </Badge>
             </td>
             <td>
-                {userData?.isActive ?
-                    <Button className="btn-sm btn-custom"
-                            onClick={() => copyToClipboard(generateLink(userData?.id, userData?.name))}>
-                        {linkCopied ? t('WLCreated.copied') : t('WLCreated.copy')}
-                    </Button>
-                    : <p className="ms-auto">{t('settings.inactiveUser')}</p>
-                }
+                <ButtonGroup vertical>
+                    {userData?.isActive ?
 
-                {editUser && userData?.isActive
-                    ? <Button
-                        className="btn-sm btn-custom"
-                        variant="danger"
-                        onClick={() => deactivateUser(userData?.id)}
-                    >
-                        {t('settings.deactivateUser')}
-                    </Button>
-                    : editUser && <Button className="btn-sm btn-danger" onClick={() => reactivateUser(userData?.id)}>
-                    {t('settings.reactivateUser')}
+                        <Button className="btn-sm btn-custom"
+                                onClick={() => copyToClipboard(generateLink(userData?.id, userData?.name))}>
+                            {linkCopied ? t('WLCreated.copied') : t('WLCreated.copy')}
+                        </Button>
+                        : <p className="ms-auto">{t('settings.inactiveUser')}</p>
+                    }
 
-                </Button>
-                }
+                    {editUser && userData?.isActive
+                        ? <Button
+                            className="btn-sm btn-custom"
+                            variant="danger"
+                            onClick={() => deactivateUser(userData?.id)}
+                        >
+                            {t('settings.deactivateUser')}
+                        </Button>
+                        : editUser && <Button className="btn-sm btn-danger" onClick={() => reactivateUser(userData?.id)}>
+                        {t('settings.reactivateUser')}
+
+                    </Button>
+                    }
+                </ButtonGroup>
 
 
             </td>

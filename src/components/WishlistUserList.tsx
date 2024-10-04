@@ -1,5 +1,5 @@
 import {UserData} from "../interfaces/UserToken";
-import {Button, Col, Container, ListGroup, Table} from "react-bootstrap";
+import {Button, Container, ListGroup, Table} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {generateLink} from "../utils/generateLink";
 import {Dispatch, SetStateAction, useState} from "react";
@@ -91,6 +91,7 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
             </div>
 
             <Container className="list-group user-wishes">
+
                 <Table striped responsive>
                     <thead>
                     <tr>
@@ -103,27 +104,36 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
                     <tbody>
                     {usersData?.map((userData: UserData) => (
                         <UserLinkItem
+                            key={userData.id}
                             userData={userData}
                             editUser={userSettings}
                             setUsersData={setUsersData}
                             otherUsersNames={usersData.map(userToken => userToken.name)}>
                         </UserLinkItem>
                     ))}
-                    {userSettings && <Col xs={12} md={6} lg={4} className="mt-4">
-                        <ListGroup.Item key={"add"} className={"user-links wishlist-list-group h-100"}>
-                            <div className={"user-links"}>
-                                <b>{t('settings.addUser')}</b>
-                            </div>
-                            {showUserForm
-                                ? <UserForm editMode={false} setShowUserForm={setShowUserForm} otherUsersNames={usersData?.map(userToken => userToken.name)} setUsersData={setUsersData} initialData={undefined}></UserForm>
-                                : <Button className="ms-auto" variant={"success"} onClick={() => setShowUserForm(true)}>
-                                    <PlusCircleDotted/>
-                                </Button>
-                            }
-                        </ListGroup.Item>
-                    </Col>}
                     </tbody>
                 </Table>
+
+                {userSettings &&
+                    <ListGroup.Item key={"add"} className={"user-links add-user wishlist-list-group h-100"}>
+                        <div className={"user-links"}>
+                            <b>{t('settings.addUser')}</b>
+                        </div>
+                        {showUserForm
+                            ? <UserForm
+                                editMode={false}
+                                setShowUserForm={setShowUserForm}
+                                otherUsersNames={usersData?.map(userToken => userToken.name)}
+                                setUsersData={setUsersData} initialData={undefined}></UserForm>
+                            : <Button
+                                variant={"success"}
+                                onClick={() => setShowUserForm(true)}>
+                                <PlusCircleDotted/>
+                            </Button>
+                        }
+                    </ListGroup.Item>
+                    }
+
             </Container>
 
         </>

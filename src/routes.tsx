@@ -1,10 +1,10 @@
 import {createBrowserRouter} from "react-router-dom";
 import WishlistCreate from "./components/WishlistCreate.tsx";
 import ErrorPage from "./components/ErrorPage.tsx";
-import Wishlist from "./components/Wishlist.tsx";
 import WelcomePage from "./components/WelcomePage.tsx";
 import {HandleUsers} from "./components/Parameters/HandleUsers.tsx";
 import {WishlistSettings} from "./components/Parameters/WishlistParameters.tsx";
+import WishlistEntry from "./components/WishlistEntry.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/link/:userToken",
-        element: <Wishlist/>,
+        element: <WishlistEntry/>,
         errorElement: <ErrorPage/>,
     },
 

@@ -4,7 +4,7 @@ export interface Wish {
     url: string | null;
     description: string | null;
     id: string;
-    assigned_user: string | null;
+    assignedUser: string | null;
     deleted: boolean;
 }
 

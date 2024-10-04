@@ -2,7 +2,7 @@ import {Wish} from "../interfaces/WishListData";
 import {Badge, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {Link, useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
 import {useTranslation} from "react-i18next";
 
@@ -29,6 +29,7 @@ export default function WishCardItem(
         : Readonly<WishCardItemProps>) {
     const {t} = useTranslation();
     const {userToken} = useParams();
+    const [canShowAssignedUser, setCanShowAssignedUser]= useState<boolean>(!!wish.assignedUser && (!isCurrentUser || surpriseMode))
 
     /**
      * Handle the assigned user of a wish, send the data to the api and refresh the wishlist data
@@ -36,13 +37,13 @@ export default function WishCardItem(
      * @param alreadyAssigned
      */
     const handleAssignedUser = (wishId: string, alreadyAssigned: boolean) => {
-        let post_values: { assigned_user: string | null } = {
-            assigned_user: userToken as string
+        let post_values: { assignedUser: string | null } = {
+            assignedUser: userToken as string
         }
         // Case when the user wants to unassign the wish
         if (alreadyAssigned) {
             post_values = {
-                assigned_user: null
+                assignedUser: null
             }
         }
         // Update via Websocket
@@ -65,9 +66,9 @@ export default function WishCardItem(
         if (isCurrentUser) {
             setEditWish(wish)
             setShowWishForm(true)
-        // Only the currently assigned user can modify the wish assigned_user
-        } else if (wish.assigned_user == null || wish.assigned_user === currentUserName) {
-            handleAssignedUser(wish.id, wish.assigned_user !== null)
+        // Only the currently assigned user can modify the wish assignedUser
+        } else if (!wish.assignedUser || wish.assignedUser === currentUserName) {
+            handleAssignedUser(wish.id, !!wish.assignedUser)
         }
     }
 
@@ -77,21 +78,24 @@ export default function WishCardItem(
     const TooltipContent = (wish: Wish) => {
         if (isCurrentUser) {
             return t('wishCard.tooltip.currentUserMessage')
-        } else if (wish.assigned_user !== null && wish.assigned_user !== currentUserName) {
+        } else if (!!wish.assignedUser && wish.assignedUser !== currentUserName) {
             return t('wishCard.tooltip.alreadyTaken')
-        } else if (wish.assigned_user !== null && wish.assigned_user === currentUserName) {
+        } else if (!!wish.assignedUser && wish.assignedUser === currentUserName) {
             return t('wishCard.tooltip.untake')
         } else {
             return t('wishCard.tooltip.otherUserMessage')
         }
     }
 
-    const canShowAssignedUser = (wish.assigned_user !== null) && (!isCurrentUser || !surpriseMode)
+    useEffect(() => {
+        const canShowAssignedUser = (!!wish.assignedUser) && (!isCurrentUser || !surpriseMode)
+        setCanShowAssignedUser(canShowAssignedUser)
+    }, [wish, isCurrentUser, surpriseMode])
 
     return (
          // If the wish is deleted and the current user is not the one who took it, we don't display it
         // We continue to display it to the user who took it, to allow him to unassign it
-        wish.deleted && wish.assigned_user !== currentUserName
+        wish.deleted && wish.assignedUser !== currentUserName
         ? null
         :
         <ListGroupItem key={wish.id}>
@@ -120,7 +124,7 @@ export default function WishCardItem(
             {/*Display taken by when surpriseMode is off*/}
             {canShowAssignedUser?
                 <Card.Subtitle>
-                    <small className="text-muted">{t("wishCard.taken")}{wish.assigned_user}</small>
+                    <small className="text-muted">{t("wishCard.taken")}{wish.assignedUser}</small>
                 </Card.Subtitle>
                 : null
             }
