@@ -13,6 +13,18 @@ export interface UserWish {
     wishes: Array<Wish>;
 }
 
+export interface UserWishData {
+    user: string;
+    wish: Wish;
+}
+
+export interface UserDeletedWishData {
+    user: string;
+    wishId: string;
+    assignedUser: string | null;
+}
+
+
 export interface WishListData {
     wishListId: string;
     name: string;

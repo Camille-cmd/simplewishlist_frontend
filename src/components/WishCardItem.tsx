@@ -104,10 +104,7 @@ export default function WishCardItem(
                 <Stack direction={"horizontal"} gap={3} >
                     {/* double HandleOnClick to avoid triggering it on Link*/}
                     <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
-                        {wish.deleted
-                            ? <span>{t("wishCard.deleted")}</span>
-                            : <span onClick={() => HandleOnClick(wish)}>{wish.name}</span>
-                        }
+                        <span onClick={() => HandleOnClick(wish)}>{wish.deleted ? t("wishCard.deleted") : wish.name }</span>
                     </OverlayTrigger>
                     <Badge className="ms-auto" onClick={() => HandleOnClick(wish)}>{wish.price}</Badge>
                      {wish.url

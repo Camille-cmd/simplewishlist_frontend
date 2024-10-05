@@ -1,7 +1,7 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Card, Col, Container, ListGroup, ListGroupItem, Row,} from "react-bootstrap";
-import {UserWish, Wish, WishListData} from "../interfaces/WishListData";
+import {UserDeletedWishData, UserWish, UserWishData, Wish, WishListData} from "../interfaces/WishListData";
 import WishlistNavbar from "./WishlistNavbar.tsx";
 import WishCardItem from "./WishCardItem.tsx";
 import WishForm from "./WishForm.tsx";
@@ -97,12 +97,84 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
     const countActiveWishes = (userWishes: Array<Wish>) => {
         let count = 0;
         userWishes.forEach((wish) => {
-            if (!wish.deleted) {
+            // We still count the wish if it was deleted but the assignedUser is the current user
+            if (!wish.deleted || (wish.deleted && isCurrentUser(wish.assignedUser as string))) {
                 count++;
             }
         });
         return count;
     }
+
+    /**
+     * Update or insert a wish within WishlistData
+     * @param newUserWishData
+     */
+    const upsertWish = (newUserWishData: UserWishData) => {
+        setWishlistData((prevWishlistData) => {
+            if (!prevWishlistData) return prevWishlistData; // Ensure wishlistData exists
+
+            // Map over the userWishes array to find the correct user
+            const updatedUserWishes = prevWishlistData.userWishes.map(userWish => {
+                if (userWish.user === newUserWishData.user) {
+                    // Check if the wish already exists in the user's wish list
+                    const wishExists = userWish.wishes.some(wish => wish.id === newUserWishData.wish.id);
+
+                    // If wish exists, update it; otherwise, add the new wish
+                    const updatedWishes = wishExists
+                        ? userWish.wishes.map(wish =>
+                            wish.id === newUserWishData.wish.id
+                                ? {...wish, ...newUserWishData.wish} // Update the existing wish
+                                : wish // Keep other wishes unchanged
+                        )
+                        : [...userWish.wishes, newUserWishData.wish]; // Add new wish
+
+                    // Return the updated userWish with the updated wishes array
+                    return {...userWish, wishes: updatedWishes};
+                }
+                return userWish; // Keep other users unchanged
+            });
+
+            // Return the updated WishListData
+            return {
+                ...prevWishlistData,
+                userWishes: updatedUserWishes,
+            };
+        });
+    };
+
+    /**
+     * Handle the deletion of a wish.
+     * Remove the wish from WishlistData or setting delete = true in case the wish is assigned to someone.
+     * In any case, removes it for the user who initiated the deletion
+     * @param deletedWishData
+     */
+    const handleDeleteWish = (deletedWishData: UserDeletedWishData) => {
+        setWishlistData((prevWishlistData) => {
+            if (!prevWishlistData) return prevWishlistData; // Ensure wishlistData exists
+
+            // Map over userWishes to handle deletion for current and other users
+            const updatedUserWishes = prevWishlistData.userWishes.map(userWish => {
+                if (deletedWishData.assignedUser !== wishlistData.currentUser || wishlistData.currentUser === deletedWishData.user) {
+                    // Remove the wish by filtering it out
+                    const updatedWishes = userWish.wishes.filter(wish => wish.id !== deletedWishData.wishId);
+                    return {...userWish, wishes: updatedWishes};
+                } else {
+                    // Update the wish for other users by marking it as deleted
+                    const updatedWishes = userWish.wishes.map(wish =>
+                        wish.id === deletedWishData.wishId ? {...wish, deleted: true} : wish
+                    );
+                    return {...userWish, wishes: updatedWishes};
+                }
+            });
+
+            // Return the updated WishListData with modified userWishes
+            return {
+                ...prevWishlistData,
+                userWishes: updatedUserWishes,
+            };
+        });
+    };
+
 
     // Run when a new WebSocket message is received (lastJsonMessage)
     useEffect(() => {
@@ -112,22 +184,24 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
         const response = lastJsonMessage as WebSocketReceiveMessage;
 
         const type = response.type;
+        const action = response.action
         const userNameFromWebsocket = response.userToken;
         const actionPerformed = response.action;
 
         // Variables to store the new data
         let errorMessage: string;
-        let newUserWishes: UserWish[];
-        let newWishlistData: WishListData;
+        let newUserWishData: UserWishData;
+        let deletedWishData: UserDeletedWishData;
 
         switch (type) {
-            case "update_wishes":
-                newUserWishes = response.data as Array<UserWish>;
-                newWishlistData = {...wishlistData} as WishListData;
-
-                // Update the wishlist data with the new userWishes
-                newWishlistData.userWishes = newUserWishes;
-                setWishlistData(newWishlistData);
+            case "updated_wish":
+                if (action == "delete_wish"){
+                    deletedWishData = response.data as UserDeletedWishData;
+                    handleDeleteWish(deletedWishData)
+                } else {
+                    newUserWishData = response.data as UserWishData;
+                    upsertWish(newUserWishData);
+                }
 
                 setShowWishForm(false);
 
@@ -150,7 +224,6 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 break;
         }
     }, [lastJsonMessage])
-
 
     return (
         <>
