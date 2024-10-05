@@ -16,8 +16,11 @@ const languages: Languages = {
  * Get the flag emoji flag for a given language
  * @param language
  */
-const getLanguageFlag = (language: string) => {
-    return languages[language].flag
+const getLanguageFlag = (language: string | undefined) => {
+    if (language && language.length >= 2){
+        language = language.toLowerCase().slice(0, 2)
+    }
+    return languages[language ? language : "en"].flag
 }
 
 /**
