@@ -1,53 +1,57 @@
 @import './base.css';
 
 .add-wish-form {
-  width: auto;
-  margin-top: 50px;
-  border-radius: 30px ;
-  background-color: var(--palette1-medium);
-  padding: 30px
+    width: auto;
+    margin-top: 50px;
+    border-radius: 30px;
+    background-color: var(--palette1-medium);
+    padding: 30px
 }
 
-.btn-custom{
-  background-color: var(--palette2-dark);
-  color: var(--main-dark);
-  border: var(--palette1-dark) solid 1px;
+.btn-custom {
+    background-color: var(--palette2-dark);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
 }
 
 .btn-custom:hover {
-  background-color: var(--palette1-light);
-  color: var(--main-dark);
-  border: var(--palette1-dark) solid 1px;
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
 }
 
 .btn-custom:active {
-  background-color: var(--palette1-medium);
-  color: var(--main-dark);
-  border: var(--palette1-dark) solid 1px;
+    background-color: var(--palette1-medium);
+    color: var(--main-dark);
+    border: var(--palette1-dark) solid 1px;
 }
 
 .btn-custom:disabled {
-  background-color: var(--palette1-light);
-  color: var(--secondary-dark);
-  border: var(--palette1-dark) solid 1px;
+    background-color: var(--palette1-light);
+    color: var(--secondary-dark);
+    border: var(--palette1-dark) solid 1px;
 }
 
 .bg-primary {
-  background-color: var(--palette2-light) !important;
-  color: var(--palette1-dark);
+    background-color: var(--palette2-light) !important;
+    color: var(--palette1-dark);
 }
 
 .bg-danger {
-  background-color: var(--danger-main) !important;
-  color: var(--main-dark);
+    background-color: var(--danger-main) !important;
+    color: var(--main-dark);
+}
+
+.wish-group-item:hover {
+    cursor: grab;
 }
 
 @media screen and (min-width: 992px) {
-.add-wish-form {
-  width: 600px;
-  margin-top: 10px;
-  border-radius: 30px ;
-  background-color: var(--palette1-medium);
-  padding: 30px
-}
+    .add-wish-form {
+        width: 600px;
+        margin-top: 10px;
+        border-radius: 30px;
+        background-color: var(--palette1-medium);
+        padding: 30px
+    }
 }
