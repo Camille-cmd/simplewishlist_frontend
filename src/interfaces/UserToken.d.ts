@@ -4,3 +4,8 @@ export interface UserData {
     "isActive": boolean;
     "isAdmin": boolean;
 }
+
+export interface UsersDataSettings {
+    "wishlistName": string;
+    "users": Array<UserData>;
+}

@@ -15,7 +15,8 @@ class UserLinkItemProps {
 }
 
 /**
- * Component to display a single user link item with the user's name, the link and actions to edit or deactivate the user.
+ * Component to display a single user link item with the user's name, the link and actions to edit or deactivate the
+ * user.
  * @param userData
  * @param editUser
  * @param setUsersData
@@ -107,10 +108,16 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
         <tr>
             <td className={"text-wrap text-break"}>
                 {editMode
-                    ? <UserForm editMode={editMode} setShowUserForm={setEditMode} otherUsersNames={otherUsersNames}
-                                setUsersData={setUsersData} initialData={userData}/>
+                    ? <UserForm
+                        editMode={editMode}
+                        setShowUserForm={setEditMode}
+                        otherUsersNames={otherUsersNames}
+                        setUsersData={setUsersData}
+                        initialData={userData}
+                    />
                     : <div className={"user-links"} onClick={() => setEditMode(true)}>
                         <b>{userData?.name}</b>
+                        {userData?.isAdmin ? <Badge bg={"secondary"} className={"mx-2"}>ADMIN</Badge> : null}
                     </div>
                 }
             </td>
@@ -126,25 +133,36 @@ export default function UserLinkItem({userData, editUser, setUsersData, otherUse
                 <ButtonGroup vertical>
                     {userData?.isActive ?
 
-                        <Button className="btn-sm btn-custom"
-                                onClick={() => copyToClipboard(generateLink(userData?.id, userData?.name))}>
+                        <Button
+                            className="btn-sm btn-custom"
+                            onClick={() => copyToClipboard(generateLink(userData?.id, userData?.name))}
+                        >
                             {linkCopied ? t('WLCreated.copied') : t('WLCreated.copy')}
                         </Button>
                         : <p className="ms-auto">{t('settings.inactiveUser')}</p>
                     }
 
                     {editUser && userData?.isActive
-                        ? <Button
-                            className="btn-sm btn-custom"
-                            variant="danger"
-                            onClick={() => deactivateUser(userData?.id)}
-                        >
-                            {t('settings.deactivateUser')}
+                        ? userData?.isAdmin
+                            ? <Button
+                                className="btn-sm btn-custom"
+                                variant="secondary"
+                                title="Default title"
+                                disabled
+                            >
+                                {t('settings.deactivateUser')}
+                            </Button>
+                            : <Button
+                                className="btn-sm btn-custom"
+                                variant="danger"
+                                onClick={() => deactivateUser(userData?.id)}
+                            >
+                                {t('settings.deactivateUser')}
+                            </Button>
+                        : editUser &&
+                        <Button className="btn-sm btn-danger" onClick={() => reactivateUser(userData?.id)}>
+                            {t('settings.reactivateUser')}
                         </Button>
-                        : editUser && <Button className="btn-sm btn-danger" onClick={() => reactivateUser(userData?.id)}>
-                        {t('settings.reactivateUser')}
-
-                    </Button>
                     }
                 </ButtonGroup>
 

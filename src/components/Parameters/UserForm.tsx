@@ -12,18 +12,24 @@ import {UserData} from "../../interfaces/UserToken";
 
 class UserFormProps {
     editMode: boolean | undefined;
-    setShowUserForm: Dispatch<boolean> | undefined;
+    setShowUserForm: Dispatch<SetStateAction<boolean>> | undefined;
     otherUsersNames: Array<string> | undefined;
     setUsersData: Dispatch<SetStateAction<Array<UserData>>> | undefined;
     initialData: UserData | undefined;
 }
 
-export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersData, initialData}: Readonly<UserFormProps>) {
+export function UserForm(
+    {
+        editMode,
+        setShowUserForm,
+        otherUsersNames,
+        setUsersData,
+        initialData
+    }: Readonly<UserFormProps>) {
     const {t} = useTranslation();
     const {userToken} = useParams();
     const [alertData, setAlertData] = useState<AlertData>();
     const [currentUserToken] = useState<string | undefined>(initialData?.id);
-
 
     const initialValues = {
         name: initialData?.name || "",
@@ -53,13 +59,13 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
                 setShowUserForm(false);
             }
         })
-        .catch((error) => {
-            setAlertData({
-                variant: "danger",
-                message: error.response.data.error.message || t('errors.generic')
-            });
-            setTimeout(() => setAlertData(undefined), 5000);
-        })
+            .catch((error) => {
+                setAlertData({
+                    variant: "danger",
+                    message: error.response.data.error.message || t('errors.generic')
+                });
+                setTimeout(() => setAlertData(undefined), 5000);
+            })
     }
 
     /**
@@ -81,13 +87,13 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
                 setShowUserForm(false);
             }
         })
-        .catch((error) => {
-             setAlertData({
-                variant: "danger",
-                message: error.response.data.error.message || t('errors.generic')
-            });
-            setTimeout(() => setAlertData(undefined), 5000);
-        })
+            .catch((error) => {
+                setAlertData({
+                    variant: "danger",
+                    message: error.response.data.error.message || t('errors.generic')
+                });
+                setTimeout(() => setAlertData(undefined), 5000);
+            })
     };
 
     /**
@@ -126,54 +132,65 @@ export function UserForm({editMode, setShowUserForm, otherUsersNames, setUsersDa
 
     return (
         <>
-        {/* Alert*/}
-        {alertData && <WishlistAlert alertData={alertData}/>}
+            {/* Alert*/}
+            {alertData && <WishlistAlert alertData={alertData}/>}
 
-        {/*Form */}
-        <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema()}
-        >
-            {props => (
-                <Form
-                    onSubmit={props.handleSubmit}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            props.handleSubmit;
-                        }
-                    }}
-                    className="d-flex flex-column"
-                >
+            {/*Form */}
+            <Formik
+                initialValues={initialValues}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema()}
+            >
+                {props => (
+                    <Form
+                        onSubmit={props.handleSubmit}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                props.handleSubmit();
+                            }
+                        }}
+                        className="d-flex flex-column"
+                    >
 
-                    <Form.Group className={!editMode ? 'mt-3' : ''} controlId="userName">
-                        <Form.Control
-                            type="text"
-                            name="name"
-                            value={props.values.name}
-                            onChange={props.handleChange}
-                            placeholder={!editMode ? t('createUser.placeholders.name') : ""}
-                            isInvalid={!!(props.touched.name && props.errors.name)}
-                        />
-                        <Form.Control.Feedback type="invalid">{props.errors.name}</Form.Control.Feedback>
+                        <Form.Group className={!editMode ? 'mt-3' : ''} controlId="userName">
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={props.values.name}
+                                onChange={props.handleChange}
+                                placeholder={!editMode ? t('createUser.placeholders.name') : ""}
+                                isInvalid={!!(props.touched.name && props.errors.name)}
+                            />
+                            <Form.Control.Feedback type="invalid">{props.errors.name}</Form.Control.Feedback>
 
-                        {/* Buttons */}
-                        {!editMode &&
-                        <Stack direction={"horizontal"} gap={3}>
-                            <Button variant="success" type="submit" disabled={props.isValidating} className="ms-auto mt-3">
-                                {t('createUser.buttons.submit')}<PlusCircle className="ms-2"/>
-                            </Button>
-                            <Button variant="danger" type="submit" onClick={()=> setShowUserForm ? setShowUserForm(false) : null} className="mt-3">
-                                {t('createUser.buttons.cancel')}
-                            </Button>
-                        </Stack>
-                        }
-                    </Form.Group>
+                            {/* Buttons */}
+                            {!editMode &&
+                                <Stack direction={"horizontal"} gap={3}>
+                                    <Button
+                                        variant="success"
+                                        type="submit"
+                                        disabled={props.isValidating}
+                                        className="ms-auto mt-3"
+                                    >
+                                        {t('createUser.buttons.submit')}
+                                        <PlusCircle className="ms-2"/>
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        type="reset"
+                                        onClick={() => setShowUserForm?.(false)}
+                                        className="mt-3"
+                                    >
+                                        {t('createUser.buttons.cancel')}
+                                    </Button>
+                                </Stack>
+                            }
+                        </Form.Group>
 
-                </Form>
+                    </Form>
                 )}
 
-        </Formik>
-            </>
+            </Formik>
+        </>
     )
 }

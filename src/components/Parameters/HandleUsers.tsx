@@ -2,7 +2,7 @@ import WishlistUserList from "../WishlistUserList.tsx";
 import {useEffect, useState} from "react";
 import {api} from "../../api/axiosConfig.tsx";
 import {useParams} from "react-router-dom";
-import {UserData} from "../../interfaces/UserToken";
+import {UserData, UsersDataSettings} from "../../interfaces/UserToken";
 import {Button} from "react-bootstrap";
 import {t} from "i18next";
 import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
@@ -15,6 +15,7 @@ import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
 export function HandleUsers() {
     const {userToken} = useParams();
     const [usersData, setUsersData] = useState<Array<UserData>>([]);
+    const [wishlistName, setWishlistName] = useState<string>();
 
 
     /**
@@ -23,7 +24,9 @@ export function HandleUsers() {
     const getUsersData = () => {
         api.get('/wishlist/users', {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
-            setUsersData(response.data);
+            const data = response.data as UsersDataSettings;
+            setUsersData(data.users);
+            setWishlistName(data.wishlistName as string)
         });
 
     }
@@ -44,7 +47,12 @@ export function HandleUsers() {
                 variant="outline-dark"
                 onClick={() => handleReturnToWishlist(userToken as string)}
             />
-            <WishlistUserList usersData={usersData} wishlistName={""} userSettings={true} setUsersData={setUsersData}/>
+            <WishlistUserList
+                usersData={usersData}
+                wishlistName={wishlistName}
+                userSettings={true}
+                setUsersData={setUsersData}
+            />
         </>
     )
 }

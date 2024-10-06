@@ -2,9 +2,8 @@ import {UserData} from "../interfaces/UserToken";
 import {Button, Container, ListGroup, Table} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {generateLink} from "../utils/generateLink";
-import {Dispatch, SetStateAction, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import UserLinkItem from "./UserLinkItem.tsx";
-import {PlusCircleDotted} from "react-bootstrap-icons";
 import {UserForm} from "./Parameters/UserForm.tsx";
 import {getAdminUserFromUserData} from "../utils/getAdminUserFromUserData.tsx";
 
@@ -24,7 +23,13 @@ class WishlistUserListProps {
  * @param setUsersData
  * @constructor
  */
-export default function WishlistUserList({usersData, wishlistName, userSettings, setUsersData}: Readonly<WishlistUserListProps>) {
+export default function WishlistUserList(
+    {
+        usersData,
+        wishlistName,
+        userSettings,
+        setUsersData
+    }: Readonly<WishlistUserListProps>) {
     const {t} = useTranslation();
     const [allLinksCopied, setAllLinksCopied] = useState<boolean>(false);
     const [showUserForm, setShowUserForm] = useState<boolean>(false);
@@ -36,8 +41,8 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
      * Copies all user links to the clipboard.
      *
      * This function iterates over the `usersTokens` array to generate a unique link for each user.
-     * It then constructs a message that includes an introduction with the `wishlistName`, the generated links for each user,
-     * and a reminder. This message is copied to the clipboard for easy sharing.
+     * It then constructs a message that includes an introduction with the `wishlistName`, the generated links for each
+     * user, and a reminder. This message is copied to the clipboard for easy sharing.
      */
     const copyAllLinks = () => {
         const links: Array<string> = [];
@@ -62,13 +67,17 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
         });
     }
 
+    useEffect(() => {
+        console.log("")
+    }, []);
+
     return (
         <>
             {userSettings
-            ?<h1 className={"wishlist-title my-4 my-md-5 p-2"}>{t('settings.users')}</h1>
-            :<h1 className={"wishlist-title my-4 my-md-5 p-2"}>{t('WLCreated.wlWasCreated')} 🎉</h1>
+                ? <h1 className={"wishlist-title my-4 my-md-5 p-2"}>{t('settings.users')}</h1>
+                : <h1 className={"wishlist-title my-4 my-md-5 p-2"}>{t('WLCreated.wlWasCreated')} 🎉</h1>
             }
-            <div className={"wishlist-container pb-1"}>
+            <div className={"wishlist-container pb-1 pt-3"}>
                 <p>
                     {t('WLCreated.helpLink')}
                     <b>{t('WLCreated.helpLinkBoldPart')} </b>
@@ -79,20 +88,26 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
 
             <div className={"d-flex flex-column"}>
 
-                <Button type="button" className={"btn-custom mt-3 mb-2 m-auto"} variant="primary" onClick={copyAllLinks}>
+                <Button
+                    type="button"
+                    className={"btn-custom mt-3 mb-2 m-auto"}
+                    variant="primary"
+                    onClick={copyAllLinks}
+                >
                     {allLinksCopied ? t('WLCreated.copied') : t('WLCreated.copyAll')}
                 </Button>
 
                 {!userSettings && <p className={"mt-3 mb-4 m-auto"}>
                     {t('WLCreated.access')}
-                    <a href={generateLink(adminId, adminName)} className={"link-success link-underline-danger"}>{t('WLCreated.accessButton')}</a>
+                    <a href={generateLink(adminId, adminName)}
+                       className={"link-success link-underline-danger"}>{t('WLCreated.accessButton')}</a>
                 </p>
                 }
             </div>
 
             <Container className="list-group user-wishes">
 
-                <Table striped responsive>
+                <Table striped responsive className={"text-center"}>
                     <thead>
                     <tr>
                         <th className={"text-wrap text-break fixed-width"}>{t('WLCreated.table.name')}</th>
@@ -115,7 +130,11 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
                 </Table>
 
                 {userSettings &&
-                    <ListGroup.Item key={"add"} className={"user-links add-user wishlist-list-group h-100"}>
+                    <ListGroup.Item
+                        key={"add"}
+                        className={"user-links add-user wishlist-list-group h-100"}
+                        onClick={() => setShowUserForm(true)}
+                    >
                         <div className={"user-links"}>
                             <b>{t('settings.addUser')}</b>
                         </div>
@@ -124,15 +143,12 @@ export default function WishlistUserList({usersData, wishlistName, userSettings,
                                 editMode={false}
                                 setShowUserForm={setShowUserForm}
                                 otherUsersNames={usersData?.map(userToken => userToken.name)}
-                                setUsersData={setUsersData} initialData={undefined}></UserForm>
-                            : <Button
-                                variant={"success"}
-                                onClick={() => setShowUserForm(true)}>
-                                <PlusCircleDotted/>
-                            </Button>
+                                setUsersData={setUsersData} initialData={undefined}>
+                            </UserForm>
+                            : <div className={"m-3"}></div>
                         }
                     </ListGroup.Item>
-                    }
+                }
 
             </Container>
 

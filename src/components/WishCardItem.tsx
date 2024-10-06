@@ -121,7 +121,7 @@ export default function WishCardItem(
 
                         {wish.url
                             ? <OverlayTrigger overlay={
-                                <Tooltip id="tooltip-take-wish">{t("wishCard.tooltip.goToWebsite")}</Tooltip>
+                                <Tooltip id="tooltip-navigate-to-wish-url">{t("wishCard.tooltip.goToWebsite")}</Tooltip>
                             }>
                                 <Button variant="link" className={"p-0"} onClick={(e) => HandleClickOnUrl(e, wish)}>
                                     <ArrowUpRightCircle className={"icon-link"}></ArrowUpRightCircle>
