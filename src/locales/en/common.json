@@ -148,6 +148,9 @@
     "wishName": {
       "required": "Your wish must have a name"
     },
+    "wishPrice": {
+      "maxChar": "The price can be 15 characters max"
+    },
     "addUser": {
       "required": "You must enter a name"
     },

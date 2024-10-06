@@ -22,8 +22,8 @@ interface WishFormProps {
  * @constructor
  */
 export default function WishForm(
-    {initialWish, setEditWish, setShowWishForm, sendJsonMessage}  : Readonly<WishFormProps>
-){
+    {initialWish, setEditWish, setShowWishForm, sendJsonMessage}: Readonly<WishFormProps>
+) {
     const {userToken} = useParams();
     // Check if the form is used to update a wish or to create a new one
     const isUpdating = !!initialWish
@@ -37,12 +37,13 @@ export default function WishForm(
         }
 
 
-    const validationSchema = () =>  {
+    const validationSchema = () => {
         return Yup.object().shape({
             url: Yup.string().url(t("errors.wishUrl.correctUrl")),
             name: Yup.string()
                 .required(t("errors.wishName.required"))
-                .nullable(t("errors.wishName.required"))
+                .nullable(t("errors.wishName.required")),
+            price: Yup.string().max(15, t("errors.wishPrice.maxChar"))
         });
     }
 
@@ -123,7 +124,8 @@ export default function WishForm(
                     onClick={handleReturnToWishlist}
                 />
                 {isUpdating
-                    ? <Button variant="danger" className={"ms-auto mx-5"} onClick={handleDelete}>{t('editWish.buttons.delete')}</Button>
+                    ? <Button variant="danger" className={"ms-auto mx-5"}
+                              onClick={handleDelete}>{t('editWish.buttons.delete')}</Button>
                     : null
                 }
             </Stack>
@@ -194,7 +196,8 @@ export default function WishForm(
                             </Form.Group>
 
                             {/*SUBMIT FORM */}
-                            <Button variant="primary" type="submit" disabled={props.isValidating} className="btn-custom mt-3 w-50 align-self-end">
+                            <Button variant="primary" type="submit" disabled={props.isValidating}
+                                    className="btn-custom mt-3 w-50 align-self-end">
                                 {isUpdating ? t('editWish.buttons.submit') : t('createWish.buttons.submit')}
                             </Button>
                         </Form>
