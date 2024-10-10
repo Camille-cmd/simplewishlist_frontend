@@ -2,7 +2,7 @@ import {UserData} from "../interfaces/UserToken";
 import {Button, Container, ListGroup, Table} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {generateLink} from "../utils/generateLink";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import UserLinkItem from "./UserLinkItem.tsx";
 import {UserForm} from "./Parameters/UserForm.tsx";
 import {getAdminUserFromUserData} from "../utils/getAdminUserFromUserData.tsx";
@@ -66,10 +66,6 @@ export default function WishlistUserList(
             console.error('Async: Could not copy text: ', err);
         });
     }
-
-    useEffect(() => {
-        console.log("")
-    }, []);
 
     return (
         <>

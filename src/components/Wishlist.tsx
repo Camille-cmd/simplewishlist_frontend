@@ -31,6 +31,8 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertData, setAlertData] = useState<AlertData>();
 
+    const [currentlyConnectedUsersNames, setCurrentlyConnectedUsersNames] = useState<Array<string>>([]);
+
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
 
@@ -192,6 +194,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
         let errorMessage: string;
         let newUserWishData: UserWishData;
         let deletedWishData: UserDeletedWishData;
+        let connectedUser: Array<string>;
 
         switch (type) {
             case "updated_wish":
@@ -217,6 +220,12 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 }
                 break;
 
+            case "new_group_member_connection":
+            case "group_member_disconnected":
+                connectedUser = response.data as Array<string>;
+                setCurrentlyConnectedUsersNames(connectedUser.filter((user) => user !== wishlistData.currentUser));
+                break;
+
             case "error_message":
                 errorMessage = response.data as string;
                 console.error("Error received from websocket: " + errorMessage);
@@ -238,7 +247,8 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 wishlistData={wishlistData}
                 setSurpriseMode={setSurpriseMode}
                 surpriseMode={surpriseMode}
-                setShowWishForm={setShowWishForm}>
+                setShowWishForm={setShowWishForm}
+                currentlyConnectedUsersNames={currentlyConnectedUsersNames}>
             </WishlistNavbar>
 
             {/* ALERT */}

@@ -86,6 +86,7 @@ header .btn-custom:hover {
 /* WISHLIST CARDS */
 .user-wishes {
     overflow-wrap: break-word;
+    margin-bottom: 30px;
 }
 
 .user-wishes .header {
@@ -127,7 +128,43 @@ header .btn-custom:hover {
     background-color: var(--palette2-light);
     color: var(--main-dark);
     border: var(--palette1-dark) solid 1px;
+    margin-bottom: 20px;
 }
+
+.connected-users-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /*display: grid;*/
+
+}
+
+.user-circle-badge {
+    width: 30px;
+    height: 30px;
+    background-color: var(--palette1-medium);
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    font-size: smaller;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*grid-area: -1 / 2;*/
+    margin-left: -10px;
+}
+
+#circle span {
+    text-align: center;
+    vertical-align: middle;
+    color: var(--main-dark);
+}
+
+#tooltip-others {
+    white-space: pre-wrap;
+}
+
+
 
 @media (min-width: 768px) {
     .wishlist-container {
@@ -140,6 +177,10 @@ header .btn-custom:hover {
 
     .welcome-img {
         width: 300px;
+    }
+
+    .user-circle-badge {
+        margin-left: -5px;
     }
 }
 

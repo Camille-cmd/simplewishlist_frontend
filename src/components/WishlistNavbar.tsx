@@ -1,16 +1,19 @@
 import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
-import {Button, Dropdown, DropdownButton, Stack} from "react-bootstrap";
+import {Button, Dropdown, DropdownButton, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import {Gear} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
+import {getUserFirstTwoLetters} from "../utils/getUserFirstTwoLetters.tsx";
+import {hashUsernameToColor} from "../utils/getUserHashColor.tsx";
 
 
 interface WishlistNavbarProps {
     wishlistData: WishListData | undefined,
     setSurpriseMode: Dispatch<SetStateAction<boolean>>,
     surpriseMode: boolean,
-    setShowWishForm: Dispatch<SetStateAction<boolean>>
+    setShowWishForm: Dispatch<SetStateAction<boolean>>,
+    currentlyConnectedUsersNames: Array<string>
 }
 
 
@@ -20,9 +23,12 @@ interface WishlistNavbarProps {
  * @param setSurpriseMode
  * @param surpriseMode
  * @param setShowWishForm
+ * @param currentlyConnectedUsers
  * @constructor
  */
-export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseMode, setShowWishForm}: Readonly<WishlistNavbarProps>) {
+export default function WishlistNavbar(
+    {wishlistData, setSurpriseMode, surpriseMode, setShowWishForm, currentlyConnectedUsersNames}: Readonly<WishlistNavbarProps>)
+{
     const {t} = useTranslation();
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
@@ -66,9 +72,45 @@ export default function WishlistNavbar({wishlistData, setSurpriseMode, surpriseM
 
                 <div className="vr"/>
 
+                {/* Currently connected users */}
+                <div className={"connected-users-container"}>
+
+                    {currentlyConnectedUsersNames.length > 0
+                        && (currentlyConnectedUsersNames.map((username: string, index: number) => {
+                            return (
+                                index < 3 && <OverlayTrigger
+                                    key={username}
+                                    placement="top"
+                                    trigger={["hover", "click"]}
+                                    delay={{show: 150, hide: 400}}
+                                    overlay={<Tooltip id={`tooltip-${index}`}>{username}</Tooltip>}
+                                    rootClose
+                                >
+                                    <div key={username} className="user-circle-badge"  style={{ backgroundColor: hashUsernameToColor(username)}}>
+                                        <span>{getUserFirstTwoLetters(username)}</span>
+                                    </div>
+                                </OverlayTrigger>
+                            )
+                        }))
+                    }
+
+                    {currentlyConnectedUsersNames.length >= 3 && <OverlayTrigger
+                        placement="bottom"
+                        trigger={["hover", "click"]}
+                        delay={{show: 150, hide: 400}}
+                        overlay={<Tooltip id={"tooltip-others"}>{currentlyConnectedUsersNames.slice(3).join('\n')}</Tooltip>}
+                        rootClose
+                    >
+                        <div className="user-circle-badge">
+                            <span>{currentlyConnectedUsersNames.length - 3}+</span>
+                        </div>
+                    </OverlayTrigger>
+                    }
+
+                </div>
+
                 {/* Add new wish button */}
                 <Stack direction="horizontal" gap={3} className="ms-auto">
-
 
                     <Button variant="primary" type="submit" className="btn-custom btn-sm" onClick={()=>setShowWishForm(true)}>
                         <span className={"d-none d-md-block"}> {t('showWL.addNewWish')} 💫</span>
