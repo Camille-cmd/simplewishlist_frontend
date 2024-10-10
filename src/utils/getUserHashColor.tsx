@@ -24,6 +24,5 @@ export const hashUsernameToColor = (name: string) => {
     const r = (hash & 0xFF0000) >> 16;
     const g = (hash & 0x00FF00) >> 8;
     const b = hash & 0x0000FF;
-    console.log(hash, r, g, b);
     return `rgb(${r}, ${g}, ${b})`;
 }
