@@ -70,7 +70,8 @@
       "alreadyTaken": "Ce souhait a déjà été pris !",
       "untake": "Cliquez pour annuler la prise de ce souhait"
     },
-    "taken": "Pris par "
+    "taken": "Pris par ",
+    "deleted": "Supprimé"
   },
   "alert": {
     "wishCreated": "Votre souhait a été ajouté !",
