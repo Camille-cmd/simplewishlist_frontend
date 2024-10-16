@@ -5,7 +5,7 @@ import {useParams} from "react-router-dom";
 import {Gear} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {getUserFirstTwoLetters} from "../utils/getUserFirstTwoLetters.tsx";
-import {hashUsernameToColor} from "../utils/getUserHashColor.tsx";
+import {usernameToColor} from "../utils/getUserHashColor.tsx";
 
 
 interface WishlistNavbarProps {
@@ -27,8 +27,13 @@ interface WishlistNavbarProps {
  * @constructor
  */
 export default function WishlistNavbar(
-    {wishlistData, setSurpriseMode, surpriseMode, setShowWishForm, currentlyConnectedUsersNames}: Readonly<WishlistNavbarProps>)
-{
+    {
+        wishlistData,
+        setSurpriseMode,
+        surpriseMode,
+        setShowWishForm,
+        currentlyConnectedUsersNames
+    }: Readonly<WishlistNavbarProps>) {
     const {t} = useTranslation();
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
@@ -38,6 +43,18 @@ export default function WishlistNavbar(
      */
     const HandleSurpriseModeChange = () => {
         setSurpriseMode(!surpriseMode)
+    }
+
+
+    /**
+     * Get the number of user bubble to display depending on the screen size.
+     * @returns {number}
+     */
+    const maxUserBubbleDisplay = (): number => {
+        if (window.matchMedia("(min-width: 992px)").matches) {
+            return 6;
+        }
+        return 3;
     }
 
     return (
@@ -62,7 +79,12 @@ export default function WishlistNavbar(
                 {/* Surprise mode */}
                 <div>
                     <span className="form-check form-switch">
-                        <input className="form-check-input" type="checkbox" role="switch" id="surpriseMode" onChange={HandleSurpriseModeChange} checked={surpriseMode}/>
+                        <input className="form-check-input"
+                               type="checkbox"
+                               role="switch"
+                               id="surpriseMode"
+                               onChange={HandleSurpriseModeChange}
+                               checked={surpriseMode}/>
                         <label className="role-click form-check-label d-flex flex-row gap-1" htmlFor="surpriseMode">
                             <span className={"d-none d-md-block"}> {t('showWL.surpriseMode')}</span>
                             <span> {surpriseMode ? '🙈' : '🐵'}</span>
@@ -78,7 +100,7 @@ export default function WishlistNavbar(
                     {currentlyConnectedUsersNames.length > 0
                         && (currentlyConnectedUsersNames.map((username: string, index: number) => {
                             return (
-                                index < 3 && <OverlayTrigger
+                                index < maxUserBubbleDisplay() && <OverlayTrigger
                                     key={username}
                                     placement="top"
                                     trigger={["hover", "click"]}
@@ -86,7 +108,9 @@ export default function WishlistNavbar(
                                     overlay={<Tooltip id={`tooltip-${index}`}>{username}</Tooltip>}
                                     rootClose
                                 >
-                                    <div key={username} className="user-circle-badge"  style={{ backgroundColor: hashUsernameToColor(username)}}>
+                                    <div key={username}
+                                         className="user-circle-badge"
+                                         style={{backgroundColor: usernameToColor(username)}}>
                                         <span>{getUserFirstTwoLetters(username)}</span>
                                     </div>
                                 </OverlayTrigger>
@@ -94,15 +118,16 @@ export default function WishlistNavbar(
                         }))
                     }
 
-                    {currentlyConnectedUsersNames.length >= 3 && <OverlayTrigger
+                    {currentlyConnectedUsersNames.length > maxUserBubbleDisplay() && <OverlayTrigger
                         placement="bottom"
                         trigger={["hover", "click"]}
                         delay={{show: 150, hide: 400}}
-                        overlay={<Tooltip id={"tooltip-others"}>{currentlyConnectedUsersNames.slice(3).join('\n')}</Tooltip>}
+                        overlay={
+                            <Tooltip id={"tooltip-others"}>{currentlyConnectedUsersNames.slice(maxUserBubbleDisplay()).join('\n')}</Tooltip>}
                         rootClose
                     >
                         <div className="user-circle-badge">
-                            <span>{currentlyConnectedUsersNames.length - 3}+</span>
+                            <span>{currentlyConnectedUsersNames.length - maxUserBubbleDisplay()}+</span>
                         </div>
                     </OverlayTrigger>
                     }
@@ -112,7 +137,10 @@ export default function WishlistNavbar(
                 {/* Add new wish button */}
                 <Stack direction="horizontal" gap={3} className="ms-auto">
 
-                    <Button variant="primary" type="submit" className="btn-custom btn-sm" onClick={()=>setShowWishForm(true)}>
+                    <Button variant="primary"
+                            type="submit"
+                            className="btn-custom btn-sm"
+                            onClick={() => setShowWishForm(true)}>
                         <span className={"d-none d-md-block"}> {t('showWL.addNewWish')} 💫</span>
                         <span className={"d-md-none"}>New 💫</span>
                     </Button>
