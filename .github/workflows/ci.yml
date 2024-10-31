@@ -1,0 +1,69 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # Only build from the default branch. (see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context)
+    if: github.ref_name == github.event.repository.default_branch
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/simplewishlist-frontend:latest
+          file: ./Dockerfile.production
+
+  deploy:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    # Only deploy from the default branch.
+    if: github.ref_name == github.event.repository.default_branch
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Github needs to know the SSH key to use for deployment.
+      # We need to set the SSH key to a file and set the permissions to 600 (we will be using the key to authenticate with the server).
+      # We also need to set the known hosts file to avoid the prompt to add the server to the list of known hosts.
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/private.key
+          sudo chmod 600 ~/.ssh/private.key
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_DEPLOY_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+
+      - name: Deploy
+        # We just need to ssh into the server to trigger the deployment
+        run: |
+          ssh -T -i ~/.ssh/private.key $SSH_USER@$SSH_HOST -p $SSH_PORT
+        env:
+          SSH_USER: ${{secrets.SSH_USER}}
+          SSH_HOST: ${{secrets.SSH_HOST}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
