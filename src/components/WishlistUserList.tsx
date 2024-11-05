@@ -125,7 +125,7 @@ export default function WishlistUserList(
 
             <Container className="list-group user-wishes">
 
-                <Table striped responsive className={"text-center"}>
+                <Table striped responsive className={"text-center"} translate={"no"}>
                     <thead>
                     <tr>
                         <th className={"text-wrap text-break fixed-width"}>{t('WLCreated.table.name')}</th>
@@ -146,17 +146,6 @@ export default function WishlistUserList(
                     ))}
                     </tbody>
                 </Table>
-
-                {showUserForm
-                    ? <UserForm
-                        editMode={false}
-                        setShowUserForm={setShowUserForm}
-                        otherUsersNames={usersData?.map(userToken => userToken.name)}
-                        setUsersData={setUsersData}
-                        initialData={undefined}>
-                    </UserForm>
-                    : <div className={"m-3"}></div>
-                }
 
             </Container>
 
