@@ -198,7 +198,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
 
         switch (type) {
             case "updated_wish":
-                if (action == "delete_wish"){
+                if (action == "delete_wish") {
                     deletedWishData = response.data as UserDeletedWishData;
                     handleDeleteWish(deletedWishData)
                 } else {
@@ -206,18 +206,17 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                     upsertWish(newUserWishData);
                 }
 
-                setShowWishForm(false);
-
-                // Show the alert only if the current user is the one who updated the wish,
-                // we don't want to show the alert to others in the group
+                // Actions for the current user workflow (close the wish form and show alert)
                 if (wishlistData.currentUser === userNameFromWebsocket) {
+                    setShowWishForm(false);
                     handleAlert("success", actionPerformed, "");
+
+                    // If we were editing a wish, we stop editing as the wish has been updated
+                    if (editWish) {
+                        setEditWish(undefined);
+                    }
                 }
 
-                // If we were editing a wish, we stop editing as the wish has been updated
-                if (editWish) {
-                    setEditWish(undefined);
-                }
                 break;
 
             case "new_group_member_connection":
