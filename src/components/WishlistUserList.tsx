@@ -1,5 +1,5 @@
 import {UserData} from "../interfaces/UserToken";
-import {Button, Container, ListGroup, Table} from "react-bootstrap";
+import {Button, Container, Table} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {generateLink} from "../utils/generateLink";
 import {Dispatch, SetStateAction, useState} from "react";
@@ -84,6 +84,26 @@ export default function WishlistUserList(
 
             <div className={"d-flex flex-column"}>
 
+                {/*Form to create a new user (only in user settings) */}
+                {userSettings &&
+                    <Button type="button"
+                            className={"btn-custom mt-3 mb-2 m-auto"}
+                            onClick={() => setShowUserForm(true)}>
+                        <b>{t('settings.addUser')}</b>
+                    </Button>
+                }
+
+                {showUserForm
+                    ? <UserForm
+                        editMode={false}
+                        setShowUserForm={setShowUserForm}
+                        otherUsersNames={usersData?.map(userToken => userToken.name)}
+                        setUsersData={setUsersData}
+                        initialData={undefined}>
+                    </UserForm>
+                    : <div className={"m-3"}></div>
+                }
+
                 <Button
                     type="button"
                     className={"btn-custom mt-3 mb-2 m-auto"}
@@ -93,12 +113,14 @@ export default function WishlistUserList(
                     {allLinksCopied ? t('WLCreated.copied') : t('WLCreated.copyAll')}
                 </Button>
 
+                {/* Link to access the wishlist for the first time */}
                 {!userSettings && <p className={"mt-3 mb-4 m-auto"}>
                     {t('WLCreated.access')}
                     <a href={generateLink(adminId, adminName)}
                        className={"link-success link-underline-danger"}>{t('WLCreated.accessButton')}</a>
                 </p>
                 }
+
             </div>
 
             <Container className="list-group user-wishes">
@@ -125,25 +147,15 @@ export default function WishlistUserList(
                     </tbody>
                 </Table>
 
-                {userSettings &&
-                    <ListGroup.Item
-                        key={"add"}
-                        className={"user-links add-user wishlist-list-group h-100"}
-                        onClick={() => setShowUserForm(true)}
-                    >
-                        <div className={"user-links"}>
-                            <b>{t('settings.addUser')}</b>
-                        </div>
-                        {showUserForm
-                            ? <UserForm
-                                editMode={false}
-                                setShowUserForm={setShowUserForm}
-                                otherUsersNames={usersData?.map(userToken => userToken.name)}
-                                setUsersData={setUsersData} initialData={undefined}>
-                            </UserForm>
-                            : <div className={"m-3"}></div>
-                        }
-                    </ListGroup.Item>
+                {showUserForm
+                    ? <UserForm
+                        editMode={false}
+                        setShowUserForm={setShowUserForm}
+                        otherUsersNames={usersData?.map(userToken => userToken.name)}
+                        setUsersData={setUsersData}
+                        initialData={undefined}>
+                    </UserForm>
+                    : <div className={"m-3"}></div>
                 }
 
             </Container>
