@@ -133,6 +133,12 @@
     "allowSeeAssigned": "Mode surprise",
     "title": "Paramètres de la wishlist"
   },
+   "WLFilters": {
+    "all": "Tous",
+    "selectAUser": "Voir seulement",
+    "onlyTakenWishes": "Voir seulement les souhaits que j'ai pris",
+    "filter": "Filtrer"
+  },
   "errors": {
     "wishlistName": {
       "required": "Vous devez donner un nom à votre wishlist"

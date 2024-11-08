@@ -89,6 +89,16 @@ a:hover {
     color: var(--main-dark);
 }
 
+.btn-outline-danger {
+    border-color: var(--danger-main);
+    color: var(--main-dark);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--danger-light);
+    color: var(--main-dark);
+}
+
 .btn-outline-dark {
     background-color: var(--main-dark);
     color: var(--palette1-light);
@@ -111,9 +121,12 @@ a:hover {
 .btn-warning {
     background-color: var(--warning-main);
     color: var(--main-dark);
+    --bs-btn-active-bg: var(--warning-light);
+    --bs-btn-active-color: var(--main-dark);
+    --bs-btn-hover-bg: var(--warning-light);
 }
 
-.btn-warning:hover {
+.btn-warning:hover .btn-warning:active .btn-warning:focus{
     background-color: var(--warning-light);
     border-color : var(--warning-main);
     color: var(--main-dark);
@@ -133,4 +146,38 @@ a:hover {
 
 .link-underline-danger {
     color: var(--danger-main);
+}
+
+
+/* CHECKBOX SWITCH */
+
+.form-check-input:checked {
+    background-color: var(--palette1-medium);
+    border-color: var(--palette1-medium);
+}
+
+.form-check-input:focus {
+    border-color: var(--main-dark);
+    box-shadow: 0 0 0 0.25rem var(--palette1-light);
+}
+
+.form-check-input:checked {
+    background-color: var(--palette2-dark);
+    border-color: var(--palette2-dark);
+}
+
+/* DROPDOWN */
+
+.dropdown-item {
+    color: var(--main-dark);
+}
+
+.dropdown-item:hover {
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
+.dropdown-item:active {
+    background-color: var(--palette1-medium);
+    color: var(--main-dark);
 }

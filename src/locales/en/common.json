@@ -133,6 +133,12 @@
     "allowSeeAssigned": "Surprise mode",
     "title": "Wishlist Settings"
   },
+  "WLFilters": {
+    "all": "All",
+    "selectAUser": "Select someone",
+    "onlyTakenWishes": "See only wishes I've taken",
+    "filter": "Filter"
+  },
   "errors": {
     "wishlistName": {
       "required": "Your wishlist must have a name"
