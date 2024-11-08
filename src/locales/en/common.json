@@ -77,7 +77,10 @@
       "untake": "Click to unmark this wish as taken"
     },
     "taken": "Taken by ",
-    "deleted": "Deleted"
+    "deleted": "Deleted",
+    "iHandleIt": "I handle it!",
+    "iDontTake": "I do not handle it!",
+    "edit": "Edit"
   },
   "editWish": {
     "pageTitle": "Update your wish",

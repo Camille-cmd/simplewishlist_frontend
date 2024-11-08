@@ -58,6 +58,7 @@ a:hover {
     --bs-table-color: var(--palette1-light);
 }
 
+/* BUTTONS */
 .btn-success {
     background-color: var(--palette1-medium);
     color: var(--main-dark);
@@ -65,6 +66,16 @@ a:hover {
 
 .btn-success:hover {
     background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
+.btn-success-custom {
+    background-color: var(--success-main);
+    color: var(--main-dark);
+}
+
+.btn-success-custom:hover {
+    background-color: var(--success-light);
     color: var(--main-dark);
 }
 
@@ -97,9 +108,24 @@ a:hover {
     background-color: var(--inactive-dark) !important;;
 }
 
+.btn-warning {
+    background-color: var(--warning-main);
+    color: var(--main-dark);
+}
+
+.btn-warning:hover {
+    background-color: var(--warning-light);
+    border-color : var(--warning-main);
+    color: var(--main-dark);
+}
+
+/* BACKGROUND */
+
 .bg-secondary {
     background-color: var(--inactive) !important;
 }
+
+/* LINKS */
 
 .link-success {
     color: var(--palette1-dark);

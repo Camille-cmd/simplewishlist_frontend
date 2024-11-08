@@ -71,7 +71,10 @@
       "untake": "Cliquez pour annuler la prise de ce souhait"
     },
     "taken": "Pris par ",
-    "deleted": "Supprimé"
+    "deleted": "Supprimé",
+    "iHandleIt": "Je m'en occupe !",
+    "iDontTake": "Je ne m'en occupe plus",
+    "edit": "Modifier"
   },
   "alert": {
     "wishCreated": "Votre souhait a été ajouté !",
