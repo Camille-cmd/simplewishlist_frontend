@@ -12,12 +12,21 @@ import {UserData} from "../../interfaces/UserToken";
 
 class UserFormProps {
     editMode: boolean | undefined;
-    setShowUserForm: Dispatch<SetStateAction<boolean>> | undefined;
+    setShowUserForm!: Dispatch<SetStateAction<boolean>>;
     otherUsersNames: Array<string> | undefined;
     setUsersData: Dispatch<SetStateAction<Array<UserData>>> | undefined;
     initialData: UserData | undefined;
 }
 
+/**
+ *Component that displays the form to add/update user
+ * @param editMode (whether we are updating rather than creating)
+ * @param setShowUserForm (to close the form)
+ * @param otherUsersNames
+ * @param setUsersData
+ * @param initialData
+ * @constructor
+ */
 export function UserForm(
     {
         editMode,
@@ -164,27 +173,26 @@ export function UserForm(
                             <Form.Control.Feedback type="invalid">{props.errors.name}</Form.Control.Feedback>
 
                             {/* Buttons */}
-                            {!editMode &&
-                                <Stack direction={"horizontal"} gap={3}>
-                                    <Button
-                                        variant="success"
-                                        type="submit"
-                                        disabled={props.isValidating}
-                                        className="ms-auto mt-3"
-                                    >
-                                        {t('createUser.buttons.submit')}
-                                        <PlusCircle className="ms-2"/>
-                                    </Button>
-                                    <Button
-                                        variant="danger"
-                                        type="reset"
-                                        onClick={() => setShowUserForm?.(false)}
-                                        className="mt-3"
-                                    >
-                                        {t('createUser.buttons.cancel')}
-                                    </Button>
-                                </Stack>
-                            }
+                            <Stack direction={"horizontal"} gap={3}>
+                                <Button
+                                    variant="success"
+                                    type="submit"
+                                    disabled={props.isValidating}
+                                    className="my-3"
+                                >
+                                    {t('createUser.buttons.submit')}
+                                    <PlusCircle className="ms-2"/>
+                                </Button>
+                                <Button
+                                    variant="danger"
+                                    type="reset"
+                                    onClick={() => setShowUserForm?.(false)}
+                                    className="my-3"
+                                >
+                                    {t('createUser.buttons.cancel')}
+                                </Button>
+                            </Stack>
+
                         </Form.Group>
 
                     </Form>

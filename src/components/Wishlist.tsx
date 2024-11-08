@@ -236,7 +236,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
     return (
         <>
             {/* WISHLIST TITLE */}
-            <h1 className={"wishlist-title my-3 my-md-4 p-2"}>
+            <h1 className={"wishlist-title my-3 my-md-4 p-2"} translate={"no"}>
                 {wishlistData.name}
                 <div>💫</div>
             </h1>
@@ -267,7 +267,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 </WishForm>
 
                 // Display the list of wishes
-                : <Container className="list-group user-wishes">
+                : <Container className="list-group user-wishes" translate={"no"}>
                     <Row>
                         {
                             wishlistData?.userWishes.map((data: UserWish) => (

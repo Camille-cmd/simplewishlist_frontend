@@ -61,7 +61,7 @@ export default function WishlistNavbar(
         <div className="utils-row utils-row-main">
 
             {/* Only on mobile display the name above */}
-            <div className={"d-md-none col-md-3 col-lg-2 mb-2"}>
+            <div className={"d-md-none col-md-3 col-lg-2 mb-2"} translate={"no"}>
                 <span>
                     {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
                 </span>
@@ -70,7 +70,7 @@ export default function WishlistNavbar(
             <Stack direction="horizontal" gap={3}>
 
                 {/* Username (not on mobile) and greetings */}
-                <div className={"d-none d-md-block"}>
+                <div className={"d-none d-md-block"} translate={"no"}>
                     <span>
                         {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
                     </span>
@@ -152,8 +152,10 @@ export default function WishlistNavbar(
                             role="parameters"
                             variant="custom"
                         >
-                            <Dropdown.Item eventKey="1" href={(`/${userToken}/wishlist/handle-users`)}>{t('settings.handleUser')} </Dropdown.Item>
-                            <Dropdown.Item eventKey="2" href={(`/${userToken}/wishlist/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
+                            <Dropdown.Item eventKey="1"
+                                           href={(`/${userToken}/wishlist/handle-users`)}>{t('settings.handleUser')} </Dropdown.Item>
+                            <Dropdown.Item eventKey="2"
+                                           href={(`/${userToken}/wishlist/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
                         </DropdownButton>
                         : null
                     }
