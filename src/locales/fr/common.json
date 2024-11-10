@@ -71,7 +71,10 @@
       "untake": "Cliquez pour annuler la prise de ce souhait"
     },
     "taken": "Pris par ",
-    "deleted": "Supprimé"
+    "deleted": "Supprimé",
+    "iHandleIt": "Je m'en occupe !",
+    "iDontTake": "Je ne m'en occupe plus",
+    "edit": "Modifier"
   },
   "alert": {
     "wishCreated": "Votre souhait a été ajouté !",
@@ -129,6 +132,14 @@
     "wishlistAdminName": "Nom de l'admin",
     "allowSeeAssigned": "Mode surprise",
     "title": "Paramètres de la wishlist"
+  },
+  "WLFilters": {
+    "all": "Tous",
+    "selectAUser": "Voir seulement",
+    "onlyTakenWishes": "Voir seulement les souhaits que j'ai pris",
+    "filter": "Filtrer",
+    "filters": "Filtres",
+    "resetAllFilters": "Réinitialiser tous les filtres"
   },
   "errors": {
     "wishlistName": {

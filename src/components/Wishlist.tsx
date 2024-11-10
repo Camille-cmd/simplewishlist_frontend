@@ -10,6 +10,8 @@ import {WebSocketReceiveMessage} from "../interfaces/Websocket";
 import WishlistAlert from "./WishlistAlert.tsx";
 import {AlertData} from "../interfaces/AlertData";
 import {useTranslation} from "react-i18next";
+import WishlistFilters from "./WishlistFilters.tsx";
+import {Filters} from "../interfaces/Filters";
 
 interface WishlistProps {
     wishlistData: WishListData
@@ -23,6 +25,9 @@ interface WishlistProps {
 export default function Wishlist({wishlistData, setWishlistData}: Readonly<WishlistProps>) {
     const {t} = useTranslation();
 
+    const [filteredWishlistData, setFilteredWishlistData] = useState<WishListData>(wishlistData);
+    const [filters, setFilters] = useState<Filters>({onlyTakenWishes: false, selectedUser: ''})
+
     const [surpriseMode, setSurpriseMode] = useState<boolean>(!wishlistData.allowSeeAssigned as boolean);
 
     const [editWish, setEditWish] = useState<Wish>();
@@ -32,6 +37,8 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
     const [alertData, setAlertData] = useState<AlertData>();
 
     const [currentlyConnectedUsersNames, setCurrentlyConnectedUsersNames] = useState<Array<string>>([]);
+
+    const allUsersNames = wishlistData.userWishes.map((userWish) => userWish.user !== wishlistData.currentUser ? userWish.user : "").filter(Boolean);
 
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
@@ -177,6 +184,60 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
         });
     };
 
+    /**
+     * Filter the wishlist data and set the new filters
+     * @param newFilters
+     */
+    const handleFilterChange = (newFilters: Filters) => {
+        // Set the new filters and filter the wishlist data
+        setFilters(newFilters)
+        filterWishlist(newFilters)
+    }
+
+    /**
+     * Filter the wishlist data based on the filters
+     * @param filters
+     */
+    const filterWishlist = (filters: Filters) => {
+        const {onlyTakenWishes, selectedUser} = filters;
+
+        let updatedWishlistData = wishlistData; // Start from the original data
+
+        // Apply filter for only taken wishes
+        // = remove userWish objects that don’t contain any wishes assigned to currentUser
+        if (onlyTakenWishes) {
+            updatedWishlistData = {
+                ...updatedWishlistData,
+                userWishes: updatedWishlistData.userWishes
+                    .map((userWish: UserWish) => ({
+                        ...userWish,
+                        wishes: userWish.wishes.filter(
+                            (wish: Wish) => wish.assignedUser === wishlistData.currentUser
+                        )
+                    }))
+                    .filter((userWish: UserWish) => userWish.wishes.length > 0) // Keep only non-empty userWishes
+            };
+        }
+
+        // Apply filter for selected user
+        if (selectedUser) {
+            updatedWishlistData = {
+                ...updatedWishlistData,
+                userWishes: updatedWishlistData.userWishes.filter(
+                    (userWish: UserWish) => userWish.user === selectedUser
+                )
+            };
+        }
+
+        // Set the filtered data only once at the end to apply all filters
+        setFilteredWishlistData(updatedWishlistData);
+    };
+
+
+    useEffect(() => {
+        // Apply filters when the wishlistData changes
+        filterWishlist(filters);
+    }, [wishlistData]);
 
     // Run when a new WebSocket message is received (lastJsonMessage)
     useEffect(() => {
@@ -256,6 +317,8 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 : null
             }
 
+            <WishlistFilters handleFilterChange={handleFilterChange} users={allUsersNames}></WishlistFilters>
+
             {/* CONTENT */}
             {showWishForm
                 // Display the wish form => edit or create a wish
@@ -270,7 +333,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 : <Container className="list-group user-wishes" translate={"no"}>
                     <Row>
                         {
-                            wishlistData?.userWishes.map((data: UserWish) => (
+                            filteredWishlistData.userWishes.map((data: UserWish) => (
                                 <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
                                     <Card key={data.user}>
 

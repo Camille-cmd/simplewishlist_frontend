@@ -18,8 +18,13 @@
     --danger-light: #ffc7cc;
     --inactive: #ccc;
     --inactive-dark: #b2b5ba;
+    --warning-main: #ffd3a2;
+    --warning-light: #ffe9bc;
+    --success-main: #ccd5ae;
+    --success-light: #e9edc9;
+    /*--filters: #fcfaee;*/
+    --filters: #ede9cf;
 }
-
 
 *,
 *::before,

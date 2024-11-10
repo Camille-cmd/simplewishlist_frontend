@@ -77,7 +77,10 @@
       "untake": "Click to unmark this wish as taken"
     },
     "taken": "Taken by ",
-    "deleted": "Deleted"
+    "deleted": "Deleted",
+    "iHandleIt": "I handle it!",
+    "iDontTake": "I do not handle it!",
+    "edit": "Edit"
   },
   "editWish": {
     "pageTitle": "Update your wish",
@@ -129,6 +132,14 @@
     "wishlistAdminName": "Admin name",
     "allowSeeAssigned": "Surprise mode",
     "title": "Wishlist Settings"
+  },
+  "WLFilters": {
+    "all": "All",
+    "selectAUser": "Select someone",
+    "onlyTakenWishes": "See only wishes I've taken",
+    "filter": "Filter",
+    "filters": "Filters",
+    "resetAllFilters": "Reset all filters"
   },
   "errors": {
     "wishlistName": {

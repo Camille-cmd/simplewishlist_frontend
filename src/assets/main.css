@@ -53,20 +53,6 @@ header .btn-custom:hover {
     display: inline-block;
 }
 
-.form-switch .form-check-input:checked {
-    background-color: var(--palette1-medium);
-    border-color: var(--palette1-medium);
-}
-
-.form-switch .form-check-input:focus {
-    border-color: var(--main-dark);
-    box-shadow: 0 0 0 0.25rem var(--palette1-light);
-}
-
-.wishlist-container .form-switch .form-check-input:checked {
-    background-color: var(--palette2-dark);
-    border-color: var(--palette2-dark);
-}
 
 /* WISHLIST */
 .utils-row.utils-row-main {

@@ -1,5 +1,5 @@
 import {Wish} from "../interfaces/WishListData";
-import {Badge, Button, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
+import {Badge, Button, ButtonGroup, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
@@ -60,16 +60,9 @@ export default function WishCardItem(
      * else assign the wish to the user
      * @param wish
      */
-    const HandleClickOnWish = (wish: Wish) => {
-        // If the user is the current one,
-        // then set the editWish state instead of assigning the wish
-        if (isCurrentUser) {
-            setEditWish(wish)
-            setShowWishForm(true)
-            // Only the currently assigned user can modify the wish assignedUser
-        } else if (!wish.assignedUser || wish.assignedUser === currentUserName) {
-            handleAssignedUser(wish.id, !!wish.assignedUser)
-        }
+    const HandleEditWish = (wish: Wish) => {
+        setEditWish(wish)
+        setShowWishForm(true)
     }
 
     /**
@@ -90,6 +83,7 @@ export default function WishCardItem(
         if (isCurrentUser) {
             return t('wishCard.tooltip.currentUserMessage')
         } else if (!!wish.assignedUser && wish.assignedUser !== currentUserName) {
+            // In theory, this message should never be displayed, we keep it in case it is needed in the future.
             return t('wishCard.tooltip.alreadyTaken')
         } else if (!!wish.assignedUser && wish.assignedUser === currentUserName) {
             return t('wishCard.tooltip.untake')
@@ -109,13 +103,11 @@ export default function WishCardItem(
         wish.deleted && wish.assignedUser !== currentUserName
             ? null
             :
-            <ListGroupItem key={wish.id} onClick={() => HandleClickOnWish(wish)} className={"wish-group-item"}>
+            <ListGroupItem key={wish.id} className={"wish-group-item"}>
 
                 <Card.Title className={canShowAssignedUser ? "crossed-text" : ""}>
                     <Stack direction={"horizontal"} gap={3}>
-                        <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
-                            <span>{wish.deleted ? t("wishCard.deleted") : wish.name}</span>
-                        </OverlayTrigger>
+                        <span>{wish.deleted ? t("wishCard.deleted") : wish.name}</span>
 
                         <Badge className="ms-auto">{wish.price}</Badge>
 
@@ -145,6 +137,38 @@ export default function WishCardItem(
                     ? <Card.Text className="mt-2">{wish.description}</Card.Text>
                     : null
                 }
+                <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
+                    <ButtonGroup aria-label="Actions on wish" className="my-2">
+                        {isCurrentUser ? (
+                            <Button
+                                variant="warning"
+                                size={"sm"}
+                                onClick={() => HandleEditWish(wish)}
+                            >
+                                {t("wishCard.edit")}
+                            </Button>
+                        ) : wish.assignedUser ? (
+                                wish.assignedUser === currentUserName ? (
+                                        <Button
+                                            variant="danger"
+                                            size={"sm"}
+                                            onClick={() => handleAssignedUser(wish.id, !!wish.assignedUser)}
+                                        >
+                                             {t("wishCard.iDontTake")}
+                                        </Button>
+                                ) : null
+                        ) : (
+                            <Button
+                                variant={"success"}
+                                className={"btn-success-custom"}
+                                size={"sm"}
+                                onClick={() => handleAssignedUser(wish.id, !!wish.assignedUser)}
+                            >
+                                {t("wishCard.iHandleIt")}
+                            </Button>
+                        )}
+                    </ButtonGroup>
+                </OverlayTrigger>
             </ListGroupItem>
     )
 }
