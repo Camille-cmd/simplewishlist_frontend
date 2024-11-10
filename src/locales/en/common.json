@@ -137,7 +137,9 @@
     "all": "All",
     "selectAUser": "Select someone",
     "onlyTakenWishes": "See only wishes I've taken",
-    "filter": "Filter"
+    "filter": "Filter",
+    "filters": "Filters",
+    "resetAllFilters": "Reset all filters"
   },
   "errors": {
     "wishlistName": {

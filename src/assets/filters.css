@@ -1,26 +1,4 @@
-
-.filters {
-  background-color: var(--filters);
-  padding: 10px;
-  border-radius: 10px;
-  width: 80%;
-
-  margin: 0 auto;
-}
-.bg-filters {
-  background-color: var(--filters);
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.users-dropdown {
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.filters .form-check-input{
-  margin-right: 8px;
-}
-.filters .form-check-label{
-  margin-top: 3px;
+.filters-content {
+    z-index: 1000;
+    min-width: 320px;
 }

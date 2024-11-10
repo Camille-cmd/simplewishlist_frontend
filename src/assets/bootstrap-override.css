@@ -100,12 +100,26 @@ a:hover {
 }
 
 .btn-outline-dark {
-    background-color: var(--main-dark);
-    color: var(--palette1-light);
+    color: var(--main-dark);
 }
 
 .btn-outline-dark:hover {
     background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
+.btn-outline-success {
+    border-color: var(--main-dark);
+    color: var(--main-dark);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--palette1-light);
+    color: var(--main-dark);
+}
+
+.btn-outline-success:active {
+    background-color: var(--main-dark) !important;
     color: var(--main-dark);
 }
 
@@ -126,9 +140,9 @@ a:hover {
     --bs-btn-hover-bg: var(--warning-light);
 }
 
-.btn-warning:hover .btn-warning:active .btn-warning:focus{
+.btn-warning:hover .btn-warning:active .btn-warning:focus {
     background-color: var(--warning-light);
-    border-color : var(--warning-main);
+    border-color: var(--warning-main);
     color: var(--main-dark);
 }
 
@@ -146,6 +160,14 @@ a:hover {
 
 .link-underline-danger {
     color: var(--danger-main);
+}
+
+.btn-link {
+    color: var(--main-dark);
+}
+
+.btn-link:active {
+    color: var(--main-dark) !important;
 }
 
 
