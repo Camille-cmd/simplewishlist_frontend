@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Card, Col, Container, ListGroup, ListGroupItem, Row,} from "react-bootstrap";
+import {Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {UserDeletedWishData, UserWish, UserWishData, Wish, WishListData} from "../interfaces/WishListData";
 import WishlistNavbar from "./WishlistNavbar.tsx";
 import WishCardItem from "./WishCardItem.tsx";
@@ -12,6 +12,8 @@ import {AlertData} from "../interfaces/AlertData";
 import {useTranslation} from "react-i18next";
 import WishlistFilters from "./WishlistFilters.tsx";
 import {Filters} from "../interfaces/Filters";
+import Masonry from 'react-masonry-css'
+
 
 interface WishlistProps {
     wishlistData: WishListData
@@ -39,6 +41,13 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
     const [currentlyConnectedUsersNames, setCurrentlyConnectedUsersNames] = useState<Array<string>>([]);
 
     const allUsersNames = wishlistData.userWishes.map((userWish) => userWish.user !== wishlistData.currentUser ? userWish.user : "").filter(Boolean);
+
+    // Responsive grid for the wishes
+    const breakpointColumnsObj = {
+        default: 3,
+        1000: 2,
+        600: 1
+    };
 
     // Get the userToken from the url params used in routes.tsx
     const {userToken} = useParams();
@@ -331,10 +340,9 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
 
                 // Display the list of wishes
                 : <Container className="list-group user-wishes" translate={"no"}>
-                    <Row>
+                    <Masonry breakpointCols={breakpointColumnsObj} className="masonry-grid" columnClassName="masonry-grid_column">
                         {
                             filteredWishlistData.userWishes.map((data: UserWish) => (
-                                <Col key={data.user} xs={12} md={6} lg={4} className="mt-4">
                                     <Card key={data.user}>
 
                                         <Card.Header
@@ -366,10 +374,9 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                                             }
                                         </ListGroup>
                                     </Card>
-                                </Col>
                             ))
                         }
-                    </Row>
+                    </Masonry>
                 </Container>
             }
         </>
