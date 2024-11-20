@@ -80,13 +80,13 @@ a:hover {
 }
 
 .btn-danger {
-    background-color: var(--danger-main);
-    color: var(--main-dark);
+    background-color: var(--danger-main) !important;
+    color: var(--main-dark) !important;
 }
 
 .btn-danger:hover {
-    background-color: var(--danger-light);
-    color: var(--main-dark);
+    background-color: var(--danger-light) !important;
+    color: var(--main-dark) !important;
 }
 
 .btn-outline-danger {
