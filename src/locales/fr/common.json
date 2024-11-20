@@ -74,7 +74,8 @@
     "deleted": "Supprimé",
     "iHandleIt": "Je m'en occupe !",
     "iDontTake": "Je ne m'en occupe plus",
-    "edit": "Modifier"
+    "edit": "Modifier",
+    "takenButton": "Déjà pris !"
   },
   "alert": {
     "wishCreated": "Votre souhait a été ajouté !",

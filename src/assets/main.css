@@ -150,7 +150,23 @@ header .btn-custom:hover {
     white-space: pre-wrap;
 }
 
+/* MASONRY */
+.masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -30px; /* gutter size offset */
+  width: auto;
+}
+.masonry-grid_column {
+  padding-left: 40px; /* gutter size */
+  background-clip: padding-box;
+}
 
+/* Style the items */
+.masonry-grid_column > div {
+  margin: 30px 0;
+}
 
 @media (min-width: 768px) {
     .wishlist-container {

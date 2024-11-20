@@ -80,7 +80,8 @@
     "deleted": "Deleted",
     "iHandleIt": "I handle it!",
     "iDontTake": "I do not handle it!",
-    "edit": "Edit"
+    "edit": "Edit",
+    "takenButton": "Already taken!"
   },
   "editWish": {
     "pageTitle": "Update your wish",

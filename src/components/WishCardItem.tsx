@@ -83,7 +83,6 @@ export default function WishCardItem(
         if (isCurrentUser) {
             return t('wishCard.tooltip.currentUserMessage')
         } else if (!!wish.assignedUser && wish.assignedUser !== currentUserName) {
-            // In theory, this message should never be displayed, we keep it in case it is needed in the future.
             return t('wishCard.tooltip.alreadyTaken')
         } else if (!!wish.assignedUser && wish.assignedUser === currentUserName) {
             return t('wishCard.tooltip.untake')
@@ -156,7 +155,16 @@ export default function WishCardItem(
                                         >
                                              {t("wishCard.iDontTake")}
                                         </Button>
-                                ) : null
+                                ) : (
+                                    <Button
+                                        variant={"danger"}
+                                        className={"btn-danger"}
+                                        size={"sm"}
+                                        disabled
+                                    >
+                                        {t("wishCard.takenButton")}
+                                    </Button>
+                                )
                         ) : (
                             <Button
                                 variant={"success"}
