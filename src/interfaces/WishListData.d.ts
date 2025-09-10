@@ -26,7 +26,7 @@ export interface UserDeletedWishData {
 
 
 export interface WishListData {
-    wishListId: string;
+    wishlistId: string;
     name: string;
     allowSeeAssigned: boolean;
     currentUser: string;

@@ -2,7 +2,6 @@ import {useTranslation} from "react-i18next";
 import {api} from "../../api/axiosConfig.tsx";
 import {useEffect, useState} from "react";
 import {WishlistSettingsInterface} from "../../interfaces/WishlistSettings";
-import {useParams} from "react-router-dom";
 import {Formik} from "formik";
 import {Button, Form, OverlayTrigger, Popover, Spinner, Stack} from "react-bootstrap";
 import {PatchQuestion} from "react-bootstrap-icons";
@@ -10,6 +9,7 @@ import * as Yup from "yup";
 import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
 import WishlistAlert from "../WishlistAlert.tsx";
 import {AlertData} from "../../interfaces/AlertData";
+import {useParams} from "react-router-dom";
 
 
 /**
@@ -18,8 +18,8 @@ import {AlertData} from "../../interfaces/AlertData";
  */
 export function WishlistSettings() {
     const {t} = useTranslation();
+    const {wishlistId} = useParams();
 
-    const {userToken} = useParams();
     const [wishlistSettings, setWishlistSettings] = useState<WishlistSettingsInterface>();
     const [alertData, setAlertData] = useState<AlertData>();
 
@@ -33,7 +33,7 @@ export function WishlistSettings() {
      * Get the wishlist settings from the api
      */
     const getWishlistSettings = () => {
-        api.get('/wishlist/settings', {headers: {'Authorization': `Bearer ${userToken}`}})
+        api.get('/wishlist/settings')
             .then((response) => {
                 setWishlistSettings(response.data as WishlistSettingsInterface);
             })
@@ -48,7 +48,6 @@ export function WishlistSettings() {
         api.post(
             `/wishlist`,
             values,
-            {headers: {'Authorization': `Bearer ${userToken}`}}
         ).then((response) => {
             if (response.status === 200) {
                 setWishlistSettings(response.data as WishlistSettingsInterface);
@@ -88,14 +87,13 @@ export function WishlistSettings() {
 
     return (
         <>
-
             {/*Return to wishlist button*/}
             <Button
                 as="input"
                 type="button"
                 value={t("createWish.buttons.returnToWishlist")}
                 variant="outline-dark"
-                onClick={() => handleReturnToWishlist(userToken as string)}
+                onClick={() => handleReturnToWishlist(wishlistId as string)}
             />
 
             {/*Title */}
@@ -105,7 +103,7 @@ export function WishlistSettings() {
             </h1>
 
             {/*Alerts*/}
-            {alertData &&<WishlistAlert alertData={alertData as AlertData}></WishlistAlert>}
+            {alertData && <WishlistAlert alertData={alertData as AlertData}></WishlistAlert>}
 
             {/*Form*/}
             <Formik
@@ -144,7 +142,10 @@ export function WishlistSettings() {
                                 name='allowSeeAssigned'
                                 onChange={() => props.setFieldValue('allowSeeAssigned', !props.values.allowSeeAssigned)}
                             />
-                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover} rootClose>
+                            <OverlayTrigger trigger={["hover", "click"]}
+                                            placement="auto"
+                                            overlay={surpriseModePopover}
+                                            rootClose>
                                 <PatchQuestion/>
                             </OverlayTrigger>
                         </Stack>

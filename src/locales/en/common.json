@@ -94,16 +94,22 @@
     "name": "Name",
     "link": "Link",
     "copyAll": "Copy all links",
+    "copyWishlistLink": "Copy wishlist link", 
     "wlWasCreated": "Your wishlist was created!",
-    "helpLink": "Each user accesses the wishlist via a personal link that identifies them. It's ",
-    "helpLinkBoldPart": "very important that everyone uses their personal link ",
-    "helpLinkEnd": "at the risk of modifying someone else's wishlist, or ruining the surprise ",
-    "individualLinks": "Here are the individual links for each user. Now's a good time to share them with everyone!",
+    "helpLink": "Everyone can now access the wishlist using the same link. When they visit the link, they'll simply choose who they are from the list of participants.",
+    "helpLinkBoldPart": "",
+    "helpLinkEnd": "",
+    "individualLinks": "Share this single link with everyone. Each person will select their identity when they first visit the wishlist.",
+    "wishlistLink": "Wishlist Link",
+    "wishlistLinkDescription": "Share this link with all participants. Each person will choose who they are when they visit.",
+    "participants": "Participants",
     "access": "Everything sent? ",
     "accessButton": "Access your wishlist!",
     "copy": "Copy user link",
     "copied": "Copied!",
     "copyAllIntro": "Here are the links for the wishlist",
+    "copyWishlistLinkIntro": "Here is the link for the wishlist",
+    "wishlistLinkInstructions": "Everyone uses the same link! When you visit the link, simply choose who you are from the participants list.",
     "copyAllReminder": "It is very important that everyone uses their personal link, at the risk of modifying someone else's wishlist, or ruining the surprise!",
     "table": {
       "name": "Name",
@@ -141,6 +147,16 @@
     "filter": "Filter",
     "filters": "Filters",
     "resetAllFilters": "Reset all filters"
+  },
+  "userSelection": {
+    "selectUser": "Who are you?",
+    "selectThisUser": "This is me!",
+    "switchingUser": "Choose a different user",
+    "choiceWillBeRemembered": "Your choice will be remembered for this wishlist",
+    "errorLoadingUsers": "Could not load users for this wishlist",
+    "errorAuthenticating": "Could not authenticate with this user",
+    "noWishlistData": "No wishlist data found",
+    "switchUser": "Switch user"
   },
   "errors": {
     "wishlistName": {

@@ -1,13 +1,13 @@
 import {Formik} from "formik";
 import {Button, Form, Stack} from "react-bootstrap";
 import {t} from "i18next";
-import {useParams} from "react-router-dom";
 import "../assets/wish.css"
 import {WishAddFormValues} from "../interfaces/WishAddFormValues";
 import {Wish} from "../interfaces/WishListData";
 import {Dispatch, SetStateAction} from "react";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
 import * as Yup from "yup";
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 interface WishFormProps {
     initialWish: Wish | undefined,
@@ -24,7 +24,7 @@ interface WishFormProps {
 export default function WishForm(
     {initialWish, setEditWish, setShowWishForm, sendJsonMessage}: Readonly<WishFormProps>
 ) {
-    const {userToken} = useParams();
+    const {userToken} = useAuth();
     // Check if the form is used to update a wish or to create a new one
     const isUpdating = !!initialWish
 

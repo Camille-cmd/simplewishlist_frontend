@@ -18,6 +18,7 @@ export default function WishlistCreate() {
     const {t} = useTranslation();
     const [usersData, setUsersData] = useState<Array<UserData>>([])
     const [wishlistName, setWishlistName] = useState<string>()
+    const [wishlistId, setWishlistId] = useState<string>()
 
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertData, setAlertData] = useState<AlertData>();
@@ -35,7 +36,15 @@ export default function WishlistCreate() {
                 setWishlistName(values.wishlistName)
 
                 // Set the users data
-                setUsersData(response.data as Array<UserData>)
+                const users = response.data as Array<UserData>
+                setUsersData(users)
+                console.log(users)
+
+                // Extract wishlist ID from the first user
+                if (users.length > 0 && users[0].wishlistId) {
+                    console.log(users[0].wishlistId)
+                    setWishlistId(users[0].wishlistId)
+                }
 
             } else {
                 setShowAlert(true);
@@ -61,7 +70,11 @@ export default function WishlistCreate() {
 
             {usersData.length > 0
                 // If we have users, then we should display the users list
-                ? <WishlistUserList usersData={usersData} wishlistName={wishlistName} userSettings={false} setUsersData={setUsersData}></WishlistUserList>
+                ? <WishlistUserList usersData={usersData}
+                                    wishlistName={wishlistName}
+                                    wishlistId={wishlistId}
+                                    userSettings={false}
+                                    setUsersData={setUsersData}></WishlistUserList>
                 // Else, display the wishlist create form
                 : <WishlistCreateForm handleSubmit={handleSubmit}></WishlistCreateForm>
             }
