@@ -1,3 +1,3 @@
-export const handleReturnToWishlist = (userToken: string) => {
-    window.location.href = `/link/${userToken}`;
+export const handleReturnToWishlist = (wishlistId: string) => {
+    window.location.href = `/wishlist/${wishlistId}/view`;
 }

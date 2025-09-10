@@ -1,24 +1,25 @@
 import {UserData} from "../interfaces/UserToken";
 import {Button, Container, Table} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
-import {generateLink} from "../utils/generateLink";
+import {generateWishlistLink} from "../utils/generateLink";
 import {Dispatch, SetStateAction, useState} from "react";
 import UserLinkItem from "./UserLinkItem.tsx";
 import {UserForm} from "./Parameters/UserForm.tsx";
-import {getAdminUserFromUserData} from "../utils/getAdminUserFromUserData.tsx";
 
 
 class WishlistUserListProps {
     usersData: Array<UserData> | undefined
     wishlistName: string | undefined
+    wishlistId: string | undefined
     userSettings: boolean | undefined
     setUsersData: Dispatch<SetStateAction<Array<UserData>>> | undefined
 }
 
 /**
- * Component that displays the list of users and their unique links.
+ * Component that displays the list of users and their shared wishlist link.
  * @param usersData
  * @param wishlistName
+ * @param wishlistId
  * @param userSettings
  * @param setUsersData
  * @constructor
@@ -27,45 +28,12 @@ export default function WishlistUserList(
     {
         usersData,
         wishlistName,
+        wishlistId,
         userSettings,
         setUsersData
     }: Readonly<WishlistUserListProps>) {
     const {t} = useTranslation();
-    const [allLinksCopied, setAllLinksCopied] = useState<boolean>(false);
     const [showUserForm, setShowUserForm] = useState<boolean>(false);
-
-    const {adminId, adminName} = getAdminUserFromUserData(usersData);
-
-
-    /**
-     * Copies all user links to the clipboard.
-     *
-     * This function iterates over the `usersTokens` array to generate a unique link for each user.
-     * It then constructs a message that includes an introduction with the `wishlistName`, the generated links for each
-     * user, and a reminder. This message is copied to the clipboard for easy sharing.
-     */
-    const copyAllLinks = () => {
-        const links: Array<string> = [];
-
-        if (!usersData) {
-            return;
-        }
-        usersData.map((userData: UserData) => (
-            userData.isActive ? links.push(userData.name + " = " + generateLink(userData.id, userData.name)) : null
-
-        ));
-
-        // Generate the data with Intro(+ wishlistName) + links + reminder
-        const data = `${t('WLCreated.copyAllIntro')} "${wishlistName}:"\n\n${links.join("\n\n")}\n\n${t('WLCreated.copyAllReminder')}`;
-        navigator.clipboard.writeText(data).then(function () {
-            setAllLinksCopied(true);
-            setTimeout(() => {
-                setAllLinksCopied(false);
-            }, 2000);
-        }, function (err) {
-            console.error('Async: Could not copy text: ', err);
-        });
-    }
 
     return (
         <>
@@ -77,12 +45,19 @@ export default function WishlistUserList(
                 <p>
                     {t('WLCreated.helpLink')}
                     <b>{t('WLCreated.helpLinkBoldPart')} </b>
-                    {t('WLCreated.helpLinkEnd')}<span className="emoji-bg">🫣</span>
+                    {t('WLCreated.helpLinkEnd')}
                 </p>
                 {!userSettings && <p> {t('WLCreated.individualLinks')}</p>}
             </div>
 
             <div className={"d-flex flex-column"}>
+
+                {/* Link to access the wishlist for the first time */}
+                {!userSettings && wishlistId && wishlistName && <p className={"mt-3 mb-4 m-auto"}>
+                    <a href={generateWishlistLink(wishlistId)}
+                       className={"link-success link-underline-danger"}>{t('WLCreated.accessButton')}</a>
+                </p>
+                }
 
                 {/*Form to create a new user (only in user settings) */}
                 {userSettings &&
@@ -104,48 +79,62 @@ export default function WishlistUserList(
                     : <div className={"m-3"}></div>
                 }
 
-                <Button
-                    type="button"
-                    className={"btn-custom mt-3 mb-2 m-auto"}
-                    variant="primary"
-                    onClick={copyAllLinks}
-                >
-                    {allLinksCopied ? t('WLCreated.copied') : t('WLCreated.copyAll')}
-                </Button>
 
-                {/* Link to access the wishlist for the first time */}
-                {!userSettings && <p className={"mt-3 mb-4 m-auto"}>
-                    {t('WLCreated.access')}
-                    <a href={generateLink(adminId, adminName)}
-                       className={"link-success link-underline-danger"}>{t('WLCreated.accessButton')}</a>
-                </p>
-                }
+                {/* Single wishlist link display */}
+                {!userSettings && wishlistId && (
+                    <div className={"mt-4 mb-4 p-3 border rounded"}>
+                        <h5>{t('WLCreated.wishlistLink')}</h5>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={generateWishlistLink(wishlistId)}
+                                readOnly
+                            />
+                        </div>
+                        <small className="text-muted">{t('WLCreated.wishlistLinkDescription')}</small>
+                    </div>
+                )}
 
             </div>
 
             <Container className="list-group user-wishes">
+                {userSettings ? (
+                    <Table striped responsive className={"text-center"} translate={"no"}>
+                        <thead>
+                        <tr>
+                            <th className={"text-wrap text-break fixed-width"}>{t('WLCreated.table.name')}</th>
+                            <th>{t('WLCreated.table.status')}</th>
+                            <th>{t('WLCreated.table.actions')}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {usersData?.map((userData: UserData) => (
+                            <UserLinkItem
+                                key={userData.id}
+                                userData={userData}
+                                editUser={userSettings}
+                                setUsersData={setUsersData}
+                                otherUsersNames={usersData.map(userToken => userToken.name)}>
+                            </UserLinkItem>
+                        ))}
+                        </tbody>
+                    </Table>
+                ) : (
+                    <div className="mt-4">
+                        <h5 className="mb-3">{t('WLCreated.participants')}</h5>
+                        <div className="row g-2">
+                            {usersData?.filter(user => user.isActive).map((userData: UserData) => (
+                                <div key={userData.id} className="col-auto">
+                                    <span className="badge bg-primary fs-6">
+                                        {userData.name}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
-                <Table striped responsive className={"text-center"} translate={"no"}>
-                    <thead>
-                    <tr>
-                        <th className={"text-wrap text-break fixed-width"}>{t('WLCreated.table.name')}</th>
-                        <th className={"text-wrap text-break d-none d-lg-table-cell"}>{t('WLCreated.table.link')}</th>
-                        <th>{t('WLCreated.table.status')}</th>
-                        <th>{t('WLCreated.table.actions')}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {usersData?.map((userData: UserData) => (
-                        <UserLinkItem
-                            key={userData.id}
-                            userData={userData}
-                            editUser={userSettings}
-                            setUsersData={setUsersData}
-                            otherUsersNames={usersData.map(userToken => userToken.name)}>
-                        </UserLinkItem>
-                    ))}
-                    </tbody>
-                </Table>
 
             </Container>
 

@@ -94,16 +94,22 @@
     "name": "Nom",
     "link": "Lien pour accéder à la wishlist",
     "copyAll": "Copier tous les liens",
+    "copyWishlistLink": "Copier le lien de la wishlist",
     "wlWasCreated": "Votre wishlist a été créée !",
-    "helpLink": "Chaque utilisateur accède à la wishlist via un lien personnel qui les identifie. Il est ",
-    "helpLinkBoldPart": "très important que chacun utilise son lien personnel ",
-    "helpLinkEnd": "au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise. ",
-    "individualLinks": "Voici les liens individuels pour chaque utilisateur. C'est le moment de les partager avec tout le monde !",
+    "helpLink": "Tout le monde peut maintenant accéder à la wishlist en utilisant le même lien. En visitant le lien, chacun choisira simplement qui il est parmi la liste des participants.",
+    "helpLinkBoldPart": "",
+    "helpLinkEnd": "",
+    "individualLinks": "Partagez ce lien unique avec tout le monde. Chaque personne sélectionnera son identité lors de sa première visite de la wishlist.",
+    "wishlistLink": "Lien de la Wishlist",
+    "wishlistLinkDescription": "Partagez ce lien avec tous les participants. Chaque personne choisira qui elle est lors de sa visite.",
+    "participants": "Participants",
     "access": "Tout le monde a son lien ? ",
     "accessButton": "Accédez à votre wishlist !",
     "copy": "Copier le lien",
     "copied": "Copié !",
     "copyAllIntro": "Voici les liens personnels de chacun pour accéder à la wishlist",
+    "copyWishlistLinkIntro": "Voici le lien pour la wishlist",
+    "wishlistLinkInstructions": "Tout le monde utilise le même lien ! En visitant le lien, choisissez simplement qui vous êtes parmi la liste des participants.",
     "copyAllReminder": "Il est très important que chacun utilise son lien personnel, au risque de modifier les souhaits de quelqu'un d'autre, ou de gâcher la surprise !",
     "table": {
       "name": "Nom",
@@ -141,6 +147,16 @@
     "filter": "Filtrer",
     "filters": "Filtres",
     "resetAllFilters": "Réinitialiser tous les filtres"
+  },
+  "userSelection": {
+    "selectUser": "Qui êtes-vous ?",
+    "selectThisUser": "C'est moi !",
+    "switchingUser": "Choisissez un utilisateur différent",
+    "choiceWillBeRemembered": "Votre choix sera mémorisé pour cette wishlist",
+    "errorLoadingUsers": "Impossible de charger les utilisateurs pour cette wishlist",
+    "errorAuthenticating": "Impossible de s'authentifier avec cet utilisateur",
+    "noWishlistData": "Aucune donnée de wishlist trouvée",
+    "switchUser": "Changer d'utilisateur"
   },
   "errors": {
     "wishlistName": {

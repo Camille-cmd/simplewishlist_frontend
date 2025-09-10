@@ -1,10 +1,10 @@
 import {Wish} from "../interfaces/WishListData";
 import {Badge, Button, ButtonGroup, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
-import {useParams} from "react-router-dom";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
 import {useTranslation} from "react-i18next";
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 interface WishCardItemProps {
     wish: Wish,
@@ -26,9 +26,9 @@ export default function WishCardItem(
         setShowWishForm,
         currentUserName,
     }
-        : Readonly<WishCardItemProps>) {
+    : Readonly<WishCardItemProps>) {
     const {t} = useTranslation();
-    const {userToken} = useParams();
+    const {userToken} = useAuth();
     const [canShowAssignedUser, setCanShowAssignedUser] = useState<boolean>(!!wish.assignedUser && (!isCurrentUser || !surpriseMode))
 
     /**
@@ -147,24 +147,24 @@ export default function WishCardItem(
                                 {t("wishCard.edit")}
                             </Button>
                         ) : wish.assignedUser ? (
-                                wish.assignedUser === currentUserName ? (
-                                        <Button
-                                            variant="danger"
-                                            size={"sm"}
-                                            onClick={() => handleAssignedUser(wish.id, !!wish.assignedUser)}
-                                        >
-                                             {t("wishCard.iDontTake")}
-                                        </Button>
-                                ) : (
-                                    <Button
-                                        variant={"danger"}
-                                        className={"btn-danger"}
-                                        size={"sm"}
-                                        disabled
-                                    >
-                                        {t("wishCard.takenButton")}
-                                    </Button>
-                                )
+                            wish.assignedUser === currentUserName ? (
+                                <Button
+                                    variant="danger"
+                                    size={"sm"}
+                                    onClick={() => handleAssignedUser(wish.id, !!wish.assignedUser)}
+                                >
+                                    {t("wishCard.iDontTake")}
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant={"danger"}
+                                    className={"btn-danger"}
+                                    size={"sm"}
+                                    disabled
+                                >
+                                    {t("wishCard.takenButton")}
+                                </Button>
+                            )
                         ) : (
                             <Button
                                 variant={"success"}

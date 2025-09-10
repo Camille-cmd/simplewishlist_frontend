@@ -1,5 +1,4 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
 import {Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {UserDeletedWishData, UserWish, UserWishData, Wish, WishListData} from "../interfaces/WishListData";
 import WishlistNavbar from "./WishlistNavbar.tsx";
@@ -13,6 +12,7 @@ import {useTranslation} from "react-i18next";
 import WishlistFilters from "./WishlistFilters.tsx";
 import {Filters} from "../interfaces/Filters";
 import Masonry from 'react-masonry-css'
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 
 interface WishlistProps {
@@ -26,6 +26,7 @@ interface WishlistProps {
  */
 export default function Wishlist({wishlistData, setWishlistData}: Readonly<WishlistProps>) {
     const {t} = useTranslation();
+    const {userToken} = useAuth();
 
     const [filteredWishlistData, setFilteredWishlistData] = useState<WishListData>(wishlistData);
     const [filters, setFilters] = useState<Filters>({onlyTakenWishes: false, selectedUser: ''})
@@ -48,9 +49,6 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
         1000: 2,
         600: 1
     };
-
-    // Get the userToken from the url params used in routes.tsx
-    const {userToken} = useParams();
 
     // Websocket
     const {sendJsonMessage, lastJsonMessage} = useWebSocket(
@@ -340,40 +338,42 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
 
                 // Display the list of wishes
                 : <Container className="list-group user-wishes" translate={"no"}>
-                    <Masonry breakpointCols={breakpointColumnsObj} className="masonry-grid" columnClassName="masonry-grid_column">
+                    <Masonry breakpointCols={breakpointColumnsObj}
+                             className="masonry-grid"
+                             columnClassName="masonry-grid_column">
                         {
                             filteredWishlistData.userWishes.map((data: UserWish) => (
-                                    <Card key={data.user}>
+                                <Card key={data.user}>
 
-                                        <Card.Header
-                                            className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
-                                            {data?.user}
-                                        </Card.Header>
+                                    <Card.Header
+                                        className={"header" + (isCurrentUser(data.user) ? " current-user-header" : "")}>
+                                        {data?.user}
+                                    </Card.Header>
 
-                                        <ListGroup>
-                                            {/* Wishes*/}
-                                            {countActiveWishes(data.wishes) > 0
-                                                ?
-                                                data.wishes.map((wish: Wish) => (
-                                                    <WishCardItem
-                                                        key={wish.id}
-                                                        wish={wish}
-                                                        isCurrentUser={isCurrentUser(data.user)}
-                                                        surpriseMode={surpriseMode}
-                                                        setEditWish={setEditWish}
-                                                        sendJsonMessage={sendJsonMessage}
-                                                        setShowWishForm={setShowWishForm}
-                                                        currentUserName={wishlistData?.currentUser as string}
-                                                    ></WishCardItem>
-                                                ))
-                                                : <ListGroupItem>
-                                                    <Card.Title>{t('showWL.emptyWishlist')}</Card.Title>
-                                                    {isCurrentUser(data.user) &&
-                                                        <Card.Text>{t('showWL.emptyWishlistText')}</Card.Text>}
-                                                </ListGroupItem>
-                                            }
-                                        </ListGroup>
-                                    </Card>
+                                    <ListGroup>
+                                        {/* Wishes*/}
+                                        {countActiveWishes(data.wishes) > 0
+                                            ?
+                                            data.wishes.map((wish: Wish) => (
+                                                <WishCardItem
+                                                    key={wish.id}
+                                                    wish={wish}
+                                                    isCurrentUser={isCurrentUser(data.user)}
+                                                    surpriseMode={surpriseMode}
+                                                    setEditWish={setEditWish}
+                                                    sendJsonMessage={sendJsonMessage}
+                                                    setShowWishForm={setShowWishForm}
+                                                    currentUserName={wishlistData?.currentUser as string}
+                                                ></WishCardItem>
+                                            ))
+                                            : <ListGroupItem>
+                                                <Card.Title>{t('showWL.emptyWishlist')}</Card.Title>
+                                                {isCurrentUser(data.user) &&
+                                                    <Card.Text>{t('showWL.emptyWishlistText')}</Card.Text>}
+                                            </ListGroupItem>
+                                        }
+                                    </ListGroup>
+                                </Card>
                             ))
                         }
                     </Masonry>

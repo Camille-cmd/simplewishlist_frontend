@@ -207,3 +207,58 @@ header .btn-custom:hover {
         gap: 30px;
     }
 }
+
+/* USER SELECTION */
+.user-selection-card {
+    background-color: var(--palette2-light);
+    border: 2px solid var(--palette1-dark);
+    border-radius: 10px;
+    padding: 30px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(52, 78, 65, 0.1);
+}
+
+.user-selection-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(52, 78, 65, 0.15);
+    border-color: var(--main-dark);
+    background-color: var(--palette1-light);
+}
+
+.user-selection-card.authenticating {
+    background-color: var(--palette1-medium);
+    border-color: var(--secondary-dark);
+}
+
+.user-selection-card .card-body {
+    padding: 0;
+}
+
+.user-selection-card .card-title {
+    color: var(--main-dark);
+    font-family: 'YesevaOne', serif;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.user-selection-card .btn-custom {
+    background-color: var(--palette1-dark);
+    border-color: var(--palette1-dark);
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.user-selection-card .btn-custom:hover {
+    background-color: var(--main-dark);
+    border-color: var(--main-dark);
+    transform: translateY(-1px);
+}
+
+.user-selection-card .badge {
+    background-color: var(--palette2-dark) !important;
+    color: var(--main-dark);
+    font-size: 0.8rem;
+}

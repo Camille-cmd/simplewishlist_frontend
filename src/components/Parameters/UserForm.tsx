@@ -4,11 +4,11 @@ import {Button, Form, Stack} from "react-bootstrap";
 import {PlusCircle} from "react-bootstrap-icons";
 import {useTranslation} from "react-i18next";
 import {api} from "../../api/axiosConfig.tsx";
-import {useParams} from "react-router-dom";
 import WishlistAlert from "../WishlistAlert.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
 import {AlertData} from "../../interfaces/AlertData";
 import {UserData} from "../../interfaces/UserToken";
+import {useAuth} from "../../contexts/AuthContext.tsx";
 
 class UserFormProps {
     editMode: boolean | undefined;
@@ -36,7 +36,7 @@ export function UserForm(
         initialData
     }: Readonly<UserFormProps>) {
     const {t} = useTranslation();
-    const {userToken} = useParams();
+    const {userToken} = useAuth();
     const [alertData, setAlertData] = useState<AlertData>();
     const [currentUserToken] = useState<string | undefined>(initialData?.id);
 

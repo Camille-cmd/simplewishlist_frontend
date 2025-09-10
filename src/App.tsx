@@ -9,6 +9,9 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 // Components
 import SimpleWishlistHeader from "./components/WishlistHeader.tsx";
 
+// Context
+import { AuthProvider } from "./contexts/AuthContext.tsx";
+
 // i18n
 import './i18n.tsx'
 
@@ -19,12 +22,12 @@ import {RouterProvider} from "react-router-dom";
 
 function App() {
     return (
-        <>
+        <AuthProvider>
             <SimpleWishlistHeader></SimpleWishlistHeader>
             <main className='container text'>
                 <RouterProvider router={router} />
             </main>
-        </>
+        </AuthProvider>
     )
 }
 

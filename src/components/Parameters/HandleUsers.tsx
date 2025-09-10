@@ -1,11 +1,11 @@
 import WishlistUserList from "../WishlistUserList.tsx";
 import {useEffect, useState} from "react";
 import {api} from "../../api/axiosConfig.tsx";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {UserData, UsersDataSettings} from "../../interfaces/UserToken";
 import {Button} from "react-bootstrap";
 import {t} from "i18next";
-import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
+import {useAuth} from "../../contexts/AuthContext.tsx";
 
 
 /**
@@ -13,22 +13,39 @@ import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
  * @constructor
  */
 export function HandleUsers() {
-    const {userToken} = useParams();
+    const {wishlistId: paramWishlistId} = useParams();
+    const navigate = useNavigate();
+    const {wishlistId: authWishlistId, isAuthenticatedForWishlist} = useAuth();
+
     const [usersData, setUsersData] = useState<Array<UserData>>([]);
     const [wishlistName, setWishlistName] = useState<string>();
+    const [wishlistId, setWishlistId] = useState<string>();
+
+    // Use wishlistId from auth context or URL params
+    const currentWishlistId = authWishlistId || paramWishlistId;
 
 
     /**
      * Get the users data from the api
      */
     const getUsersData = () => {
-        api.get('/wishlist/users', {headers: {'Authorization': `Bearer ${userToken}`}}
-        ).then((response) => {
-            const data = response.data as UsersDataSettings;
-            setUsersData(data.users);
-            setWishlistName(data.wishlistName as string)
-        });
+        // Check if user is authenticated and has admin rights
+        const isAuthenticated = isAuthenticatedForWishlist(currentWishlistId as string);
+        if (!isAuthenticated) {
+            navigate(`/wishlist/${currentWishlistId}`, {replace: true});
+            return;
+        }
 
+        // For new authenticated users, use header authentication
+        if (isAuthenticated) {
+            api.get('/wishlist/users')
+                .then((response) => {
+                    const data = response.data as UsersDataSettings;
+                    setUsersData(data.users);
+                    setWishlistName(data.wishlistName as string);
+                    setWishlistId(data.wishlistId as string);
+                });
+        }
     }
 
     /**
@@ -45,11 +62,12 @@ export function HandleUsers() {
                 type="button"
                 value={t("createWish.buttons.returnToWishlist")}
                 variant="outline-dark"
-                onClick={() => handleReturnToWishlist(userToken as string)}
+                onClick={() => navigate(`/wishlist/${currentWishlistId}/view`)}
             />
             <WishlistUserList
                 usersData={usersData}
                 wishlistName={wishlistName}
+                wishlistId={wishlistId}
                 userSettings={true}
                 setUsersData={setUsersData}
             />

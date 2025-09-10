@@ -1,8 +1,8 @@
 import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
 import {Button, Dropdown, DropdownButton, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
-import {useParams} from "react-router-dom";
-import {Gear} from "react-bootstrap-icons";
+import {useNavigate} from "react-router-dom";
+import {Gear, PersonCheck} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {getUserFirstTwoLetters} from "../utils/getUserFirstTwoLetters.tsx";
 import {usernameToColor} from "../utils/getUserHashColor.tsx";
@@ -35,14 +35,22 @@ export default function WishlistNavbar(
         currentlyConnectedUsersNames
     }: Readonly<WishlistNavbarProps>) {
     const {t} = useTranslation();
-    // Get the userToken from the url params used in routes.tsx
-    const {userToken} = useParams();
+    const navigate = useNavigate();
 
     /**
      * Handle the surprise mode change via the setter function
      */
     const HandleSurpriseModeChange = () => {
         setSurpriseMode(!surpriseMode)
+    }
+
+    /**
+     * Handle switching to a different user by redirecting to user selection
+     */
+    const handleSwitchUser = () => {
+        if (wishlistData?.wishlistId) {
+            navigate(`/wishlist/${wishlistData.wishlistId}?switch=true`);
+        }
     }
 
 
@@ -62,18 +70,48 @@ export default function WishlistNavbar(
 
             {/* Only on mobile display the name above */}
             <div className={"d-md-none col-md-3 col-lg-2 mb-2"} translate={"no"}>
-                <span>
-                    {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
-                </span>
+                <Stack direction="horizontal" gap={2}>
+                    <span>
+                        {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
+                    </span>
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={<Tooltip>{t('userSelection.switchUser')}</Tooltip>}
+                    >
+                        <Button
+                            variant="link"
+                            size="sm"
+                            className="p-0 text-decoration-none"
+                            onClick={handleSwitchUser}
+                        >
+                            <PersonCheck size={14}/>
+                        </Button>
+                    </OverlayTrigger>
+                </Stack>
             </div>
 
             <Stack direction="horizontal" gap={3}>
 
                 {/* Username (not on mobile) and greetings */}
                 <div className={"d-none d-md-block"} translate={"no"}>
-                    <span>
-                        {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
-                    </span>
+                    <Stack direction="horizontal" gap={2}>
+                        <span>
+                            {t('showWL.hello')} <b className="current-user-hello">{wishlistData?.currentUser}</b>
+                        </span>
+                        <OverlayTrigger
+                            placement="bottom"
+                            overlay={<Tooltip>{t('userSelection.switchUser')}</Tooltip>}
+                        >
+                            <Button
+                                variant="link"
+                                size="sm"
+                                className="p-0 text-decoration-none"
+                                onClick={handleSwitchUser}
+                            >
+                                <PersonCheck size={14}/>
+                            </Button>
+                        </OverlayTrigger>
+                    </Stack>
                 </div>
 
                 {/* Surprise mode */}
@@ -153,9 +191,9 @@ export default function WishlistNavbar(
                             variant="custom"
                         >
                             <Dropdown.Item eventKey="1"
-                                           href={(`/${userToken}/wishlist/handle-users`)}>{t('settings.handleUser')} </Dropdown.Item>
+                                           href={(`/wishlist/${wishlistData?.wishlistId}/users`)}>{t('settings.handleUser')} </Dropdown.Item>
                             <Dropdown.Item eventKey="2"
-                                           href={(`/${userToken}/wishlist/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
+                                           href={(`/wishlist/${wishlistData?.wishlistId}/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
                         </DropdownButton>
                         : null
                     }
