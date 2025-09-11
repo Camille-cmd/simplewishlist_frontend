@@ -2,15 +2,26 @@
   "welcomePage": {
     "title": "Welcome to SimpleWishlist",
     "description": "Create a wishlist, add your wishes and share it with your friends. They will be able to see your wishes and mark them as taken. No more duplicate gifts!",
-    "description2": "To make things very simple, we don't require any registration. Just create a wishlist, share the personal links and let the magic happen!",
-    "description3": "Each user accesses the wishlist via a personal link that identifies them. This link is automatically generated on wishlist's creation. It's very important that everyone uses their personal link at the risk of modifying someone else's wishes",
+    "description2": "To make things very simple, we don't require any registration. Just create a wishlist, share the link and start adding wishes!",
+    "description3": "Each user chooses who they are when accessing the wishlist.",
     "description4": "Click on the \"Create a new Wishlist\" button to get started!",
-    "createWLButton": "Create a new Wishlist"
+    "createWLButton": "Create a new Wishlist",
+    "visitedWishlists": {
+      "title": "Recently Visited Wishlists",
+      "wishlistName": "Wishlist Name",
+      "lastVisited": "Last visited",
+      "action": "Action",
+      "enterWishlist": "Enter Wishlist",
+      "noWishlists": "No previously visited wishlists found."
+    }
   },
   "createWL": {
     "title": "Create a new wishlist",
     "wishlistName": "Your Wishlist name",
     "wishlistAdminName": "Your name (you are the admin)",
+    "surpriseModeSection": "Surprise Mode Settings",
+    "enableSurpriseMode": "Enable surprise mode {{enabled}}",
+    "surpriseModeEnabledDescription": "Enable or disable the surprise mode functionality for this wishlist. When enabled, users can toggle between seeing and hiding who took care of wishes.",
     "allowSeeAssigned": "Surprise mode default mode {{checked}}",
     "surpriseModeDescription": "In surprise mode, you can not see who took care of your wishes nor taken wishes. It's a surprise!",
     "otherUserName": "Who's in?",
@@ -94,7 +105,7 @@
     "name": "Name",
     "link": "Link",
     "copyAll": "Copy all links",
-    "copyWishlistLink": "Copy wishlist link", 
+    "copyWishlistLink": "Copy wishlist link",
     "wlWasCreated": "Your wishlist was created!",
     "helpLink": "Everyone can now access the wishlist using the same link. When they visit the link, they'll simply choose who they are from the list of participants.",
     "helpLinkBoldPart": "",

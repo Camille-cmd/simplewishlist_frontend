@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {useParams, useNavigate, useSearchParams} from "react-router-dom";
-import {Container, Spinner, Alert} from "react-bootstrap";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {Alert, Container, Spinner} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {api} from "../api/axiosConfig.tsx";
 import {useAuth} from "../contexts/AuthContext.tsx";
@@ -72,7 +72,7 @@ export default function UserSelection() {
 
             const userData = response.data;
 
-            setAuth(wishlistId, userData.id);
+            setAuth(wishlistId, userData.id, wishlistData?.wishlistName);
 
             // Navigate to wishlist view
             navigate(`/wishlist/${wishlistId}/view`, {replace: true});
@@ -144,25 +144,21 @@ export default function UserSelection() {
                     </p>
                 </div>
 
-                <div className="row g-4">
+                <div className="row g-4 flex-column flex-md-row justify-content-center">
                     {wishlistData.users.map((user) => (
                         <div key={user.id} className="col-md-6 col-lg-4">
                             <div
-                                className={`user-selection-card h-100 ${authenticating === user.id ? 'authenticating' : ''}`}
+                                className={`user-selection-card ${authenticating === user.id ? 'authenticating' : ''}`}
                                 style={{cursor: authenticating ? 'wait' : 'pointer'}}
                                 onClick={() => authenticating ? null : handleUserSelect(user.id)}
                             >
-                                <div className="card-body d-flex flex-column align-items-center text-center">
-                                    <h5 className="card-title mb-3">
-                                        {user.name}
-                                    </h5>
-
+                                <div className="card-body text-center">
                                     {authenticating === user.id ? (
                                         <Spinner animation="border" size="sm" className="text-primary"/>
                                     ) : (
-                                        <button className="btn btn-danger mt-auto">
-                                            {t('userSelection.selectThisUser')}
-                                        </button>
+                                        <h5 className="card-title">
+                                            {user.name}
+                                        </h5>
                                     )}
                                 </div>
                             </div>

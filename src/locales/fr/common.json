@@ -2,15 +2,26 @@
   "welcomePage": {
     "title": "Bienvenue sur SimpleWishlist",
     "description": "Créez une wishlist, ajoutez vos souhaits et partagez-la avec vos amis. Ils pourront voir vos souhaits et les marquer comme pris. Fini les cadeaux en double !",
-    "description2": "Pour simplifier les choses, nous ne demandons aucune inscription. Créez simplement une wishlist, partagez les liens personnels et laissez la magie opérer !",
-    "description3": "Chaque utilisateur accède à la wishlist via un lien personnel qui les identifie. Ce lien est généré automatiquement lors de la création de la wishlist. Il est très important que chacun utilise son lien personnel sous peine de modifier les souhaits de quelqu'un d'autre.",
+    "description2": "Pour simplifier les choses, nous ne demandons aucune inscription. Créez simplement une wishlist, partagez le lien et ajoutez vos souhaits !",
+    "description3": "Chaque utilisateur choisit qui il est dans la wishlist lors de sa connexion.",
     "description4": "Cliquez sur le bouton \"Créer une nouvelle Wishlist\" pour commencer !",
-    "createWLButton": "Créer une nouvelle Wishlist"
+    "createWLButton": "Créer une nouvelle Wishlist",
+    "visitedWishlists": {
+      "title": "Wishlists récemment visitées",
+      "wishlistName": "Nom de la Wishlist",
+      "lastVisited": "Dernière visite",
+      "action": "Action",
+      "enterWishlist": "Accéder à la Wishlist",
+      "noWishlists": "Aucune wishlist visitée précédemment."
+    }
   },
   "createWL": {
     "title": "Créer une nouvelle wishlist",
     "wishlistName": "Nom de la wishlist",
     "wishlistAdminName": "Votre super nom (vous êtes l'admin)",
+    "surpriseModeSection": "Paramètres du Mode Surprise",
+    "enableSurpriseMode": "Activer le mode surprise {{enabled}}",
+    "surpriseModeEnabledDescription": "Activez ou désactivez la fonctionnalité de mode surprise pour cette wishlist. Quand activé, les utilisateurs peuvent basculer entre voir et cacher qui s'est occupé des souhaits.",
     "allowSeeAssigned": "Mode surprise par défaut {{checked}}",
     "surpriseModeDescription": "En mode surprise, vous ne pouvez pas voir qui a pris en charge vos souhaits, ni quels souhaits sont pris. C'est une surprise !",
     "otherUserName": "Et qui participe ?",

@@ -152,20 +152,21 @@ header .btn-custom:hover {
 
 /* MASONRY */
 .masonry-grid {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  margin-left: -30px; /* gutter size offset */
-  width: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-left: -30px; /* gutter size offset */
+    width: auto;
 }
+
 .masonry-grid_column {
-  padding-left: 40px; /* gutter size */
-  background-clip: padding-box;
+    padding-left: 40px; /* gutter size */
+    background-clip: padding-box;
 }
 
 /* Style the items */
 .masonry-grid_column > div {
-  margin: 30px 0;
+    margin: 30px 0;
 }
 
 @media (min-width: 768px) {
@@ -238,7 +239,6 @@ header .btn-custom:hover {
     color: var(--main-dark);
     font-family: 'YesevaOne', serif;
     font-size: 1.3rem;
-    margin-bottom: 1rem;
 }
 
 .user-selection-card .btn-custom {
@@ -261,4 +261,61 @@ header .btn-custom:hover {
     background-color: var(--palette2-dark) !important;
     color: var(--main-dark);
     font-size: 0.8rem;
+}
+
+/* Recent Wishlists - Compact Pill Design */
+.recent-wishlists-container {
+    margin: 20px 0;
+    padding: 15px;
+    text-align: center;
+}
+
+.recent-wishlists-label {
+    font-weight: 600;
+    color: var(--main-dark);
+    font-size: 1rem;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
+.recent-wishlist-pill {
+    background-color: var(--palette1-medium) !important;
+    color: var(--main-dark) !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.recent-wishlist-pill:hover {
+    background-color: var(--palette1-dark) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 78, 65, 0.2);
+}
+
+.recent-wishlist-pill:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 6px rgba(52, 78, 65, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .recent-wishlists-container {
+        padding: 10px;
+    }
+
+    .recent-wishlists-label {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .recent-wishlist-pill {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        margin: 2px;
+    }
 }

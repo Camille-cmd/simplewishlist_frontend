@@ -10,6 +10,7 @@ import {handleReturnToWishlist} from "../../utils/returnToWishlist.tsx";
 import WishlistAlert from "../WishlistAlert.tsx";
 import {AlertData} from "../../interfaces/AlertData";
 import {useParams} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
 
 
 /**
@@ -19,12 +20,14 @@ import {useParams} from "react-router-dom";
 export function WishlistSettings() {
     const {t} = useTranslation();
     const {wishlistId} = useParams();
+    const {updateWishlistName} = useAuth();
 
     const [wishlistSettings, setWishlistSettings] = useState<WishlistSettingsInterface>();
     const [alertData, setAlertData] = useState<AlertData>();
 
     const initialValues = {
         wishlistName: wishlistSettings?.wishlistName ?? '',
+        surpriseModeEnabled: wishlistSettings?.surpriseModeEnabled ?? true,
         allowSeeAssigned: wishlistSettings?.allowSeeAssigned ?? false,
     }
 
@@ -50,7 +53,14 @@ export function WishlistSettings() {
             values,
         ).then((response) => {
             if (response.status === 200) {
-                setWishlistSettings(response.data as WishlistSettingsInterface);
+                const updatedSettings = response.data as WishlistSettingsInterface;
+                setWishlistSettings(updatedSettings);
+
+                // Update wishlist name in localStorage if it changed
+                if (wishlistId && updatedSettings.wishlistName !== wishlistSettings?.wishlistName) {
+                    updateWishlistName(wishlistId, updatedSettings.wishlistName);
+                }
+
                 // Show success alert
                 setAlertData({
                     "variant": "success",
@@ -74,7 +84,16 @@ export function WishlistSettings() {
     // Popover for the surprise mode description
     // TODO: dry popover with createWL
     const surpriseModePopover = (
-        <Popover id="popover-basic">
+        <Popover id="surprise-mode-popover">
+            <Popover.Body>
+                {t('createWL.surpriseModeEnabledDescription')}
+            </Popover.Body>
+        </Popover>
+    );
+
+    // Popover for the default surprise mode state
+    const surpriseModeDefaultPopover = (
+        <Popover id="surprise-mode-default-popover">
             <Popover.Body>
                 {t('createWL.surpriseModeDescription')}
             </Popover.Body>
@@ -131,24 +150,49 @@ export function WishlistSettings() {
                                 type="invalid">{props.errors.wishlistName}</Form.Control.Feedback>
                         </Form.Group>
 
-                        {/* ALLOW SEE ASSIGNED USERS CHECKBOX*/}
-                        <Stack direction="horizontal" gap={2}>
-                            <Form.Check
-                                type='switch'
-                                id="surprise-mode"
-                                reverse={true}
-                                checked={!props.values.allowSeeAssigned}
-                                label={t('createWL.allowSeeAssigned', {checked: props.values.allowSeeAssigned ? '🐵' : '🙈'})}
-                                name='allowSeeAssigned'
-                                onChange={() => props.setFieldValue('allowSeeAssigned', !props.values.allowSeeAssigned)}
-                            />
-                            <OverlayTrigger trigger={["hover", "click"]}
-                                            placement="auto"
-                                            overlay={surpriseModePopover}
-                                            rootClose>
-                                <PatchQuestion/>
-                            </OverlayTrigger>
-                        </Stack>
+                        {/* SURPRISE MODE SETTINGS */}
+                        <div className="surprise-mode-section mb-4">
+                            <h3 className="mb-3">{t('createWL.surpriseModeSection')}</h3>
+
+                            {/* ENABLE SURPRISE MODE CHECKBOX */}
+                            <Stack direction="horizontal" gap={2} className="mb-3">
+                                <Form.Check
+                                    type='switch'
+                                    id="surprise-mode-enabled"
+                                    checked={props.values.surpriseModeEnabled}
+                                    label={t('createWL.enableSurpriseMode', {enabled: props.values.surpriseModeEnabled ? '🎁' : '👀'})}
+                                    name='surpriseModeEnabled'
+                                    onChange={() => props.setFieldValue('surpriseModeEnabled', !props.values.surpriseModeEnabled)}
+                                />
+                                <OverlayTrigger trigger={["hover", "click"]}
+                                                placement="auto"
+                                                overlay={surpriseModePopover}
+                                                rootClose>
+                                    <PatchQuestion/>
+                                </OverlayTrigger>
+                            </Stack>
+
+                            {/* DEFAULT SURPRISE MODE STATE (only if surprise mode is enabled) */}
+                            {props.values.surpriseModeEnabled && (
+                                <Stack direction="horizontal" gap={2} className="ms-4">
+                                    <Form.Check
+                                        type='switch'
+                                        id="surprise-mode-default"
+                                        reverse={true}
+                                        checked={!props.values.allowSeeAssigned}
+                                        label={t('createWL.allowSeeAssigned', {checked: props.values.allowSeeAssigned ? '🐵' : '🙈'})}
+                                        name='allowSeeAssigned'
+                                        onChange={() => props.setFieldValue('allowSeeAssigned', !props.values.allowSeeAssigned)}
+                                    />
+                                    <OverlayTrigger trigger={["hover", "click"]}
+                                                    placement="auto"
+                                                    overlay={surpriseModeDefaultPopover}
+                                                    rootClose>
+                                        <PatchQuestion/>
+                                    </OverlayTrigger>
+                                </Stack>
+                            )}
+                        </div>
 
 
                         {/*SUBMIT FORM */}

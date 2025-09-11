@@ -4,6 +4,7 @@ import {setAuthToken} from '../api/axiosConfig.tsx';
 interface WishlistUserSelection {
     userToken: string;
     selectedAt: string;
+    wishlistName?: string;
 }
 
 interface WishlistUserSelections {
@@ -13,11 +14,12 @@ interface WishlistUserSelections {
 interface AuthContextType {
     userToken: string | null;
     wishlistId: string | null;
-    setAuth: (wishlistId: string, token: string) => void;
+    setAuth: (wishlistId: string, token: string, wishlistName?: string) => void;
     clearAuth: (wishlistId?: string) => void;
     isAuthenticated: boolean;
     isAuthenticatedForWishlist: (wishlistId: string) => boolean;
     switchToWishlist: (wishlistId: string) => boolean;
+    updateWishlistName: (wishlistId: string, newName: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,11 +43,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         }
     };
 
-    const setWishlistUserSelection = (wishlistId: string, userToken: string) => {
+    const setWishlistUserSelection = (wishlistId: string, userToken: string, wishlistName?: string) => {
         const selections = getWishlistUserSelections();
         selections[wishlistId] = {
             userToken,
-            selectedAt: new Date().toISOString()
+            selectedAt: new Date().toISOString(),
+            wishlistName
         };
         setUserToken(userToken)
         setWishlistId(wishlistId)
@@ -83,7 +86,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         }
     }, []);
 
-    const setAuth = (wishlistId: string, token: string) => {
+    const setAuth = (wishlistId: string, token: string, wishlistName?: string) => {
         setUserToken(token);
         setWishlistId(wishlistId);
 
@@ -91,7 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         setAuthToken(token);
 
         // Store per-wishlist user selection
-        setWishlistUserSelection(wishlistId, token);
+        setWishlistUserSelection(wishlistId, token, wishlistName);
 
         // Update current active wishlist
         localStorage.setItem('current-wishlist-id', wishlistId);
@@ -141,6 +144,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         return false;
     };
 
+    const updateWishlistName = (wishlistId: string, newName: string) => {
+        const selections = getWishlistUserSelections();
+        if (selections[wishlistId]) {
+            selections[wishlistId] = {
+                ...selections[wishlistId],
+                wishlistName: newName
+            };
+            localStorage.setItem('wishlist-user-selections', JSON.stringify(selections));
+        }
+    };
+
     const value: AuthContextType = {
         userToken,
         wishlistId,
@@ -149,6 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         isAuthenticated,
         isAuthenticatedForWishlist,
         switchToWishlist,
+        updateWishlistName,
     };
 
     return (
