@@ -2,7 +2,7 @@ import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
 import {Button, Dropdown, DropdownButton, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {Gear, PersonCheck} from "react-bootstrap-icons";
+import {Gear, PersonCheck, PersonFillGear} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {getUserFirstTwoLetters} from "../utils/getUserFirstTwoLetters.tsx";
 import {usernameToColor} from "../utils/getUserHashColor.tsx";
@@ -84,7 +84,7 @@ export default function WishlistNavbar(
                             className="p-0 text-decoration-none"
                             onClick={handleSwitchUser}
                         >
-                            <PersonCheck size={14}/>
+                            <PersonFillGear size={14}/>
                         </Button>
                     </OverlayTrigger>
                 </Stack>
@@ -114,23 +114,28 @@ export default function WishlistNavbar(
                     </Stack>
                 </div>
 
-                {/* Surprise mode */}
-                <div>
-                    <span className="form-check form-switch">
-                        <input className="form-check-input"
-                               type="checkbox"
-                               role="switch"
-                               id="surpriseMode"
-                               onChange={HandleSurpriseModeChange}
-                               checked={surpriseMode}/>
-                        <label className="role-click form-check-label d-flex flex-row gap-1" htmlFor="surpriseMode">
-                            <span className={"d-none d-md-block"}> {t('showWL.surpriseMode')}</span>
-                            <span> {surpriseMode ? '🙈' : '🐵'}</span>
-                        </label>
-                    </span>
-                </div>
+                {/* Surprise mode - only show if surprise mode is enabled */}
+                {wishlistData?.surpriseModeEnabled && (
+                    <>
+                        <div>
+                            <span className="form-check form-switch">
+                                <input className="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="surpriseMode"
+                                       onChange={HandleSurpriseModeChange}
+                                       checked={surpriseMode}/>
+                                <label className="role-click form-check-label d-flex flex-row gap-1"
+                                       htmlFor="surpriseMode">
+                                    <span className={"d-none d-md-block"}> {t('showWL.surpriseMode')}</span>
+                                    <span> {surpriseMode ? '🙈' : '🐵'}</span>
+                                </label>
+                            </span>
+                        </div>
 
-                <div className="vr"/>
+                        <div className="vr"/>
+                    </>
+                )}
 
                 {/* Currently connected users */}
                 <div className={"connected-users-container"}>
@@ -184,19 +189,17 @@ export default function WishlistNavbar(
                     </Button>
 
                     {/*Parameters*/}
-                    {wishlistData?.isCurrentUserAdmin
-                        ? <DropdownButton
-                            title={<Gear></Gear>}
-                            role="parameters"
-                            variant="custom"
-                        >
-                            <Dropdown.Item eventKey="1"
-                                           href={(`/wishlist/${wishlistData?.wishlistId}/users`)}>{t('settings.handleUser')} </Dropdown.Item>
-                            <Dropdown.Item eventKey="2"
-                                           href={(`/wishlist/${wishlistData?.wishlistId}/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
-                        </DropdownButton>
-                        : null
-                    }
+                    <DropdownButton
+                        title={<Gear></Gear>}
+                        role="parameters"
+                        variant="custom"
+                    >
+                        <Dropdown.Item eventKey="1"
+                                       href={(`/wishlist/${wishlistData?.wishlistId}/users`)}>{t('settings.handleUser')} </Dropdown.Item>
+                        <Dropdown.Item eventKey="2"
+                                       href={(`/wishlist/${wishlistData?.wishlistId}/settings`)}>{t('settings.manageWishlist')}</Dropdown.Item>
+                    </DropdownButton>
+
 
                 </Stack>
             </Stack>

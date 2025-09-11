@@ -1,5 +1,6 @@
 import {Button} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
+import VisitedWishlists from "./VisitedWishlists";
 
 export default function WelcomePage() {
     const {t} = useTranslation();
@@ -11,13 +12,14 @@ export default function WelcomePage() {
                 <div>💫</div>
             </h1>
 
+            <VisitedWishlists/>
+
             <div className="text-center welcome-container">
 
                 <img src="/wishlist.svg" alt="wishlist" className="welcome-img"/>
 
 
                 <div className="wishlist-container">
-
 
                     <p>{t('welcomePage.description')}</p>
                     <p>{t('welcomePage.description2')}</p>

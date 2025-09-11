@@ -28,6 +28,7 @@ export interface UserDeletedWishData {
 export interface WishListData {
     wishlistId: string;
     name: string;
+    surpriseModeEnabled: boolean;
     allowSeeAssigned: boolean;
     currentUser: string;
     isCurrentUserAdmin: boolean;

@@ -211,7 +211,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
         let updatedWishlistData = wishlistData; // Start from the original data
 
         // Apply filter for only taken wishes
-        // = remove userWish objects that don’t contain any wishes assigned to currentUser
+        // = remove userWish objects that don't contain any wishes assigned to currentUser
         if (onlyTakenWishes) {
             updatedWishlistData = {
                 ...updatedWishlistData,

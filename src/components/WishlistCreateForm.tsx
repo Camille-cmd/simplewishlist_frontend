@@ -41,6 +41,7 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
         {
             wishlistName: '',
             wishlistAdminName: '',
+            surpriseModeEnabled: true,
             allowSeeAssigned: false,
             otherUsersNames: [''],
         }
@@ -78,7 +79,16 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
 
     // Popover for the surprise mode description
     const surpriseModePopover = (
-        <Popover id="popover-basic">
+        <Popover id="surprise-mode-popover">
+            <Popover.Body>
+                {t('createWL.surpriseModeEnabledDescription')}
+            </Popover.Body>
+        </Popover>
+    );
+
+    // Popover for the default surprise mode state
+    const surpriseModeDefaultPopover = (
+        <Popover id="surprise-mode-default-popover">
             <Popover.Body>
                 {t('createWL.surpriseModeDescription')}
             </Popover.Body>
@@ -133,21 +143,49 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        {/* ALLOW SEE ASSIGNED USERS CHECKBOX*/}
-                        <Stack direction="horizontal" gap={2}>
-                            <Form.Check
-                                type='switch'
-                                id="surprise-mode"
-                                reverse={true}
-                                checked={!props.values.allowSeeAssigned}
-                                label={t('createWL.allowSeeAssigned', {checked: props.values.allowSeeAssigned ? '🐵' : '🙈'})}
-                                name='allowSeeAssigned'
-                                onChange={() => props.setFieldValue('allowSeeAssigned', !props.values.allowSeeAssigned)}
-                            />
-                            <OverlayTrigger trigger={["hover", "click"]} placement="auto" overlay={surpriseModePopover} rootClose>
-                                <PatchQuestion/>
-                            </OverlayTrigger>
-                        </Stack>
+                        {/* SURPRISE MODE SETTINGS */}
+                        <div className="surprise-mode-section mb-4">
+                            <h3 className="mb-3">{t('createWL.surpriseModeSection')}</h3>
+
+                            {/* ENABLE SURPRISE MODE CHECKBOX */}
+                            <Stack direction="horizontal" gap={2} className="mb-3">
+                                <Form.Check
+                                    type='switch'
+                                    id="surprise-mode-enabled"
+                                    checked={props.values.surpriseModeEnabled}
+                                    label={t('createWL.enableSurpriseMode', {enabled: props.values.surpriseModeEnabled ? '🎁' : '👀'})}
+                                    name='surpriseModeEnabled'
+                                    onChange={() => props.setFieldValue('surpriseModeEnabled', !props.values.surpriseModeEnabled)}
+                                />
+                                <OverlayTrigger trigger={["hover", "click"]}
+                                                placement="auto"
+                                                overlay={surpriseModePopover}
+                                                rootClose>
+                                    <PatchQuestion/>
+                                </OverlayTrigger>
+                            </Stack>
+
+                            {/* DEFAULT SURPRISE MODE STATE (only if surprise mode is enabled) */}
+                            {props.values.surpriseModeEnabled && (
+                                <Stack direction="horizontal" gap={2} className="ms-4">
+                                    <Form.Check
+                                        type='switch'
+                                        id="surprise-mode-default"
+                                        reverse={true}
+                                        checked={!props.values.allowSeeAssigned}
+                                        label={t('createWL.allowSeeAssigned', {checked: props.values.allowSeeAssigned ? '🐵' : '🙈'})}
+                                        name='allowSeeAssigned'
+                                        onChange={() => props.setFieldValue('allowSeeAssigned', !props.values.allowSeeAssigned)}
+                                    />
+                                    <OverlayTrigger trigger={["hover", "click"]}
+                                                    placement="auto"
+                                                    overlay={surpriseModeDefaultPopover}
+                                                    rootClose>
+                                        <PatchQuestion/>
+                                    </OverlayTrigger>
+                                </Stack>
+                            )}
+                        </div>
 
                         {/* ADD OTHER USERS*/}
                         <Form.Group controlId="wishlistOtherUsersName">
@@ -178,10 +216,12 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                                         }}
                                                         isInvalid={!!(props.touched.otherUsersNames && props.errors.otherUsersNames)}
                                                     />
-                                                    <Form.Control.Feedback className="mb-3" type="invalid">{props.errors.otherUsersNames}</Form.Control.Feedback>
+                                                    <Form.Control.Feedback className="mb-3"
+                                                                           type="invalid">{props.errors.otherUsersNames}</Form.Control.Feedback>
 
                                                     {/*REMOVE */}
-                                                    <Button className="btn-remove btn-sm mb-3" onClick={() => arrayHelpers.remove(index)}>
+                                                    <Button className="btn-remove btn-sm mb-3"
+                                                            onClick={() => arrayHelpers.remove(index)}>
                                                         <Trash/>
                                                     </Button>
                                                 </Stack>
@@ -189,7 +229,8 @@ export default function WishlistCreateForm({handleSubmit}: Readonly<WishlistCrea
                                         }
 
                                         {/* ADD ANOTHER */}
-                                        <Button className="btn-add-another btn-sm float-end" onClick={() => arrayHelpers.push('')}>
+                                        <Button className="btn-add-another btn-sm float-end"
+                                                onClick={() => arrayHelpers.push('')}>
                                             <PlusCircle/> {t('createWL.buttons.addAnother')}
                                         </Button>
                                     </div>
