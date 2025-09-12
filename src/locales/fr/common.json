@@ -18,7 +18,7 @@
   "createWL": {
     "title": "Créer une nouvelle wishlist",
     "wishlistName": "Nom de la wishlist",
-    "surpriseModeSection": "Paramètres du Mode Surprise",
+    "surpriseModeSection": "Paramètres du mode surprise",
     "enableSurpriseMode": "Activer le mode surprise {{enabled}}",
     "surpriseModeEnabledDescription": "Activez ou désactivez la fonctionnalité de mode surprise pour cette wishlist. Quand activé, les utilisateurs peuvent basculer entre voir et cacher qui s'est occupé des souhaits.",
     "allowSeeAssigned": "Mode surprise par défaut {{checked}}",
