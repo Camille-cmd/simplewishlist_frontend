@@ -29,7 +29,7 @@ export function HandleUsers() {
      * Get the users data from the api
      */
     const getUsersData = () => {
-        // Check if user is authenticated and has admin rights
+        // Check if user is authenticated
         const isAuthenticated = isAuthenticatedForWishlist(currentWishlistId as string);
         if (!isAuthenticated) {
             navigate(`/wishlist/${currentWishlistId}`, {replace: true});

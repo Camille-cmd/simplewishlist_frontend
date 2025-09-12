@@ -31,6 +31,5 @@ export interface WishListData {
     surpriseModeEnabled: boolean;
     allowSeeAssigned: boolean;
     currentUser: string;
-    isCurrentUserAdmin: boolean;
     userWishes: Array<UserWish>;
 }

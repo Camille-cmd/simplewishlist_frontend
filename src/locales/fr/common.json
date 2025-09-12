@@ -18,16 +18,14 @@
   "createWL": {
     "title": "Créer une nouvelle wishlist",
     "wishlistName": "Nom de la wishlist",
-    "wishlistAdminName": "Votre super nom (vous êtes l'admin)",
     "surpriseModeSection": "Paramètres du Mode Surprise",
     "enableSurpriseMode": "Activer le mode surprise {{enabled}}",
     "surpriseModeEnabledDescription": "Activez ou désactivez la fonctionnalité de mode surprise pour cette wishlist. Quand activé, les utilisateurs peuvent basculer entre voir et cacher qui s'est occupé des souhaits.",
     "allowSeeAssigned": "Mode surprise par défaut {{checked}}",
     "surpriseModeDescription": "En mode surprise, vous ne pouvez pas voir qui a pris en charge vos souhaits, ni quels souhaits sont pris. C'est une surprise !",
-    "otherUserName": "Et qui participe ?",
+    "userNames": "Et qui participe ?",
     "placeholders": {
       "wishlistName": "Noël en famille, Anniversaire...",
-      "wishlistAdminName": "Votre nom",
       "otherUserName": "Nom d'un gros chanceux"
     },
     "buttons": {
@@ -37,7 +35,6 @@
   },
   "updateWL": {
     "title": "Mettre à jour votre wishlist",
-    "admin": "Administrateur:",
     "success": "Votre wishlist a été mise à jour !",
     "buttons": {
       "submit": "Mettre à jour la wishlist",
@@ -147,7 +144,6 @@
     "handleUser": "Gestion des participants",
     "manageWishlist": "Gestion de la wishlist",
     "wishlistName": "Nom de la wishlist",
-    "wishlistAdminName": "Nom de l'admin",
     "allowSeeAssigned": "Mode surprise",
     "title": "Paramètres de la wishlist"
   },
@@ -173,12 +169,8 @@
     "wishlistName": {
       "required": "Vous devez donner un nom à votre wishlist"
     },
-    "wishlistAdminName": {
-      "required": "Nous avons besoin du nom de l'admin",
-      "noDuplicate": "Tous les noms dans la wishlist doivent être différents. Admin inclus."
-    },
     "otherUsersNames": {
-      "required": "Nous avons besoin d'au moins un participant",
+      "required": "Nous avons besoin d'au moins une personne",
       "noDuplicate": "Tous les noms dans la wishlist doivent être différents."
     },
     "wishUrl": {
@@ -193,6 +185,7 @@
     "addUser": {
       "required": "Vous devez entrer un nom"
     },
+    "minWishlistUsers": "Vous devez choisir au moins un participant",
     "generic": "Une erreur est survenue. Veuillez réessayer plus tard.",
     "404": "La page n'existe pas.",
     "404explanation": "Vous avez peut-être mal tapé l'adresse ou la page a peut-être été déplacée."

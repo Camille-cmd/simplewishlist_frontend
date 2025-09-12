@@ -114,7 +114,7 @@ export default function UserSelection() {
         return (
             <Container className="mt-5">
                 <Alert variant="danger">
-                    <Alert.Heading>{t('common.error')}</Alert.Heading>
+                    <Alert.Heading>{t('errors.generic')}</Alert.Heading>
                     <p>{error}</p>
                 </Alert>
             </Container>

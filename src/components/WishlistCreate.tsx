@@ -45,21 +45,12 @@ export default function WishlistCreate() {
                     console.log(users[0].wishlistId)
                     setWishlistId(users[0].wishlistId)
                 }
-
-            } else {
-                setShowAlert(true);
-                setAlertData({
-                    "variant": "danger",
-                    "message": t("errors.generic")
-                } as AlertData);
             }
-        }).catch((error) => {
-            console.error(error.response);
-            const errorMessage = error.response.data.detail[0].msg;
+        }).catch(() => {
             setShowAlert(true);
             setAlertData({
                 "variant": "danger",
-                "message": errorMessage
+                "message": t("errors.generic")
             } as AlertData);
         });
     }
