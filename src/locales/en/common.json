@@ -18,16 +18,14 @@
   "createWL": {
     "title": "Create a new wishlist",
     "wishlistName": "Your Wishlist name",
-    "wishlistAdminName": "Your name (you are the admin)",
     "surpriseModeSection": "Surprise Mode Settings",
     "enableSurpriseMode": "Enable surprise mode {{enabled}}",
     "surpriseModeEnabledDescription": "Enable or disable the surprise mode functionality for this wishlist. When enabled, users can toggle between seeing and hiding who took care of wishes.",
     "allowSeeAssigned": "Surprise mode default mode {{checked}}",
     "surpriseModeDescription": "In surprise mode, you can not see who took care of your wishes nor taken wishes. It's a surprise!",
-    "otherUserName": "Who's in?",
+    "userNames": "Who's in?",
     "placeholders": {
       "wishlistName": "Family Christmas, Birthday...",
-      "wishlistAdminName": "Your cool name",
       "otherUserName": "Name of a lucky one"
     },
     "buttons": {
@@ -37,7 +35,6 @@
   },
   "updateWL": {
     "title": "Update your wishlist",
-    "admin": "Administrator:",
     "success": "Your wishlist has been updated!",
     "buttons": {
       "submit": "Update your Wishlist",
@@ -147,7 +144,6 @@
     "handleUser": "Handle users",
     "manageWishlist": "Manage Wishlist",
     "wishlistName": "Wishlist name",
-    "wishlistAdminName": "Admin name",
     "allowSeeAssigned": "Surprise mode",
     "title": "Wishlist Settings"
   },
@@ -173,12 +169,8 @@
     "wishlistName": {
       "required": "Your wishlist must have a name"
     },
-    "wishlistAdminName": {
-      "required": "We need an admin name",
-      "noDuplicate": "All names in the wishlist must be different. Admin included."
-    },
     "otherUsersNames": {
-      "required": "We need at least one other person",
+      "required": "We need at least one person",
       "noDuplicate": "All names in the wishlist must be different."
     },
     "wishUrl": {
@@ -193,6 +185,7 @@
     "addUser": {
       "required": "You must enter a name"
     },
+    "minWishlistUsers": "At least one user must be added to the wishlist",
     "generic": "An error occurred. Please try again later.",
     "404": "The page you are looking for does not exist.",
     "404explanation": "You may have mistyped the address or the page may have moved."
