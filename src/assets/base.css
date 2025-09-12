@@ -13,6 +13,7 @@
     --palette2-dark: #d4a373;
     --main-dark: #344e41;
     --secondary-dark: #637f71;
+    --secondary-light: #a3c4b5;
     --danger-main: #f99;
     --danger-secondary: #f66;
     --danger-light: #ffc7cc;
@@ -22,7 +23,9 @@
     --warning-light: #ffe9bc;
     --success-main: #ccd5ae;
     --success-light: #e9edc9;
-    /*--filters: #fcfaee;*/
+    --info-main: #637f71;
+    --info-dark: #4a5f56;
+    --info-light: rgba(99, 127, 113, 0.25);
     --filters: #ede9cf;
 }
 

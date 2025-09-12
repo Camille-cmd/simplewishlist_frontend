@@ -86,10 +86,10 @@
     },
     "taken": "Taken by ",
     "deleted": "Deleted",
-    "iHandleIt": "I handle it!",
-    "iDontTake": "I do not handle it!",
+    "iHandleIt": "I'll take this",
+    "iDontTake": "I release this wish",
     "edit": "Edit",
-    "takenButton": "Already taken!"
+    "takenButton": "Taken by someone else"
   },
   "editWish": {
     "pageTitle": "Update your wish",
@@ -132,8 +132,10 @@
     "handleWishlist": "Wishlist Params",
     "handleWishlistUsers": "Handle Users",
     "addNewWish": "Add a new wish",
-    "emptyWishlist": "This wishlist is empty.",
-    "emptyWishlistText": "Click on the \"Add a new wish\" button upward to add your first wish!"
+    "addNewWishMobile": "wish",
+    "emptyWishlist": "No wishes yet!",
+    "emptyWishlistText": "Time to add your first wish! ✨",
+    "clickToAddFirstWish": "Click here to add a wish"
   },
   "settings": {
     "users": "Users Settings",

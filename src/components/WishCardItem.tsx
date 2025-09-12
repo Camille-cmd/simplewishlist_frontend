@@ -56,6 +56,17 @@ export default function WishCardItem(
     }
 
     /**
+     * Remove focus from button after click to prevent persistent focus state
+     */
+    const handleButtonClick = (callback: () => void, event?: React.MouseEvent<HTMLButtonElement>) => {
+        callback();
+        // Remove focus from the button after click
+        if (event?.currentTarget) {
+            event.currentTarget.blur();
+        }
+    }
+
+    /**
      * Handle the click on the wish, if the user is the current one then set the editWish state
      * else assign the wish to the user
      * @param wish
@@ -102,7 +113,7 @@ export default function WishCardItem(
         wish.deleted && wish.assignedUser !== currentUserName
             ? null
             :
-            <ListGroupItem key={wish.id} className={"wish-group-item"}>
+            <ListGroupItem key={wish.id} className={`wish-group-item ${wish.assignedUser === currentUserName ? 'wish-taken-by-me' : ''}`}>
 
                 <Card.Title className={canShowAssignedUser ? "crossed-text" : ""}>
                     <Stack direction={"horizontal"} gap={3}>
@@ -125,8 +136,13 @@ export default function WishCardItem(
 
                 {/*Display taken by when surpriseMode is off*/}
                 {canShowAssignedUser ?
-                    <Card.Subtitle>
-                        <small className="text-muted">{t("wishCard.taken")}{wish.assignedUser}</small>
+                    <Card.Subtitle className="mb-2">
+                        <small className="text-muted">
+                            {t("wishCard.taken")}
+                            <Badge bg="light" className="taken-by-username-badge ms-1">
+                                {wish.assignedUser}
+                            </Badge>
+                        </small>
                     </Card.Subtitle>
                     : null
                 }
@@ -142,16 +158,16 @@ export default function WishCardItem(
                             <Button
                                 variant="warning"
                                 size={"sm"}
-                                onClick={() => HandleEditWish(wish)}
+                                onClick={(e) => handleButtonClick(() => HandleEditWish(wish), e)}
                             >
                                 {t("wishCard.edit")}
                             </Button>
                         ) : wish.assignedUser ? (
                             wish.assignedUser === currentUserName ? (
                                 <Button
-                                    variant="danger"
+                                    variant="info"
                                     size={"sm"}
-                                    onClick={() => handleAssignedUser(wish.id, !!wish.assignedUser)}
+                                    onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
                                 >
                                     {t("wishCard.iDontTake")}
                                 </Button>
@@ -170,7 +186,7 @@ export default function WishCardItem(
                                 variant={"success"}
                                 className={"btn-success-custom"}
                                 size={"sm"}
-                                onClick={() => handleAssignedUser(wish.id, !!wish.assignedUser)}
+                                onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
                             >
                                 {t("wishCard.iHandleIt")}
                             </Button>
