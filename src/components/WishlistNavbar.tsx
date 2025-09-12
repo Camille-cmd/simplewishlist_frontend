@@ -2,7 +2,7 @@ import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
 import {Button, Dropdown, DropdownButton, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {Gear, PersonCheck, PersonFillGear} from "react-bootstrap-icons";
+import {Gear, PersonCheck, PersonFillGear, PlusCircle} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {getUserFirstTwoLetters} from "../utils/getUserFirstTwoLetters.tsx";
 import {usernameToColor} from "../utils/getUserHashColor.tsx";
@@ -184,8 +184,8 @@ export default function WishlistNavbar(
                             type="submit"
                             className="btn-custom btn-sm"
                             onClick={() => setShowWishForm(true)}>
-                        <span className={"d-none d-md-block"}> {t('showWL.addNewWish')} 💫</span>
-                        <span className={"d-md-none"}>New 💫</span>
+                        <span className={"d-none d-md-block"}><PlusCircle className={"mb-1"}></PlusCircle> {t('showWL.addNewWish')} 💫</span>
+                        <span className={"d-md-none"}><PlusCircle></PlusCircle> {t('showWL.addNewWishMobile')} 💫</span>
                     </Button>
 
                     {/*Parameters*/}
@@ -193,6 +193,7 @@ export default function WishlistNavbar(
                         title={<Gear></Gear>}
                         role="parameters"
                         variant="custom"
+                        size="sm"
                     >
                         <Dropdown.Item eventKey="1"
                                        href={(`/wishlist/${wishlistData?.wishlistId}/users`)}>{t('settings.handleUser')} </Dropdown.Item>

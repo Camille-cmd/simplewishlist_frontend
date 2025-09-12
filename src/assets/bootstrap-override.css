@@ -255,6 +255,33 @@ a:hover {
     color: var(--main-dark) !important;
 }
 
+/* Custom info button - less saturated blue */
+.btn-info {
+    background-color: var(--info-main) !important;
+    border-color: var(--info-main) !important;
+    color: #faf8ff !important;
+}
+
+.btn-info:hover {
+    background-color: var(--info-dark) !important;
+    border-color: var(--info-dark) !important;
+    color: #faf8ff !important;
+}
+
+.btn-info:focus, .btn-info:focus-visible {
+    background-color: var(--info-main) !important;
+    border-color: var(--info-main) !important;
+    color: #faf8ff !important;
+    box-shadow: 0 0 0 0.25rem var(--info-light) !important;
+    outline: none !important;
+}
+
+.btn-info:active, .btn-info.active {
+    background-color: var(--info-dark) !important;
+    border-color: var(--info-dark) !important;
+    color: #faf8ff !important;
+}
+
 /* BACKGROUND */
 
 .bg-secondary {
@@ -293,6 +320,35 @@ a:hover {
     background-color: inherit;
     color: inherit;
     border-color: inherit;
+}
+
+/* Remove persistent focus after button interaction */
+.btn:not(:focus-visible):focus {
+    box-shadow: none !important;
+}
+
+.btn:focus:not(:focus-visible) {
+    box-shadow: none !important;
+}
+
+/* Specifically handle buttons inside interactive cards */
+.user-wishes .btn:focus:not(:focus-visible) {
+    box-shadow: none !important;
+}
+
+/* Remove focus outline for mouse interactions */
+.btn:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+/* Ensure focus is only visible for keyboard navigation */
+.btn:focus-visible {
+    outline: none !important;
+}
+
+/* Reset button state after click when not keyboard focused */
+.btn:active:focus:not(:focus-visible) {
+    box-shadow: none !important;
 }
 
 /* Custom button classes focus states */

@@ -43,11 +43,13 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
 
     const allUsersNames = wishlistData.userWishes.map((userWish) => userWish.user !== wishlistData.currentUser ? userWish.user : "").filter(Boolean);
 
-    // Responsive grid for the wishes
+    // Responsive grid for the wishes - optimized for compactness
     const breakpointColumnsObj = {
-        default: 3,
-        1000: 2,
-        600: 1
+        default: 4,  // 4 columns on extra large screens (1400px+)
+        1400: 4,     // 4 columns on large screens
+        1200: 3,     // 3 columns on medium-large screens  
+        900: 2,      // 2 columns on tablets
+        600: 1       // 1 column on mobile
     };
 
     // Websocket
@@ -366,10 +368,22 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                                                     currentUserName={wishlistData?.currentUser as string}
                                                 ></WishCardItem>
                                             ))
-                                            : <ListGroupItem>
-                                                <Card.Title>{t('showWL.emptyWishlist')}</Card.Title>
-                                                {isCurrentUser(data.user) &&
-                                                    <Card.Text>{t('showWL.emptyWishlistText')}</Card.Text>}
+                                            :
+                                            <ListGroupItem
+                                                className={`empty-wishlist-item text-center ${isCurrentUser(data.user) ? 'current-user-empty clickable-empty' : ''}`}
+                                                onClick={isCurrentUser(data.user) ? () => setShowWishForm(true) : undefined}
+                                                role={isCurrentUser(data.user) ? "button" : undefined}
+                                                tabIndex={isCurrentUser(data.user) ? 0 : undefined}
+                                            >
+                                                <div className="empty-wishlist-content">
+                                                    <Card.Title className="empty-wishlist-title">{t('showWL.emptyWishlist')}</Card.Title>
+                                                    {isCurrentUser(data.user) &&
+                                                        <Card.Text className="empty-wishlist-text">{t('showWL.emptyWishlistText')}</Card.Text>}
+                                                    {isCurrentUser(data.user) &&
+                                                        <div className="empty-wishlist-cta">
+                                                            <span>{t('showWL.clickToAddFirstWish')}</span>
+                                                        </div>}
+                                                </div>
                                             </ListGroupItem>
                                         }
                                     </ListGroup>

@@ -80,10 +80,10 @@
     },
     "taken": "Pris par ",
     "deleted": "Supprimé",
-    "iHandleIt": "Je m'en occupe !",
-    "iDontTake": "Je ne m'en occupe plus",
+    "iHandleIt": "Je prends celui-ci",
+    "iDontTake": "Je libère ce souhait",
     "edit": "Modifier",
-    "takenButton": "Déjà pris !"
+    "takenButton": "Pris par quelqu'un d'autre"
   },
   "alert": {
     "wishCreated": "Votre souhait a été ajouté !",
@@ -132,8 +132,10 @@
     "handleWishlist": "Paramètres de la wishlist",
     "handleWishlistUsers": "Gérer les participants",
     "addNewWish": "Ajouter un souhait",
-    "emptyWishlist": "Cette wishlist est vide.",
-    "emptyWishlistText": "Cliquez sur le bouton \"Ajouter un souhait\" ci-dessus pour ajouter votre premier souhait !"
+    "addNewWishMobile": "souhait",
+    "emptyWishlist": "Aucun souhait pour le moment !",
+    "emptyWishlistText": "Il est temps d'ajouter votre premier souhait ! ✨",
+    "clickToAddFirstWish": "Cliquez ici pour ajouter un souhait"
   },
   "settings": {
     "users": "Gérer les participants",
