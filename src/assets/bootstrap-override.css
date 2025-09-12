@@ -59,14 +59,40 @@ a:hover {
 }
 
 /* BUTTONS */
+
+/* Global button focus states to remove default blue outline */
+.btn:focus, .btn:focus-visible {
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+    outline: none !important;
+}
+
+.btn:active, .btn.active {
+    box-shadow: none !important;
+}
+
 .btn-success {
     background-color: var(--palette1-medium);
     color: var(--main-dark);
+    border-color: var(--palette1-medium);
 }
 
 .btn-success:hover {
     background-color: var(--palette1-light);
     color: var(--main-dark);
+    border-color: var(--palette1-light);
+}
+
+.btn-success:focus, .btn-success:focus-visible {
+    background-color: var(--palette1-medium);
+    color: var(--main-dark);
+    border-color: var(--palette1-medium);
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+}
+
+.btn-success:active, .btn-success.active {
+    background-color: var(--palette1-dark) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--palette1-dark) !important;
 }
 
 .btn-success-custom {
@@ -82,11 +108,26 @@ a:hover {
 .btn-danger {
     background-color: var(--danger-main) !important;
     color: var(--main-dark) !important;
+    border-color: var(--danger-main) !important;
 }
 
 .btn-danger:hover {
     background-color: var(--danger-light) !important;
     color: var(--main-dark) !important;
+    border-color: var(--danger-light) !important;
+}
+
+.btn-danger:focus, .btn-danger:focus-visible {
+    background-color: var(--danger-main) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--danger-main) !important;
+    box-shadow: 0 0 0 0.25rem var(--danger-light) !important;
+}
+
+.btn-danger:active, .btn-danger.active {
+    background-color: var(--danger-secondary) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--danger-secondary) !important;
 }
 
 .btn-outline-danger {
@@ -97,15 +138,44 @@ a:hover {
 .btn-outline-danger:hover {
     background-color: var(--danger-light);
     color: var(--main-dark);
+    border-color: var(--danger-main);
+}
+
+.btn-outline-danger:focus, .btn-outline-danger:focus-visible {
+    background-color: transparent;
+    color: var(--main-dark);
+    border-color: var(--danger-main);
+    box-shadow: 0 0 0 0.25rem var(--danger-light) !important;
+}
+
+.btn-outline-danger:active, .btn-outline-danger.active {
+    background-color: var(--danger-light) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--danger-main) !important;
 }
 
 .btn-outline-dark {
     color: var(--main-dark);
+    border-color: var(--main-dark);
 }
 
 .btn-outline-dark:hover {
     background-color: var(--palette1-light);
     color: var(--main-dark);
+    border-color: var(--main-dark);
+}
+
+.btn-outline-dark:focus, .btn-outline-dark:focus-visible {
+    background-color: transparent;
+    color: var(--main-dark);
+    border-color: var(--main-dark);
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+}
+
+.btn-outline-dark:active, .btn-outline-dark.active {
+    background-color: var(--palette1-light) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--main-dark) !important;
 }
 
 .btn-outline-success {
@@ -116,34 +186,73 @@ a:hover {
 .btn-outline-success:hover {
     background-color: var(--palette1-light);
     color: var(--main-dark);
+    border-color: var(--main-dark);
 }
 
-.btn-outline-success:active {
-    background-color: var(--main-dark) !important;
+.btn-outline-success:focus, .btn-outline-success:focus-visible {
+    background-color: transparent;
     color: var(--main-dark);
+    border-color: var(--main-dark);
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+}
+
+.btn-outline-success:active, .btn-outline-success.active {
+    background-color: var(--palette1-light) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--main-dark) !important;
 }
 
 .btn-secondary {
     background-color: var(--inactive) !important;
     color: var(--main-dark);
+    border-color: var(--inactive) !important;
 }
 
 .btn-secondary:hover {
-    background-color: var(--inactive-dark) !important;;
+    background-color: var(--inactive-dark) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--inactive-dark) !important;
+}
+
+.btn-secondary:focus, .btn-secondary:focus-visible {
+    background-color: var(--inactive) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--inactive) !important;
+    box-shadow: 0 0 0 0.25rem var(--inactive-dark) !important;
+}
+
+.btn-secondary:active, .btn-secondary.active {
+    background-color: var(--inactive-dark) !important;
+    color: var(--main-dark) !important;
+    border-color: var(--inactive-dark) !important;
 }
 
 .btn-warning {
     background-color: var(--warning-main);
     color: var(--main-dark);
+    border-color: var(--warning-main);
     --bs-btn-active-bg: var(--warning-light);
     --bs-btn-active-color: var(--main-dark);
     --bs-btn-hover-bg: var(--warning-light);
 }
 
-.btn-warning:hover .btn-warning:active .btn-warning:focus {
+.btn-warning:hover {
     background-color: var(--warning-light);
     border-color: var(--warning-main);
     color: var(--main-dark);
+}
+
+.btn-warning:focus, .btn-warning:focus-visible {
+    background-color: var(--warning-main);
+    border-color: var(--warning-main);
+    color: var(--main-dark);
+    box-shadow: 0 0 0 0.25rem var(--warning-light) !important;
+}
+
+.btn-warning:active, .btn-warning.active {
+    background-color: var(--warning-light) !important;
+    border-color: var(--warning-main) !important;
+    color: var(--main-dark) !important;
 }
 
 /* BACKGROUND */
@@ -166,8 +275,60 @@ a:hover {
     color: var(--main-dark);
 }
 
-.btn-link:active {
+.btn-link:hover {
+    color: var(--palette1-dark) !important;
+}
+
+.btn-link:focus, .btn-link:focus-visible {
     color: var(--main-dark) !important;
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+}
+
+.btn-link:active, .btn-link.active {
+    color: var(--main-dark) !important;
+}
+
+.btn:active, .btn.active, .btn:first-child:active {
+    box-shadow: inherit;
+    background-color: inherit;
+    color: inherit;
+    border-color: inherit;
+}
+
+/* Custom button classes focus states */
+.btn-custom:focus, .btn-custom:focus-visible {
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+    outline: none !important;
+}
+
+.btn-custom:active, .btn-custom.active {
+    box-shadow: none !important;
+}
+
+.btn-add-another:focus, .btn-add-another:focus-visible {
+    background-color: var(--secondary-dark) !important;
+    color: var(--main-dark) !important;
+    border: var(--palette1-dark) solid 1px !important;
+    box-shadow: 0 0 0 0.25rem var(--palette1-light) !important;
+}
+
+.btn-add-another:active, .btn-add-another.active {
+    background-color: var(--palette1-dark) !important;
+    color: var(--main-dark) !important;
+    border: var(--palette1-dark) solid 1px !important;
+}
+
+.btn-remove:focus, .btn-remove:focus-visible {
+    background-color: var(--danger-main) !important;
+    color: var(--main-dark) !important;
+    border: var(--palette1-dark) solid 1px !important;
+    box-shadow: 0 0 0 0.25rem var(--danger-light) !important;
+}
+
+.btn-remove:active, .btn-remove.active {
+    background-color: var(--danger-secondary) !important;
+    color: var(--main-dark) !important;
+    border: var(--palette1-dark) solid 1px !important;
 }
 
 
