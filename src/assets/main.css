@@ -178,12 +178,6 @@ header .btn-custom:hover {
     overflow: hidden;
 }
 
-.user-wishes .card:hover {
-    box-shadow: 0 3px 12px rgba(52, 78, 65, 0.15);
-    transform: translateY(-1px);
-    border-color: var(--palette1-medium);
-}
-
 .user-wishes .header {
     padding: 14px 18px;
     font-size: 1.3rem;
