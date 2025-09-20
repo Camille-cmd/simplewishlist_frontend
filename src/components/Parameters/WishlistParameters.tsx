@@ -152,10 +152,9 @@ export function WishlistSettings() {
 
                         {/* SURPRISE MODE SETTINGS */}
                         <div className="surprise-mode-section mb-4">
-                            <h3 className="mb-3">{t('createWL.surpriseModeSection')}</h3>
 
                             {/* ENABLE SURPRISE MODE CHECKBOX */}
-                            <Stack direction="horizontal" gap={2} className="mb-3 ms-4">
+                            <Stack direction="horizontal" gap={2} className="mb-3">
                                 <Form.Check
                                     type='switch'
                                     id="surprise-mode-enabled"
@@ -175,7 +174,7 @@ export function WishlistSettings() {
 
                             {/* DEFAULT SURPRISE MODE STATE (only if surprise mode is enabled) */}
                             {props.values.surpriseModeEnabled && (
-                                <Stack direction="horizontal" gap={2} className="ms-4">
+                                <Stack direction="horizontal" gap={2}>
                                     <Form.Check
                                         type='switch'
                                         id="surprise-mode-default"

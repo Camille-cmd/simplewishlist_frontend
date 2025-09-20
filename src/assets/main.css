@@ -43,9 +43,23 @@ header .btn-custom:hover {
     border-color: 0 0 0 0.25rem var(--palette1-light);
 }
 
+header .btn-warning {
+    margin-top: 5px;
+    background-color: var(--palette2-dark);
+    border-color: 0 0 0 0.25rem var(--palette1-light);
+}
+
+header .btn-warning:focus {
+    background-color: var(--palette2-dark);
+}
+
+header .btn-warning:hover {
+    background-color: var(--palette2-dark);
+}
+
 .user-wishes .current-user-header {
     background-color: var(--secondary-dark) !important;
-    color: var(--main-dark) !important;
+    color: var(--success-light) !important;
 }
 
 /* CHECKBOX SWITCH */
@@ -275,9 +289,9 @@ header .btn-custom:hover {
 }
 
 .empty-wishlist-title {
-    color: var(--main-dark) !important;
+    color: var(--inactive-dark) !important;
     font-size: 1.1rem !important;
-    font-weight: 600 !important;
+    font-weight: 400 !important;
     margin-bottom: 8px !important;
 }
 
