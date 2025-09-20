@@ -6,6 +6,7 @@
     "description3": "Each user chooses who they are when accessing the wishlist.",
     "description4": "Click on the \"Create a new Wishlist\" button to get started!",
     "createWLButton": "Create a new Wishlist",
+    "createWLButtonMobile": " Add",
     "visitedWishlists": {
       "title": "Recently Visited Wishlists",
       "wishlistName": "Wishlist Name",
@@ -18,7 +19,6 @@
   "createWL": {
     "title": "Create a new wishlist",
     "wishlistName": "Your Wishlist name",
-    "surpriseModeSection": "Surprise Mode Settings",
     "enableSurpriseMode": "Enable surprise mode {{enabled}}",
     "surpriseModeEnabledDescription": "Enable or disable the surprise mode functionality for this wishlist. When enabled, users can toggle between seeing and hiding who took care of wishes.",
     "allowSeeAssigned": "Surprise mode default mode {{checked}}",

@@ -38,11 +38,9 @@ export default function WishlistCreate() {
                 // Set the users data
                 const users = response.data as Array<UserData>
                 setUsersData(users)
-                console.log(users)
 
                 // Extract wishlist ID from the first user
                 if (users.length > 0 && users[0].wishlistId) {
-                    console.log(users[0].wishlistId)
                     setWishlistId(users[0].wishlistId)
                 }
             }
