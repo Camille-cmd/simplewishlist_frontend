@@ -35,6 +35,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
 
     const [editWish, setEditWish] = useState<Wish>();
     const [showWishForm, setShowWishForm] = useState<boolean>(false);
+    const [isSuggestionMode, setIsSuggestionMode] = useState<boolean>(false);
 
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertData, setAlertData] = useState<AlertData>();
@@ -317,6 +318,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 setSurpriseMode={setSurpriseMode}
                 surpriseMode={surpriseMode}
                 setShowWishForm={setShowWishForm}
+                setIsSuggestionMode={setIsSuggestionMode}
                 currentlyConnectedUsersNames={currentlyConnectedUsersNames}>
             </WishlistNavbar>
 
@@ -335,7 +337,10 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                     initialWish={editWish}
                     setEditWish={setEditWish}
                     setShowWishForm={setShowWishForm}
-                    sendJsonMessage={sendJsonMessage}>
+                    sendJsonMessage={sendJsonMessage}
+                    isSuggestionMode={isSuggestionMode}
+                    setIsSuggestionMode={setIsSuggestionMode}
+                    wishlistData={wishlistData}>
                 </WishForm>
 
                 // Display the list of wishes
@@ -366,6 +371,8 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                                                     sendJsonMessage={sendJsonMessage}
                                                     setShowWishForm={setShowWishForm}
                                                     currentUserName={wishlistData?.currentUser as string}
+                                                    isSuggestionMode={isSuggestionMode}
+                                                    setIsSuggestionMode={setIsSuggestionMode}
                                                 ></WishCardItem>
                                             ))
                                             :

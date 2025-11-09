@@ -3,17 +3,22 @@ import {Button, Form, Stack} from "react-bootstrap";
 import {t} from "i18next";
 import "../assets/wish.css"
 import {WishAddFormValues} from "../interfaces/WishAddFormValues";
-import {Wish} from "../interfaces/WishListData";
-import {Dispatch, SetStateAction} from "react";
+import {Wish, WishListData} from "../interfaces/WishListData";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
 import * as Yup from "yup";
 import {useAuth} from "../contexts/AuthContext.tsx";
+import {api} from "../api/axiosConfig.tsx";
+import {WishlistUsersResponse} from "../interfaces/Wishlist";
 
 interface WishFormProps {
     initialWish: Wish | undefined,
     setEditWish: Dispatch<SetStateAction<Wish | undefined>>,
     setShowWishForm: Dispatch<SetStateAction<boolean>>,
-    sendJsonMessage: (message: WebSocketSendMessage) => void
+    sendJsonMessage: (message: WebSocketSendMessage) => void,
+    isSuggestionMode: boolean,
+    setIsSuggestionMode: Dispatch<SetStateAction<boolean>>,
+    wishlistData: WishListData
 }
 
 
@@ -22,18 +27,47 @@ interface WishFormProps {
  * @constructor
  */
 export default function WishForm(
-    {initialWish, setEditWish, setShowWishForm, sendJsonMessage}: Readonly<WishFormProps>
+    {
+        initialWish,
+        setEditWish,
+        setShowWishForm,
+        sendJsonMessage,
+        isSuggestionMode,
+        setIsSuggestionMode,
+        wishlistData
+    }: Readonly<WishFormProps>
 ) {
     const {userToken} = useAuth();
     // Check if the form is used to update a wish or to create a new one
     const isUpdating = !!initialWish
+
+    const [wishlistUsers, setWishlistUsers] = useState<WishlistUsersResponse | null>(null);
+
+    // Fetch wishlist users with IDs for the suggestion dropdown
+    useEffect(() => {
+        if (isSuggestionMode) {
+            const fetchUsers = async () => {
+                try {
+                    const response = await api.get(`/wishlist/${wishlistData.wishlistId}/users`);
+                    setWishlistUsers(response.data as WishlistUsersResponse);
+                } catch (error) {
+                    console.error("Error fetching wishlist users:", error);
+                }
+            };
+            fetchUsers();
+        }
+    }, [isSuggestionMode, wishlistData.wishlistId]);
+
+    // Get other users (excluding current user) for the suggestion dropdown
+    const otherUsers = wishlistUsers?.users.filter(user => user.name !== wishlistData.currentUser) || [];
 
     const initialValues =
         {
             name: initialWish?.name ?? '',
             price: initialWish?.price ?? '',
             url: initialWish?.url ?? '',
-            description: initialWish?.description ?? ''
+            description: initialWish?.description ?? '',
+            suggestedForUserId: ''
         }
 
 
@@ -43,7 +77,10 @@ export default function WishForm(
             name: Yup.string()
                 .required(t("errors.wishName.required"))
                 .nullable(t("errors.wishName.required")),
-            price: Yup.string().max(15, t("errors.wishPrice.maxChar"))
+            price: Yup.string().max(15, t("errors.wishPrice.maxChar")),
+            suggestedForUserId: isSuggestionMode
+                ? Yup.string().required(t("suggestWish.selectUserRequired"))
+                : Yup.string()
         });
     }
 
@@ -111,6 +148,10 @@ export default function WishForm(
             setEditWish(undefined)
         }
         setShowWishForm(false)
+        // Reset suggestion mode
+        if (isSuggestionMode) {
+            setIsSuggestionMode(false)
+        }
     }
 
     return (
@@ -132,7 +173,13 @@ export default function WishForm(
 
             {/* FORM */}
             <div className="container add-wish-form">
-                <h1 className="my-2">{isUpdating ? t('editWish.pageTitle') : t('createWish.pageTitle')} 💫</h1>
+                <h1 className="my-2">
+                    {isUpdating
+                        ? t('editWish.pageTitle')
+                        : isSuggestionMode
+                            ? t('suggestWish.pageTitle') + ' 🎁'
+                            : t('createWish.pageTitle')} 💫
+                </h1>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -141,6 +188,29 @@ export default function WishForm(
                     {props => (
 
                         <Form onSubmit={props.handleSubmit} className="d-flex flex-column">
+
+                            {/* User selector for suggestion mode */}
+                            {isSuggestionMode && !isUpdating && (
+                                <Form.Group className="mb-3" controlId="suggestedForUserId">
+                                    <Form.Label>{t('suggestWish.selectUser')}</Form.Label>
+                                    <Form.Select
+                                        name="suggestedForUserId"
+                                        value={props.values.suggestedForUserId}
+                                        onChange={props.handleChange}
+                                        isInvalid={!!(props.touched.suggestedForUserId && props.errors.suggestedForUserId)}
+                                    >
+                                        <option value="">{t('suggestWish.selectUserPlaceholder')}</option>
+                                        {otherUsers.map(user => (
+                                            <option key={user.id} value={user.id}>
+                                                {user.name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {props.errors.suggestedForUserId}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            )}
 
                             <Form.Group className="mb-3" controlId="wishName">
                                 <Form.Label>{t('createWish.name')}</Form.Label>
@@ -197,7 +267,7 @@ export default function WishForm(
 
                             {/*SUBMIT FORM */}
                             <Button variant="primary" type="submit" disabled={props.isValidating}
-                                    className="btn-custom mt-3 w-50 align-self-end">
+                                    className="btn-custom mt-3 w-md-50 align-self-end">
                                 {isUpdating ? t('editWish.buttons.submit') : t('createWish.buttons.submit')}
                             </Button>
                         </Form>

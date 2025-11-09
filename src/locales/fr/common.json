@@ -58,6 +58,12 @@
       "returnToWishlist": "Retour à la wishlist"
     }
   },
+  "suggestWish": {
+    "pageTitle": "Suggérer un souhait pour quelqu'un",
+    "selectUser": "Je veux suggérer ce souhait pour",
+    "selectUserPlaceholder": "Sélectionnez un participant",
+    "selectUserRequired": "Veuillez sélectionner un participant pour suggérer ce souhait"
+  },
   "createUser": {
     "placeholders": {
       "name": "Nom d'un nouveau gros chanceux"
@@ -79,11 +85,13 @@
       "untake": "Cliquez pour annuler la prise de ce souhait"
     },
     "taken": "Pris par ",
+    "suggestedBy": "Suggéré par",
     "deleted": "Supprimé",
     "iHandleIt": "Je prends celui-ci",
     "iDontTake": "Je libère ce souhait",
     "edit": "Modifier",
-    "takenButton": "Pris par quelqu'un d'autre"
+    "takenButton": "Pris par quelqu'un d'autre",
+    "suggestion": "Suggestion :"
   },
   "alert": {
     "wishCreated": "Votre souhait a été ajouté !",
@@ -133,6 +141,8 @@
     "handleWishlistUsers": "Gérer les participants",
     "addNewWish": "Ajouter un souhait",
     "addNewWishMobile": "souhait",
+    "suggestWish": "Suggérer un souhait",
+    "suggestWishMobile": "Suggérer",
     "emptyWishlist": "Aucun souhait pour le moment !",
     "emptyWishlistText": "Il est temps d'ajouter votre premier souhait ! ✨",
     "clickToAddFirstWish": "Cliquez ici pour ajouter un souhait"
