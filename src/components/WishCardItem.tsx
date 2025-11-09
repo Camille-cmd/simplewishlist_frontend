@@ -113,11 +113,25 @@ export default function WishCardItem(
         wish.deleted && wish.assignedUser !== currentUserName
             ? null
             :
-            <ListGroupItem key={wish.id} className={`wish-group-item ${wish.assignedUser === currentUserName ? 'wish-taken-by-me' : ''}`}>
+            <ListGroupItem key={wish.id}
+                           className={`wish-group-item ${wish.assignedUser === currentUserName ? 'wish-taken-by-me' : ''}`}>
+
+                {/*Display "Suggested by" badge - only for non-owners*/}
+                {wish.suggestedBy && !isCurrentUser ?
+                    <Card.Subtitle className="mb-2">
+                        <small className="text-muted">
+                            {t("wishCard.suggestedBy")}
+                            <Badge bg="info" className="suggested-by-badge ms-1">
+                                {wish.suggestedBy}
+                            </Badge>
+                        </small>
+                    </Card.Subtitle>
+                    : null
+                }
 
                 <Card.Title className={canShowAssignedUser ? "crossed-text" : ""}>
                     <Stack direction={"horizontal"} gap={3}>
-                        <span>{wish.deleted ? t("wishCard.deleted") : wish.name}</span>
+                        <span>{wish.suggestedBy ? "💡" + t("wishCard.suggestion") : ""} {wish.deleted ? t("wishCard.deleted") : wish.name}</span>
 
                         <Badge className="ms-auto">{wish.price}</Badge>
 
@@ -133,6 +147,7 @@ export default function WishCardItem(
                         }
                     </Stack>
                 </Card.Title>
+
 
                 {/*Display taken by when surpriseMode is off*/}
                 {canShowAssignedUser ?
@@ -154,7 +169,11 @@ export default function WishCardItem(
                 }
                 <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
                     <ButtonGroup aria-label="Actions on wish" className="my-2">
-                        {isCurrentUser ? (
+                        {/* Show edit button for:
+                            - Regular wish: only the wish owner
+                            - Suggested wish: only the suggester
+                        */}
+                        {(wish.suggestedBy ? wish.suggestedBy === currentUserName : isCurrentUser) && (
                             <Button
                                 variant="warning"
                                 size={"sm"}
@@ -162,34 +181,43 @@ export default function WishCardItem(
                             >
                                 {t("wishCard.edit")}
                             </Button>
-                        ) : wish.assignedUser ? (
-                            wish.assignedUser === currentUserName ? (
+                        )}
+
+                        {/* Show assignment buttons for:
+                            - Regular wish: only other users (not the owner)
+                            - Suggested wish: all users including the suggester
+                        */}
+                        {(wish.suggestedBy || !isCurrentUser) && (
+                            wish.assignedUser ? (
+                                wish.assignedUser === currentUserName ? (
+                                    <Button
+                                        variant="info"
+                                        size={"sm"}
+                                        className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "ms-2" : ""}
+                                        onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
+                                    >
+                                        {t("wishCard.iDontTake")}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant={"danger"}
+                                        className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "btn-danger ms-2" : "btn-danger"}
+                                        size={"sm"}
+                                        disabled
+                                    >
+                                        {t("wishCard.takenButton")}
+                                    </Button>
+                                )
+                            ) : (
                                 <Button
-                                    variant="info"
+                                    variant={"success"}
+                                    className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "btn-success-custom ms-2" : "btn-success-custom"}
                                     size={"sm"}
                                     onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
                                 >
-                                    {t("wishCard.iDontTake")}
-                                </Button>
-                            ) : (
-                                <Button
-                                    variant={"danger"}
-                                    className={"btn-danger"}
-                                    size={"sm"}
-                                    disabled
-                                >
-                                    {t("wishCard.takenButton")}
+                                    {t("wishCard.iHandleIt")}
                                 </Button>
                             )
-                        ) : (
-                            <Button
-                                variant={"success"}
-                                className={"btn-success-custom"}
-                                size={"sm"}
-                                onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
-                            >
-                                {t("wishCard.iHandleIt")}
-                            </Button>
                         )}
                     </ButtonGroup>
                 </OverlayTrigger>

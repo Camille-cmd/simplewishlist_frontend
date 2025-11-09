@@ -6,6 +6,7 @@ export interface Wish {
     id: string;
     assignedUser: string | null;
     deleted: boolean;
+    suggestedBy: string | null;
 }
 
 export interface UserWish {

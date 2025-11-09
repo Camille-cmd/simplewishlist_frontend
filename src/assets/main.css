@@ -255,10 +255,21 @@ header .btn-warning:hover {
     background-color: var(--palette2-light) !important;
     color: var(--main-dark) !important;
     font-size: 0.7rem !important;
-    padding: 0.2em 0.5em !important;
+    padding: 0.4em 0.5em !important;
     border-radius: 12px !important;
     font-weight: 500 !important;
     border: 1px solid var(--palette1-medium) !important;
+}
+
+/* Styling for suggested-by badge */
+.suggested-by-badge {
+    background-color: var(--info-badge) !important;
+    color: var(--info-dark) !important;
+    font-size: 0.7rem !important;
+    padding: 0.4em 0.5em !important;
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+    border: 1px solid var(--info-main) !important;
 }
 
 /* Very subtle gradient for wishes taken by current user */

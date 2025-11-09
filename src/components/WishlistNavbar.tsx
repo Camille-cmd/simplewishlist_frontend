@@ -2,7 +2,7 @@ import {WishListData} from "../interfaces/WishListData";
 import {useTranslation} from "react-i18next";
 import {Button, Dropdown, DropdownButton, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {Gear, PersonCheck, PersonFillGear, PlusCircle} from "react-bootstrap-icons";
+import {Gear, Gift, PersonCheck, PersonFillGear, PlusCircle} from "react-bootstrap-icons";
 import {Dispatch, SetStateAction} from "react";
 import {getUserFirstTwoLetters} from "../utils/getUserFirstTwoLetters.tsx";
 import {usernameToColor} from "../utils/getUserHashColor.tsx";
@@ -13,6 +13,7 @@ interface WishlistNavbarProps {
     setSurpriseMode: Dispatch<SetStateAction<boolean>>,
     surpriseMode: boolean,
     setShowWishForm: Dispatch<SetStateAction<boolean>>,
+    setIsSuggestionMode: Dispatch<SetStateAction<boolean>>,
     currentlyConnectedUsersNames: Array<string>
 }
 
@@ -32,6 +33,7 @@ export default function WishlistNavbar(
         setSurpriseMode,
         surpriseMode,
         setShowWishForm,
+        setIsSuggestionMode,
         currentlyConnectedUsersNames
     }: Readonly<WishlistNavbarProps>) {
     const {t} = useTranslation();
@@ -51,6 +53,22 @@ export default function WishlistNavbar(
         if (wishlistData?.wishlistId) {
             navigate(`/wishlist/${wishlistData.wishlistId}?switch=true`);
         }
+    }
+
+    /**
+     * Handle opening the wish form in suggestion mode
+     */
+    const handleSuggestWish = () => {
+        setIsSuggestionMode(true);
+        setShowWishForm(true);
+    }
+
+    /**
+     * Handle opening the wish form in creation mode
+     */
+    const handleAddWishWish = () => {
+        setIsSuggestionMode(false);
+        setShowWishForm(true);
     }
 
 
@@ -178,14 +196,22 @@ export default function WishlistNavbar(
                 </div>
 
                 {/* Add new wish button */}
-                <Stack direction="horizontal" gap={3} className="ms-auto">
+                <Stack direction="horizontal" gap={2} className="ms-auto">
 
                     <Button variant="primary"
                             type="submit"
                             className="btn-custom btn-sm"
-                            onClick={() => setShowWishForm(true)}>
+                            onClick={handleAddWishWish}>
                         <span className={"d-none d-md-block"}><PlusCircle className={"mb-1"}></PlusCircle> {t('showWL.addNewWish')} 💫</span>
                         <span className={"d-md-none"}><PlusCircle></PlusCircle> {t('showWL.addNewWishMobile')} 💫</span>
+                    </Button>
+
+                    <Button variant="info"
+                            type="button"
+                            className="btn-custom btn-sm"
+                            onClick={handleSuggestWish}>
+                        <span className={"d-none d-md-block"}><Gift className={"mb-1"}></Gift> {t('showWL.suggestWish')}</span>
+                        <span className={"d-md-none"}><Gift></Gift></span>
                     </Button>
 
                     {/*Parameters*/}

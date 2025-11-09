@@ -58,6 +58,12 @@
       "returnToWishlist": "Return to wishlist"
     }
   },
+  "suggestWish": {
+    "pageTitle": "Suggest a wish for someone",
+    "selectUser": "I want to suggest this wish for",
+    "selectUserPlaceholder": "Select a user",
+    "selectUserRequired": "Please select a user to suggest this wish for"
+  },
   "createUser": {
     "placeholders": {
       "name": "Name of a new lucky one"
@@ -85,11 +91,13 @@
       "untake": "Click to unmark this wish as taken"
     },
     "taken": "Taken by ",
+    "suggestedBy": "Suggested by",
     "deleted": "Deleted",
     "iHandleIt": "I'll take this",
     "iDontTake": "I release this wish",
     "edit": "Edit",
-    "takenButton": "Taken by someone else"
+    "takenButton": "Taken by someone else",
+    "suggestion": "Suggestion:"
   },
   "editWish": {
     "pageTitle": "Update your wish",
@@ -133,6 +141,8 @@
     "handleWishlistUsers": "Handle Users",
     "addNewWish": "Add a new wish",
     "addNewWishMobile": "wish",
+    "suggestWish": "Suggest a wish",
+    "suggestWishMobile": "Suggest",
     "emptyWishlist": "No wishes yet!",
     "emptyWishlistText": "Time to add your first wish! ✨",
     "clickToAddFirstWish": "Click here to add a wish"
