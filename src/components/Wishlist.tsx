@@ -371,8 +371,6 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                                                     sendJsonMessage={sendJsonMessage}
                                                     setShowWishForm={setShowWishForm}
                                                     currentUserName={wishlistData?.currentUser as string}
-                                                    isSuggestionMode={isSuggestionMode}
-                                                    setIsSuggestionMode={setIsSuggestionMode}
                                                 ></WishCardItem>
                                             ))
                                             :
