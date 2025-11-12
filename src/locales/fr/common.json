@@ -186,7 +186,8 @@
       "noDuplicate": "Tous les noms dans la wishlist doivent être différents."
     },
     "wishUrl": {
-      "correctUrl": "Vous devez entrer une URL valide, commençant par http:// ou https://"
+      "correctUrl": "Vous devez entrer une URL valide, commençant par http:// ou https://",
+      "maxLength": "L’URL peut contenir au maximum 200 caractères. Utilisez tinyurl.com pour la raccourcir si nécessaire."
     },
     "wishName": {
       "required": "Vous devez donner un nom à votre souhait"

@@ -73,7 +73,9 @@ export default function WishForm(
 
     const validationSchema = () => {
         return Yup.object().shape({
-            url: Yup.string().url(t("errors.wishUrl.correctUrl")),
+            url: Yup.string()
+                .url(t("errors.wishUrl.correctUrl"))
+                .max(200, t("errors.wishUrl.maxLength")),
             name: Yup.string()
                 .required(t("errors.wishName.required"))
                 .nullable(t("errors.wishName.required")),
