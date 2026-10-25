@@ -87,7 +87,7 @@
       "currentUserMessage": "Click to edit/delete this wish!",
       "otherUserMessage": "Click to mark this wish as taken!",
       "goToWebsite": "Go to the website",
-      "alreadyTaken": "Already taken by someone else — click to share it with them!",
+      "alreadyTaken": "This wish is already taken!",
       "untake": "Click to unmark this wish as taken"
     },
     "taken": "Taken by ",
@@ -95,8 +95,8 @@
     "deleted": "Deleted",
     "iHandleIt": "I'll take this",
     "iDontTake": "I release this wish",
-    "iShareIt": "I'll share it",
     "edit": "Edit",
+    "takenButton": "Taken by someone else",
     "suggestion": "Suggestion:"
   },
   "editWish": {
@@ -197,16 +197,6 @@
     },
     "addUser": {
       "required": "You must enter a name"
-    },
-    "wish": {
-      "wish_assignment_unauthorized": "Modifying assigned user unauthorized",
-      "wish_assignment_user_not_found": "The user the wish is being assigned to does not exist.",
-      "wish_already_taken": "You have already taken this wish.",
-      "wish_deleted": "This wish has been deleted.",
-      "wish_edit_unauthorized": "Only the owner of the wish can change the wish data.",
-      "wish_suggested_edit_unauthorized": "Only the suggester can edit this suggested wish.",
-      "wish_delete_unauthorized": "Only the owner of the wish can delete it.",
-      "wish_suggested_delete_unauthorized": "Only the suggester can delete this suggested wish."
     },
     "minWishlistUsers": "At least one user must be added to the wishlist",
     "generic": "An error occurred. Please try again later.",

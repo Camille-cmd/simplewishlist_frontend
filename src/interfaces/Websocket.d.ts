@@ -3,7 +3,6 @@ export interface WebSocketReceiveMessage {
     data: never;
     userToken: string;
     action: string;
-    code?: string | null;
 }
 
 export interface WebSocketSendMessage {

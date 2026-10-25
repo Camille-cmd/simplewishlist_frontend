@@ -110,16 +110,6 @@ a:hover {
     color: var(--main-dark);
 }
 
-.btn-warning-take {
-    background-color: var(--warning-main);
-    color: var(--main-dark);
-}
-
-.btn-warning-take:hover {
-    background-color: var(--warning-light);
-    color: var(--main-dark);
-}
-
 .btn-danger {
     background-color: var(--danger-main) !important;
     color: var(--main-dark) !important;
