@@ -1,7 +1,7 @@
 import {Wish} from "../interfaces/WishListData";
 import {Badge, Button, ButtonGroup, Card, ListGroupItem, OverlayTrigger, Stack, Tooltip} from "react-bootstrap";
 import {ArrowUpRightCircle} from "react-bootstrap-icons";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import {WebSocketSendMessage} from "../interfaces/Websocket";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../contexts/AuthContext.tsx";
@@ -29,7 +29,10 @@ export default function WishCardItem(
     : Readonly<WishCardItemProps>) {
     const {t} = useTranslation();
     const {userToken} = useAuth();
-    const [canShowAssignedUser, setCanShowAssignedUser] = useState<boolean>(!!wish.assignedUser && (!isCurrentUser || !surpriseMode))
+    const isTaker = wish.assignedUsers.includes(currentUserName)
+    // The taken state is visible to me, except on my own cards in surprise mode.
+    const takenByOthers = wish.assignedUsers.length > 0 && !isTaker && (!isCurrentUser || !surpriseMode)
+    const canShowAssignedUser = wish.assignedUsers.length > 0 && (!isCurrentUser || !surpriseMode)
 
     /**
      * Handle the assigned user of a wish, send the data to the api and refresh the wishlist data
@@ -90,31 +93,26 @@ export default function WishCardItem(
     /**
      * Get the tooltip content depending on the user
      */
-    const TooltipContent = (wish: Wish) => {
+    const TooltipContent = () => {
         if (isCurrentUser) {
             return t('wishCard.tooltip.currentUserMessage')
-        } else if (!!wish.assignedUser && wish.assignedUser !== currentUserName) {
-            return t('wishCard.tooltip.alreadyTaken')
-        } else if (!!wish.assignedUser && wish.assignedUser === currentUserName) {
+        } else if (isTaker) {
             return t('wishCard.tooltip.untake')
+        } else if (takenByOthers) {
+            return t('wishCard.tooltip.alreadyTaken')
         } else {
             return t('wishCard.tooltip.otherUserMessage')
         }
     }
 
-    useEffect(() => {
-        const canShowAssignedUser = (!!wish.assignedUser) && (!isCurrentUser || !surpriseMode)
-        setCanShowAssignedUser(canShowAssignedUser)
-    }, [wish, isCurrentUser, surpriseMode])
-
     return (
-        // If the wish is deleted and the current user is not the one who took it, we don't display it
-        // We continue to display it to the user who took it, to allow him to unassign it
-        wish.deleted && wish.assignedUser !== currentUserName
+        // If the wish is deleted and the current user is not one of the takers, we don't display it
+        // We continue to display it to the takers, to allow them to unassign it
+        wish.deleted && !wish.assignedUsers.includes(currentUserName)
             ? null
             :
             <ListGroupItem key={wish.id}
-                           className={`wish-group-item ${wish.assignedUser === currentUserName ? 'wish-taken-by-me' : ''}`}>
+                           className={`wish-group-item ${isTaker ? 'wish-taken-by-me' : takenByOthers ? 'wish-taken-by-others' : ''}`}>
 
                 {/*Display "Suggested by" badge - only for non-owners*/}
                 {wish.suggestedBy && !isCurrentUser ?
@@ -129,7 +127,7 @@ export default function WishCardItem(
                     : null
                 }
 
-                <Card.Title className={canShowAssignedUser ? "crossed-text" : ""}>
+                <Card.Title>
                     <Stack direction={"horizontal"} gap={3}>
                         <span>{wish.suggestedBy ? "💡" + t("wishCard.suggestion") : ""} {wish.deleted ? t("wishCard.deleted") : wish.name}</span>
 
@@ -154,9 +152,11 @@ export default function WishCardItem(
                     <Card.Subtitle className="mb-2">
                         <small className="text-muted">
                             {t("wishCard.taken")}
-                            <Badge bg="light" className="taken-by-username-badge ms-1">
-                                {wish.assignedUser}
-                            </Badge>
+                            {wish.assignedUsers.map((userName) => (
+                                <Badge bg="light" className="taken-by-username-badge ms-1" key={userName}>
+                                    {userName}
+                                </Badge>
+                            ))}
                         </small>
                     </Card.Subtitle>
                     : null
@@ -167,7 +167,7 @@ export default function WishCardItem(
                     ? <Card.Text className="mt-2">{wish.description}</Card.Text>
                     : null
                 }
-                <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent(wish)}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id="tooltip-take-wish">{TooltipContent()}</Tooltip>}>
                     <ButtonGroup aria-label="Actions on wish" className="my-2">
                         {/* Show edit button for:
                             - Regular wish: only the wish owner
@@ -188,32 +188,30 @@ export default function WishCardItem(
                             - Suggested wish: all users including the suggester
                         */}
                         {(wish.suggestedBy || !isCurrentUser) && (
-                            wish.assignedUser ? (
-                                wish.assignedUser === currentUserName ? (
-                                    <Button
-                                        variant="info"
-                                        size={"sm"}
-                                        className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "ms-2" : ""}
-                                        onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
-                                    >
-                                        {t("wishCard.iDontTake")}
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant={"danger"}
-                                        className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "btn-danger ms-2" : "btn-danger"}
-                                        size={"sm"}
-                                        disabled
-                                    >
-                                        {t("wishCard.takenButton")}
-                                    </Button>
-                                )
+                            isTaker ? (
+                                <Button
+                                    variant="info"
+                                    size={"sm"}
+                                    className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "ms-2" : ""}
+                                    onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, isTaker), e)}
+                                >
+                                    {t("wishCard.iDontTake")}
+                                </Button>
+                            ) : takenByOthers ? (
+                                <Button
+                                    variant={"success"}
+                                    className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "btn-warning-take ms-2" : "btn-warning-take"}
+                                    size={"sm"}
+                                    onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, isTaker), e)}
+                                >
+                                    {t("wishCard.iShareIt")}
+                                </Button>
                             ) : (
                                 <Button
                                     variant={"success"}
                                     className={(wish.suggestedBy && wish.suggestedBy === currentUserName) ? "btn-success-custom ms-2" : "btn-success-custom"}
                                     size={"sm"}
-                                    onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, !!wish.assignedUser), e)}
+                                    onClick={(e) => handleButtonClick(() => handleAssignedUser(wish.id, isTaker), e)}
                                 >
                                     {t("wishCard.iHandleIt")}
                                 </Button>

@@ -4,7 +4,7 @@ export interface Wish {
     url: string | null;
     description: string | null;
     id: string;
-    assignedUser: string | null;
+    assignedUsers: string[];
     deleted: boolean;
     suggestedBy: string | null;
 }
@@ -22,7 +22,7 @@ export interface UserWishData {
 export interface UserDeletedWishData {
     user: string;
     wishId: string;
-    assignedUser: string | null;
+    assignedUsers: string[];
 }
 
 

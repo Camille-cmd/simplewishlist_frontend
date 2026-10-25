@@ -81,7 +81,7 @@
       "currentUserMessage": "Cliquez pour éditer/supprimer ce souhait !",
       "otherUserMessage": "Cliquez pour marquer ce souhait comme pris",
       "goToWebsite": "Aller sur le site",
-      "alreadyTaken": "Ce souhait a déjà été pris !",
+      "alreadyTaken": "Déjà pris par quelqu'un d'autre. Cliquez pour le partager !",
       "untake": "Cliquez pour annuler la prise de ce souhait"
     },
     "taken": "Pris par ",
@@ -89,8 +89,8 @@
     "deleted": "Supprimé",
     "iHandleIt": "Je prends celui-ci",
     "iDontTake": "Je libère ce souhait",
+    "iShareIt": "Je le partage",
     "edit": "Modifier",
-    "takenButton": "Pris par quelqu'un d'autre",
     "suggestion": "Suggestion :"
   },
   "alert": {
@@ -197,6 +197,16 @@
     },
     "addUser": {
       "required": "Vous devez entrer un nom"
+    },
+    "wish": {
+      "wish_assignment_unauthorized": "Modification de l'assignation non autorisée.",
+      "wish_assignment_user_not_found": "L'utilisateur auquel le souhait est assigné n'existe pas.",
+      "wish_already_taken": "Vous avez déjà pris ce souhait.",
+      "wish_deleted": "Ce souhait a été supprimé.",
+      "wish_edit_unauthorized": "Seul le propriétaire du souhait peut le modifier.",
+      "wish_suggested_edit_unauthorized": "Seule la personne qui a suggéré le souhait peut le modifier.",
+      "wish_delete_unauthorized": "Seul le propriétaire du souhait peut le supprimer.",
+      "wish_suggested_delete_unauthorized": "Seule la personne qui a suggéré le souhait peut le supprimer."
     },
     "minWishlistUsers": "Vous devez choisir au moins un participant",
     "generic": "Une erreur est survenue. Veuillez réessayer plus tard.",

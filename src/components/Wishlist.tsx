@@ -116,8 +116,8 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
     const countActiveWishes = (userWishes: Array<Wish>) => {
         let count = 0;
         userWishes.forEach((wish) => {
-            // We still count the wish if it was deleted but the assignedUser is the current user
-            if (!wish.deleted || (wish.deleted && isCurrentUser(wish.assignedUser as string))) {
+            // We still count the wish if it was deleted but the current user is one of the takers
+            if (!wish.deleted || wish.assignedUsers.includes(wishlistData.currentUser)) {
                 count++;
             }
         });
@@ -173,7 +173,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
 
             // Map over userWishes to handle deletion for current and other users
             const updatedUserWishes = prevWishlistData.userWishes.map(userWish => {
-                if (deletedWishData.assignedUser !== wishlistData.currentUser || wishlistData.currentUser === deletedWishData.user) {
+                if (!deletedWishData.assignedUsers.includes(wishlistData.currentUser) || wishlistData.currentUser === deletedWishData.user) {
                     // Remove the wish by filtering it out
                     const updatedWishes = userWish.wishes.filter(wish => wish.id !== deletedWishData.wishId);
                     return {...userWish, wishes: updatedWishes};
@@ -222,7 +222,7 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                     .map((userWish: UserWish) => ({
                         ...userWish,
                         wishes: userWish.wishes.filter(
-                            (wish: Wish) => wish.assignedUser === wishlistData.currentUser
+                            (wish: Wish) => wish.assignedUsers.includes(wishlistData.currentUser)
                         )
                     }))
                     .filter((userWish: UserWish) => userWish.wishes.length > 0) // Keep only non-empty userWishes
@@ -296,11 +296,14 @@ export default function Wishlist({wishlistData, setWishlistData}: Readonly<Wishl
                 setCurrentlyConnectedUsersNames(connectedUser.filter((user) => user !== wishlistData.currentUser));
                 break;
 
-            case "error_message":
-                errorMessage = response.data as string;
+            case "error_message": {
+                const rawMessage = response.data as string;
+                const code = response.code;
+                errorMessage = code ? t(`errors.wish.${code}`, {defaultValue: rawMessage}) : rawMessage;
                 console.error("Error received from websocket: " + errorMessage);
                 handleAlert("danger", null, errorMessage);
                 break;
+            }
         }
     }, [lastJsonMessage])
 
